@@ -1,0 +1,284 @@
+.billing-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* full viewport */
+  padding: 0px 0px;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+.table-scroll {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.products-container {
+  background: #fff;
+  padding: 8px 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  font-family: "Segoe UI", sans-serif;
+  overflow-x: auto;
+  margin-bottom: 10px;
+}
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.products-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fafafa;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.products-table th,
+.products-table td {
+  padding: 3px 2px;
+  font-size: 13px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.products-table th {
+  background: #f5f5f5;
+  color: #555;
+  white-space: nowrap;
+}
+
+.products-table input {
+  width: 100%;
+  padding: 3px 2px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 13px;
+  box-sizing: border-box;
+}
+
+.products-table tr:hover {
+  background: #f9f9f9;
+}
+
+.add-btn {
+  padding: 6px 12px;
+  font-size: 13px;
+  border: none;
+  border-radius: 15px;
+  background: #489FB5;
+  color: white;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.add-btn:hover {
+  background: #3d8496;
+}
+
+/* Summary card sticky at bottom */
+.summary-card {
+  position: sticky;
+  bottom: 0;
+  background: #f5f5f5;
+  padding: 4px 16px;
+  border-radius: 8px 8px 0 0;
+  box-shadow: 0 -2px 3px rgba(0,0,0,0.08);
+  font-family: "Segoe UI", sans-serif;
+  z-index: 10;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2px;
+  font-size: 12px;
+}
+
+.summary-row input {
+  width: 80px;
+  padding: 4px 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  text-align: right;
+}
+
+.total-row {
+  font-weight: 600;
+  font-size: 16px;
+  border-top: 1px solid #ccc;
+  padding-top: 6px;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 7px;
+  font-size: 13px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.print-btn {
+  background: #489FB5;
+  color: #fff;
+}
+.print-btn:hover {
+  background: #3d8496;
+}
+
+.save-btn {
+  background: #4CAF50;
+  color: #fff;
+}
+.save-btn:hover {
+  background: #3e8e41;
+}
+
+.exit-btn {
+  background: #F44336;
+  color: #fff;
+}
+.exit-btn:hover {
+  background: #c0392b;
+}
+.table-title{
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+.billing-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 12px;
+  background: rgb(247, 245, 245);
+  padding: 0px 10px;
+  border-radius: 2px;
+  flex-wrap: wrap; /* responsive */
+}
+
+.header-part {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  gap: 6px;
+  min-width: 150px;
+  flex: 1; /* distributes space equally */
+}
+
+.header-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.header-row label {
+  width: 100px; /* fixed width for labels */
+  font-weight: 500;
+  margin: 0;
+}
+
+.header-row input,
+.header-row select,
+.header-row span {
+  flex: 1; /* take remaining space */
+  font-size: 10px;
+  padding: 2px 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Responsive table for mobile */
+@media (max-width: 768px) {
+  .products-table,
+  .products-table thead,
+  .products-table tbody,
+  .products-table th,
+  .products-table td,
+  .products-table tr {
+    display: block;
+    width: 100%;
+  }
+  .products-table td {
+    width: 95%;
+  }
+  .products-table thead {
+    display: none;
+  }
+  .products-table tr {
+    margin-bottom: 8px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 4px;
+    background: #fafafa;
+  }
+  .products-table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 3px;
+    border: none;
+  }
+  .products-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    flex-basis: 40%;
+    text-align: left;
+    color: #444;
+  }
+  .products-table input {
+    flex-basis: 55%;
+    font-size: 13px;
+  }
+  .billing-header {
+  gap: 5px;
+  font-size: 8px;
+  background: rgb(247, 245, 245);
+  padding: 0px 5px;
+  border-radius: 1px;
+  }
+
+.header-part {
+  flex-direction: column;
+  padding: 5px;
+  gap: 3px;
+  min-width: 100px;
+  flex: 1; /* distributes space equally */
+}
+
+.header-row {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.header-row label {
+  width: 70px; /* fixed width for labels */
+  font-weight: 500;
+  margin: 0;
+}
+
+.header-row input,
+.header-row select,
+.header-row span {
+  flex: 1; /* take remaining space */
+  font-size: 8px;
+  padding: 1px 3px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+}

@@ -1,0 +1,33 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+.container {
+  display: grid;
+  height: 100vh;
+  grid-template-columns: 230px 1fr; /* Sidebar fixed, rest flexible */
+  grid-template-rows: 50px 1fr;     /* Navbar fixed height, rest flexible */
+  grid-template-areas:
+    "sidebar nav"
+    "sidebar main";
+}
+
+
+@media only screen and (max-width: 978px) {
+
+.container{
+
+grid-template-columns: 1fr;
+
+grid-template-rows: 6.2fr 3fr;
+
+grid-template-areas:
+
+"nav"
+
+"main";}}
+.main{
+    grid-area: main;
+    height: 90vh;
+    
+}
