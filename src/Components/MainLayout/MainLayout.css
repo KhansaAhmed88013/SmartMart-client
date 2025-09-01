@@ -5,7 +5,7 @@
 .container {
   display: grid;
   height: 100vh;
-  grid-template-columns: 230px 1fr; /* Sidebar fixed, rest flexible */
+  grid-template-columns: 210px 1fr; /* Sidebar fixed, rest flexible */
   grid-template-rows: 50px 1fr;     /* Navbar fixed height, rest flexible */
   grid-template-areas:
     "sidebar nav"
@@ -28,6 +28,6 @@ grid-template-areas:
 "main";}}
 .main{
     grid-area: main;
-    height: 90vh;
+    height: 100vh;
     
 }

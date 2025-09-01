@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "./InventoryStock.css";
 
 function ImportStock() {
   const [imports, setImports] = useState([

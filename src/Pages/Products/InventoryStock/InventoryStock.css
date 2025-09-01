@@ -69,10 +69,17 @@
 
 
 .low-stock {
-  background: #fdf2f2 !important;
   color: #c03a2bc6;
   font-weight: bold;
 }
+.low-stock {
+  background-color: #fff3cd; /* light yellow */
+}
+
+.expired {
+  background-color: #f8d7da; /* light red */
+}
+
 
 /* Buttons */
 .stock-table button {
@@ -223,4 +230,141 @@
 .pagination span {
   font-size: 14px;
   color: #333;
+}
+/* Modal Overlay */
+.modal--overlay {
+  position: fixed;        /* overlay covers the entire viewport */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5); /* semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;          /* make sure it's above everything */
+}
+
+/* Modal Content */
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  z-index: 1001;           /* above overlay */
+}
+/* ✅ Tablet (≤ 1024px) */
+@media (max-width: 1024px) {
+  .inventory-header {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 buttons per row */
+    gap: 3px;
+    padding: 5px;
+  }
+
+  .inventory-header button {
+    width: 100%; /* make each fill its grid cell */
+    justify-content: center;
+    font-size: 10px;
+    padding: 5px;
+  }
+
+  .stock-summary {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 12px;
+  }
+
+  .search-bar {
+    text-align: center;
+  }
+
+  .search-bar input {
+    width: 80%;
+    max-width: 400px;
+  }
+
+  .stock-table th,
+  .stock-table td {
+    font-size: 12px;
+    padding: 6px 4px;
+  }
+}
+
+/* ✅ Mobile (≤ 768px) */
+@media (max-width: 768px) {
+  .inventory-container {
+    padding: 0px;
+  }
+
+  .inventory-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .inventory-header button {
+    width: 100%;
+    justify-content: center;
+    font-size: 13px;
+    padding: 5px;
+  }
+
+  .stock-summary {
+    font-size: 13px;
+    padding: 5px 10px;
+    margin-top: 10px;
+  }
+
+  /* Table turns scrollable */
+  .stock-table {
+    display: block;
+    justify-content: space-between;
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+    border: 1px solid #ddd;
+  }
+
+  .stock-table thead {
+    display: none; /* hide table headers */
+  }
+  
+  .stock-table tr {
+    display: block;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 5px;
+    background: #fff;
+    padding: 10px;
+    width: 100%;
+  }
+
+  .stock-table td {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    padding: 3px 0;
+    border: none;
+    width: 100%;
+  }
+
+  .stock-table td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    margin-right: 12px;
+    color: #444;
+  }
+
+  /* Buttons inside mobile cards */
+  .stock-table td:last-child {
+    justify-content: flex-start;
+    gap: 6px;
+  }
+
+  .pagination {
+    flex-direction: column;
+    gap: 8px;
+  }
 }

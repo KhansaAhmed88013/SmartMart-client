@@ -1,0 +1,437 @@
+/* Categories.css */
+
+/* Page Container */
+.categories-page {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+}
+
+/* Header */
+.categories-page .categories-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.categories-page .categories-header .header-left {
+  display: flex;
+  gap: 10px;
+}
+
+.categories-page .btn-create,
+.categories-page .btn-all {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.categories-page .btn-create {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+.categories-page .btn-create:hover {
+  background-color: #45a049;
+}
+
+.categories-page .btn-all {
+  background-color: #2196f3;
+  color: #fff;
+}
+
+.categories-page .btn-all:hover {
+  background-color: #1976d2;
+}
+
+.categories-page .header-search input {
+  padding: 8px 12px;
+  width: 300px;
+  max-width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Messages */
+.categories-page .alert {
+  padding: 10px 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.categories-page .alert.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.categories-page .alert.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+/* Categories List */
+.categories-page .categories-list {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.categories-page .category-block {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.categories-page .table-wrapper {
+  overflow-x: auto;
+}
+
+.categories-page .products-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.categories-page .products-table th,
+.categories-page .products-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.categories-page .products-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.categories-page .products-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.categories-page .products-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.categories-page .category-summary {
+  background-color: #e0f7fa;
+  font-weight: bold;
+}
+
+/* Modal */
+.categories-page .overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.categories-page .modal {
+  background-color: #fff;
+  padding: 25px;
+  border-radius: 10px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.categories-page .modal h2 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 22px;
+}
+
+.categories-page .form-group {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.categories-page .form-group label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.categories-page .form-group input,
+.categories-page .form-group textarea {
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  width: 100%;
+}
+
+.categories-page .form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.categories-page .btn-save {
+  background-color: #4caf50;
+  color: #fff;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.categories-page .btn-save:hover {
+  background-color: #45a049;
+}
+
+.categories-page .btn-cancel {
+  background-color: #f44336;
+  color: #fff;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.categories-page .btn-cancel:hover {
+  background-color: #d32f2f;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Scoped inside categories-page */
+.categories-page .products-table th,
+.categories-page .products-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: right; /* Align numbers to right */
+  white-space: nowrap; /* Prevent numbers from wrapping */
+}
+/* Table wrapper */
+.categories-page .table-wrapper {
+  overflow-x: auto;
+  width: 100%;
+}
+
+/* Products table */
+.categories-page .products-table {
+  width: max-content; /* ensures table takes full width of content */
+  border-collapse: collapse;
+  font-size: 14px;
+  table-layout: fixed; /* helps fix column widths */
+}
+
+/* Table headers & cells */
+.categories-page .products-table th,
+.categories-page .products-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: right; /* numbers right-aligned */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Table wrapper */
+.categories-page .table-wrapper {
+  width: 100%;
+  overflow-x: hidden; /* prevent horizontal scroll */
+}
+
+/* Products table */
+.categories-page .products-table {
+  width: 100%;        /* fill container */
+  border-collapse: collapse;
+  font-size: 14px;
+  table-layout: fixed; /* columns respect widths */
+}
+
+/* Left-align first 3 columns */
+.categories-page .products-table th:nth-child(-n+3),
+.categories-page .products-table td:nth-child(-n+3) {
+  text-align: right;
+}
+
+/* Right-align numeric columns */
+.categories-page .products-table th:nth-child(n+4),
+.categories-page .products-table td:nth-child(n+4) {
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Column widths in % (so table fits container) */
+.categories-page .products-table th:nth-child(1),
+.categories-page .products-table td:nth-child(1) { width: 5%; }   /* # */
+.categories-page .products-table th:nth-child(2),
+.categories-page .products-table td:nth-child(2) { width: 15%; }  /* Item Code */
+.categories-page .products-table th:nth-child(3),
+.categories-page .products-table td:nth-child(3) { width: 25%; }  /* Product Name */
+.categories-page .products-table th:nth-child(4),
+.categories-page .products-table td:nth-child(4) { width: 10%; }  /* QTY */
+.categories-page .products-table th:nth-child(5),
+.categories-page .products-table td:nth-child(5) { width: 10%; }  /* Cost Price */
+.categories-page .products-table th:nth-child(6),
+.categories-page .products-table td:nth-child(6) { width: 10%; }  /* Sale Price */
+.categories-page .products-table th:nth-child(7),
+.categories-page .products-table td:nth-child(7) { width: 12.5%; } /* Total on Sale */
+.categories-page .products-table th:nth-child(8),
+.categories-page .products-table td:nth-child(8) { width: 12.5%; } /* Total on Cost */
+/* Category Header (Name + Search Row) */
+.categories-page .category-header {
+  display: flex;
+  justify-content: space-between; /* category name left, search right */
+  align-items: center;
+  margin-bottom: 15px;
+  gap: 10px;
+  flex-wrap: wrap; /* allows search to wrap on small screens */
+}
+
+.categories-page .category-header .category-heading {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.categories-page .category-header .category-search {
+  padding: 6px 10px;
+  width: 250px;
+  max-width: 100%; /* responsive */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+/* ✅ Tablet & Mobile Fix */
+@media screen and (max-width: 1024px) {
+  /* allow scrolling for tablets */
+  .categories-page .table-wrapper {
+    overflow-x: auto;   /* enable scroll */
+  }
+
+  .categories-page .products-table {
+    width: max-content; /* table can extend */
+    table-layout: auto; /* allow flexible columns */
+  }
+}
+.categories-page .category-block {
+  width: 100%;        /* full width of parent */
+  box-sizing: border-box;
+}
+
+.categories-page .table-wrapper {
+  width: 100%;
+  overflow-x: auto;   /* allow scroll instead of hiding */
+}
+
+.categories-page .products-table {
+  width: 100%;        /* fill wrapper */
+  table-layout: auto; /* flexible columns */
+}
+@media screen and (max-width: 768px) {
+  /* stack header */
+  .categories-page .categories-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 3px;
+  }
+
+  .categories-page .header-search input {
+    width: 100%;
+  }
+
+  /* card-style table */
+  .categories-page .table-wrapper {
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  .categories-page .products-table,
+  .categories-page .products-table thead,
+  .categories-page .products-table tbody,
+  .categories-page .products-table tr,
+  .categories-page .products-table th,
+  .categories-page .products-table td {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .categories-page .products-table thead {
+    display: none;
+  }
+
+  .categories-page .products-table tr {
+    margin-bottom: 6px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 5px;
+    background: #fff;
+  }
+
+  .categories-page .products-table td {
+    border: none;
+    padding: 6px 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    white-space: normal;     /* ✅ allow wrapping */
+    word-break: break-word;  /* ✅ wrap long words */
+  }
+
+  /* label (from header) */
+  .categories-page .products-table td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    flex: 0 0 40%; /* label column */
+    text-align: left;
+  }
+
+  /* value */
+  .categories-page .products-table td {
+    flex: 1;
+    text-align: left;
+  }
+  /* Default table cells */
+/* Numeric columns only */
+.categories-page .products-table th:nth-child(1),
+.categories-page .products-table td:nth-child(1), /* QTY */
+.categories-page .products-table th:nth-child(2),
+.categories-page .products-table td:nth-child(2), /* Cost Price */
+.categories-page .products-table th:nth-child(3),
+.categories-page .products-table td:nth-child(3), /* Sale Price */
+.categories-page .products-table th:nth-child(4),
+.categories-page .products-table td:nth-child(4), /* QTY */
+.categories-page .products-table th:nth-child(5),
+.categories-page .products-table td:nth-child(5), /* Cost Price */
+.categories-page .products-table th:nth-child(6),
+.categories-page .products-table td:nth-child(6), /* Sale Price */
+.categories-page .products-table th:nth-child(7),
+.categories-page .products-table td:nth-child(7), /* Total on Sale */
+.categories-page .products-table th:nth-child(8),
+.categories-page .products-table td:nth-child(8)  /* Total on Cost */ {
+  text-align: left;         /* ✅ right align numbers */
+  white-space: nowrap;       /* ✅ keep numbers on one line */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+}
