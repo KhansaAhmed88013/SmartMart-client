@@ -1,13 +1,20 @@
 import "./Sidebar.css";
-import { useEffect, useState } from "react";
+
+import React, { useEffect, useState } from "react";
+
 import { 
   FaTimes, FaHome, FaUserSecret, FaBuilding, FaWrench, 
   FaBox, FaTags, FaShoppingCart, FaFileInvoice, 
-  FaChartLine, FaUsers, FaCogs, FaSignOutAlt, FaTruck ,FaBoxes,FaPlus
+  FaChartLine, FaUsers, FaCogs, FaSignOutAlt, FaTruck ,FaBoxes,FaPlus,FaChevronDown,FaChevronUp
 } from "react-icons/fa";
 import { getProfileName } from "../../../../UserService";
 
 function Sidebar({ sidebarOpen, closeSidebar }) {
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [isPurchaseOpen, setIsPurchaseOpen] = useState(false);
+
+
   const [profilename,setProfileName]=useState("Smart Super ")
 useEffect(()=>{
   const getname=async()=>{
@@ -18,6 +25,7 @@ useEffect(()=>{
   }
   getname()
 },[])
+
   return (
     <div className={sidebarOpen ? "sidebar_responsive" : ""} id="sidebar">
       <div className="sidebar__title">
@@ -59,7 +67,7 @@ useEffect(()=>{
 
         {/* Sales & Billing */}
         <h2>Sales & Billing</h2>
-        <div className="sidebar__link">
+        <div className="sidebar__link" onClick={()=>window.location.href='/SalesRecord'}>
           <FaShoppingCart />
           <a href="#">Sales Records</a>
         </div>
@@ -67,7 +75,7 @@ useEffect(()=>{
           <FaFileInvoice />
           <a href="/billing">Billing / POS</a>
         </div>
-        <div className="sidebar__link">
+        <div className="sidebar__link" onClick={()=>window.location.href='/DiscountOfferSummary'}>
               <FaTags />
               <a href="#">Discounts & Offers</a>
         </div>
@@ -85,22 +93,80 @@ useEffect(()=>{
 
         {/* Reports */}
         <h2>Reports</h2>
-        <div className="sidebar__link">
-          <FaChartLine />
-          <a href="#">Sales Report</a>
+        <div className="sidebar__section">
+      {/* Parent Folder */}
+      <div className="sidebar__link" onClick={() => setIsOpen(!isOpen)}>
+        <FaChartLine />
+        <span>Sales Reports</span>
+        {isOpen ? <FaChevronUp className="ml-auto" /> : <FaChevronDown className="ml-auto" />}
+      </div>
+
+      {/* Dropdown Content */}
+      {isOpen && (
+        <div className="sidebar__dropdown">
+          <div className="sidebar__link" onClick={() => (window.location.href = "/SalesSummary")}>
+            <FaChartLine />
+            <span>Sales Report</span>
+          </div>
+          <div className="sidebar__link" onClick={() => (window.location.href = "/OTSaleReport")}>
+            <FaChartLine />
+            <span>OT Sale Report</span>
+          </div>
+          <div className="sidebar__link" onClick={() => (window.location.href = "/StockReport")}>
+            <FaChartLine />
+            <span>Stock Report</span>
+          </div>
+          <div className="sidebar__link" onClick={() => (window.location.href = "/SalariesInvoiceReport")}>
+            <FaChartLine />
+            <span>Sales Invoice Wise Report</span>
+          </div>
+          <div className="sidebar__link" onClick={() => (window.location.href = "/SalesReturnReport")}>
+            <FaChartLine />
+            <span>Sale Return</span>
+          </div>
+          <div className="sidebar__link" onClick={() => (window.location.href = "/InvoiceReport")}>
+            <FaChartLine />
+            <span>Invoice Report</span>
+          </div>
+          <div className="sidebar__link" onClick={() => (window.location.href = "/DailySaleSummary")}>
+            <FaChartLine />
+            <span>Sale Summary on Slip</span>
+          </div>
         </div>
-        <div className="sidebar__link">
-          <FaChartLine />
-          <a href="#">Inventory Report</a>
+      )}
+    </div>
+    <div className="sidebar__section">
+      {/* Parent Folder */}
+      <div className="sidebar__link" onClick={() => setIsPurchaseOpen(!isPurchaseOpen)}>
+        <FaShoppingCart />
+        <span>Purchase reports</span>
+        {isPurchaseOpen ? <FaChevronUp className="ml-auto" /> : <FaChevronDown className="ml-auto" />}
+      </div>
+
+      {/* Dropdown Content */}
+      {isPurchaseOpen && (
+        <div className="sidebar__dropdown">
+          <div className="sidebar__link" onClick={() => (window.location.href = "/PurchaseReport")}>
+            <FaShoppingCart />
+            <span>purchase report</span>
+          </div>
+          <div className="sidebar__link" onClick={() => (window.location.href = "/SupplierReport")}>
+            <FaShoppingCart />
+            <span>Supplier report</span>
+          </div>
+          
+          <div className="sidebar__link" onClick={() => (window.location.href = "/DailyPurchaseSummary")}>
+            <FaShoppingCart />
+            <span>Daily purchase summary </span>
+          </div>
         </div>
-        <div className="sidebar__link">
-          <FaChartLine />
-          <a href="#">Profit & Loss</a>
-        </div>
-        <div className="sidebar__link">
-          <FaChartLine />
-          <a href="#">Expenses Report</a>
-        </div>
+      )}
+         <div className="sidebar__link" onClick={() => (window.location.href = "/CustomerReport")}>
+            <FaShoppingCart />
+            <span>Customer Report </span>
+          </div>
+    </div>
+    
 
 
         {/* Management */}
