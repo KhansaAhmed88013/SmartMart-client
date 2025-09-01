@@ -5,6 +5,7 @@ import AddProduct from "./Pages/Products/AddProducts/AddProduct";
 import ViewProducts from "./Pages/Products/ViewProducts/ViewProducts";
 import Billing from "./Pages/SalesBilling/Billing/Billing";
 import InventoryStock from "./Pages/Products/InventoryStock/InventoryStock";
+
 import ImportStock from "./Pages/Products/InventoryStock/ImportStock";
 import ExportStock from "./Pages/Products/InventoryStock/ExportStock";
 import SalesRecord from "./Pages/SalesBilling/Billing/SalesRecord";
@@ -20,6 +21,16 @@ import SupplierReport from "./Components/MainLayout/Components/Sidebar/Reports/S
 import DailyPurchaseSummary from "./Components/MainLayout/Components/Sidebar/Reports/DailyPurchaseSummary";
 import CustomerReport from "./Components/MainLayout/Components/Sidebar/Reports/CustomerReport";
 import DiscountOfferSummary from "./Pages/SalesBilling/Discount/DiscountOfferSummary";
+
+import ImportStock from "./Pages/Products/InventoryStock/Components/ImportExport/ImportStock";
+import ExportStock from "./Pages/Products/InventoryStock/Components/ImportExport/ExportStock";
+import AuditLog from "./Pages/Products/InventoryStock/Components/AuditLog/AuditLog";
+import SupplierMNG from "./Pages/MNG/SupplierMNG/SupplierMNG";
+import SupplierAddForm from "./Pages/MNG/SupplierMNG/Components/SupplierAdd/SupplierAddForm";
+import Categories from "./Pages/Products/Categories/Categories";
+import CategoryView from "./Pages/Products/Categories/Components/CategoryView/CategoryView";
+import ShopProfile from "./Pages/ShopProfile/ShopProfile";
+
 function App() {
   return (
     <Router>
@@ -32,6 +43,7 @@ function App() {
           <Route path="stock" element={<InventoryStock/>}/>
           <Route path="import" element={<ImportStock/>}/>
           <Route path="export" element={<ExportStock/>}/>
+
          <Route path="SalesRecord" element={<SalesRecord/>}/>
          <Route path="SalesSummary" element={<SalesSummary/>}/>
          <Route path="OTsaleReport" element={<OTsaleReport/>}/>
@@ -45,7 +57,16 @@ function App() {
           <Route path="DailyPurchaseSummary" element={<DailyPurchaseSummary/>}/>
           <Route path="CustomerReport" element={<CustomerReport/>}/>
           <Route path="DiscountOfferSummary" element={<DiscountOfferSummary/>}/>
-        </Route>     
+  
+          <Route path="auditLog" element={<AuditLog/>}/>
+          <Route path="supplierManagement" element={<SupplierMNG/>}/>
+          <Route path="addSuppliers" element={<SupplierAddForm/>}/>
+          <Route path="categories" element={<Categories/>}/>
+          <Route path="allCategories" element={<CategoryView/>}/>
+          <Route path="shopProfile" element={<ShopProfile/>}/>
+        </Route>    
+      
+
    </Routes>
     </Router>
   );

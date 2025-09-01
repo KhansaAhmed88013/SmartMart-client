@@ -1,3 +1,13 @@
+html, body {
+  margin: 0;
+  padding: 0;
+
+}
+.billing-header {
+  margin: 0;     /* remove default margin */
+  padding-top: 2px; /* keep only a small padding if needed */
+}
+
 .billing-container {
   display: flex;
   flex-direction: column;
@@ -7,12 +17,12 @@
   margin: 0;
 }
 
-.table-scroll {
+.billing-container .table-scroll {
   flex: 1;
   overflow-y: auto;
 }
 
-.products-container {
+.billing-container .products-container {
   background: #fff;
   padding: 8px 15px;
   border-radius: 10px;
@@ -22,12 +32,12 @@
   margin-bottom: 10px;
 }
 
-.table-wrapper {
+.billing-container .table-wrapper {
   width: 100%;
   overflow-x: auto;
 }
 
-.products-table {
+.billing-container .products-table {
   width: 100%;
   border-collapse: collapse;
   background: #fafafa;
@@ -36,21 +46,20 @@
   margin-bottom: 12px;
 }
 
-.products-table th,
-.products-table td {
+.billing-container .products-table th,
+.billing-container .products-table td {
   padding: 3px 2px;
   font-size: 13px;
   text-align: left;
   border-bottom: 1px solid #eee;
 }
-
-.products-table th {
+.billing-container .products-table th {
   background: #f5f5f5;
   color: #555;
   white-space: nowrap;
 }
 
-.products-table input {
+.billing-container .products-table input {
   width: 100%;
   padding: 3px 2px;
   border: 1px solid #ccc;
@@ -59,11 +68,56 @@
   box-sizing: border-box;
 }
 
-.products-table tr:hover {
+.billing-container .products-table tr:hover {
   background: #f9f9f9;
 }
 
-.add-btn {
+/* Column widths (Desktop / Tablet only) */
+.billing-container .products-table th:nth-child(1),
+.billing-container .products-table td:nth-child(1) {
+  width: 20px; /* Number column */
+  text-align: center;
+}
+
+.billing-container .products-table th:nth-child(2),
+.billing-container .products-table td:nth-child(2) {
+  width: 15px; /* Barcode */
+  text-align: center;
+}
+
+.billing-container .products-table th:nth-child(3),
+.billing-container .products-table td:nth-child(3) {
+  width: 80px; /* Product Name */
+}
+.billing-container .products-table th:nth-child(4),
+.billing-container .products-table td:nth-child(4) {
+  width: 180px; /* Product Name */
+}
+
+
+.billing-container .products-table th:nth-child(5),
+.billing-container .products-table td:nth-child(5),
+.billing-container .products-table th:nth-child(6),
+.billing-container .products-table td:nth-child(6){
+  width: 80px;
+}
+.billing-container .products-table th:nth-child(7),
+.billing-container .products-table td:nth-child(7) {
+  width: 50px; /* Cost, QTY, Sale, Total Price */
+}
+
+.billing-container .products-table th:nth-child(8),
+.billing-container .products-table td:nth-child(8) {
+  width: 100px; /* Expiry */
+}
+
+.billing-container .products-table th:nth-child(9),
+.billing-container .products-table td:nth-child(9) {
+  width: 100px;
+}
+
+
+.billing-container .add-btn {
   padding: 6px 12px;
   font-size: 13px;
   border: none;
@@ -73,12 +127,12 @@
   cursor: pointer;
   transition: background 0.2s;
 }
-.add-btn:hover {
+.billing-container .add-btn:hover {
   background: #3d8496;
 }
 
 /* Summary card sticky at bottom */
-.summary-card {
+.billing-container .summary-card {
   position: sticky;
   bottom: 0;
   background: #f5f5f5;
@@ -89,7 +143,7 @@
   z-index: 10;
 }
 
-.summary-row {
+.billing-container .summary-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -97,7 +151,7 @@
   font-size: 12px;
 }
 
-.summary-row input {
+.billing-container .summary-row input {
   width: 80px;
   padding: 4px 6px;
   border: 1px solid #ccc;
@@ -106,21 +160,21 @@
   text-align: right;
 }
 
-.total-row {
+.billing-container .total-row {
   font-weight: 600;
   font-size: 16px;
   border-top: 1px solid #ccc;
   padding-top: 6px;
 }
 
-.action-buttons {
+.billing-container .action-buttons {
   display: flex;
   justify-content: flex-end;
   gap: 6px;
   margin-top: 4px;
 }
 
-.action-btn {
+.billing-container .action-btn {
   display: flex;
   align-items: center;
   gap: 4px;
@@ -132,34 +186,34 @@
   transition: background 0.2s;
 }
 
-.print-btn {
+.billing-container .print-btn {
   background: #489FB5;
   color: #fff;
 }
-.print-btn:hover {
+.billing-container .print-btn:hover {
   background: #3d8496;
 }
 
-.save-btn {
+.billing-container .save-btn {
   background: #4CAF50;
   color: #fff;
 }
-.save-btn:hover {
+.billing-container .save-btn:hover {
   background: #3e8e41;
 }
 
-.exit-btn {
+.billing-container .exit-btn {
   background: #F44336;
   color: #fff;
 }
-.exit-btn:hover {
+.billing-container .exit-btn:hover {
   background: #c0392b;
 }
-.table-title{
+.billing-container .table-title{
   font-size: 16px;
   margin-bottom: 5px;
 }
-.billing-header {
+.billing-container .billing-header {
   display: flex;
   justify-content: space-between;
   gap: 10px;
@@ -170,7 +224,7 @@
   flex-wrap: wrap; /* responsive */
 }
 
-.header-part {
+.billing-container .header-part {
   display: flex;
   flex-direction: column;
   padding: 10px;
@@ -179,21 +233,21 @@
   flex: 1; /* distributes space equally */
 }
 
-.header-row {
+.billing-container .header-row {
   display: flex;
   align-items: center;
   gap: 4px;
 }
 
-.header-row label {
+.billing-container .header-row label {
   width: 100px; /* fixed width for labels */
   font-weight: 500;
   margin: 0;
 }
 
-.header-row input,
-.header-row select,
-.header-row span {
+.billing-container .header-row input,
+.billing-container .header-row select,
+.billing-container .header-row span {
   flex: 1; /* take remaining space */
   font-size: 10px;
   padding: 2px 6px;
@@ -201,84 +255,297 @@
   border-radius: 4px;
 }
 
-/* Responsive table for mobile */
-@media (max-width: 768px) {
-  .products-table,
-  .products-table thead,
-  .products-table tbody,
-  .products-table th,
-  .products-table td,
-  .products-table tr {
-    display: block;
-    width: 100%;
-  }
-  .products-table td {
-    width: 95%;
-  }
-  .products-table thead {
-    display: none;
-  }
-  .products-table tr {
-    margin-bottom: 8px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    padding: 4px;
-    background: #fafafa;
-  }
-  .products-table td {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 3px;
-    border: none;
-  }
-  .products-table td::before {
-    content: attr(data-label);
-    font-weight: 600;
-    flex-basis: 40%;
-    text-align: left;
-    color: #444;
-  }
-  .products-table input {
-    flex-basis: 55%;
-    font-size: 13px;
-  }
-  .billing-header {
-  gap: 5px;
-  font-size: 8px;
-  background: rgb(247, 245, 245);
-  padding: 0px 5px;
-  border-radius: 1px;
-  }
-
-.header-part {
-  flex-direction: column;
-  padding: 5px;
-  gap: 3px;
-  min-width: 100px;
-  flex: 1; /* distributes space equally */
+/* Pre-print overlay background */
+.billing-container .preprint-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* semi-transparent black */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
 }
 
-.header-row {
+/* Pre-print modal container */
+.billing-container .preprint-modal {
+  background: #fff;
+  padding: 20px 25px;
+  border-radius: 10px;
+  width: 350px;
+  max-width: 90%;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  font-family: "Segoe UI", sans-serif;
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Modal header */
+.billing-container .preprint-modal h3 {
+  text-align: center;
+  margin-bottom: 15px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Row styling */
+.billing-container .preprint-modal div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 8px 0;
+  font-size: 14px;
+}
+
+.billing-container .preprint-modal label {
+  font-weight: 500;
+}
+
+.billing-container .preprint-modal input {
+  width: 100px;
+  padding: 5px 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  text-align: right;
+}
+
+/* Actions buttons container */
+.billing-container .preprint-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+/* Buttons */
+.billing-container .preprint-actions button {
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.billing-container .preprint-actions .print-btn {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.billing-container .preprint-actions .print-btn:hover {
+  background-color: #218838;
+}
+
+.billing-container .preprint-actions .cancel-btn {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.billing-container .preprint-actions .cancel-btn:hover {
+  background-color: #c82333;
+}
+
+/* Make header more compact */
+.billing-container .billing-header {
+  gap: 4px;
+  padding: 2px 6px;
+  align-items: flex-start; /* shrink vertically */
+}
+
+.billing-container .header-part {
+  flex-direction: row;   /* row instead of column */
+  flex-wrap: wrap;       /* allow wrapping instead of forcing tall block */
+  padding: 2px;
+  gap: 4px;
+  min-width: auto;
+}
+.barcode-error {
+  background: rgba(239, 145, 145, 0.614);
+  padding: 10px;
+  color: rgba(255, 0, 0, 0.854);
+  margin: 5px 0;
+  font-weight: bold;
+}
+
+.billing-container .header-row {
   display: flex;
   align-items: center;
   gap: 2px;
-}
-
-.header-row label {
-  width: 70px; /* fixed width for labels */
-  font-weight: 500;
   margin: 0;
 }
 
-.header-row input,
-.header-row select,
-.header-row span {
-  flex: 1; /* take remaining space */
-  font-size: 8px;
-  padding: 1px 3px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+.billing-container .header-row label {
+  width: auto;           /* remove fixed width */
+  min-width: 60px;
+  font-size: 11px;
+  margin: 0;
+  line-height: 1;        /* tighter line height */
+}
+
+.billing-container .header-row input,
+.billing-container .header-row select,
+.billing-container .header-row span {
+  font-size: 11px;
+  padding: 1px 4px;
+  height: 20px;          /* force small height */
+  line-height: 1.2;
+}
+@media (max-width: 768px) {
+
+  /* ✅ Base table reset */
+  .billing-container .products-table,
+  .billing-container .products-table thead,
+  .billing-container .products-table tbody,
+  .billing-container .products-table th,
+  .billing-container .products-table tr {
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .billing-container .products-table th {
+    display: none; /* hide table headers */
+  }
+
+  .billing-container .products-table tr {
+    display: flex;            /* flex rows */
+    flex-wrap: wrap;          /* allow wrapping */
+    margin-bottom: 5px;
+    border-bottom: 1px solid #eee;
+    padding: 2px 0;
+    background: #fff;
+    box-shadow: none;
+  }
+
+  /* ✅ All table cells: label + input in same row */
+  .billing-container .products-table td {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 4px;
+    border: none;
+    margin: 0;
+    width: 100%;
+  }
+
+  .billing-container .products-table td::before {
+    content: attr(data-label);
+    flex: 0 0 auto;
+    font-weight: 600;
+    font-size: 10px;
+    color: #444;
+    margin: 0;
+  }
+
+  .billing-container .products-table input {
+    flex: 1 1 auto;
+    margin: 0;
+    font-size: 11px;
+    padding: 2px 4px;
+    height: 22px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    box-sizing: border-box;
+  }
+
+  /* ✅ First two columns (Number + Barcode) side-by-side */
+  .billing-container .products-table tr td:nth-child(1),
+  .billing-container .products-table tr td:nth-child(2) {
+    display: inline-flex;
+    width: auto;
+    min-width: 50px;
+    margin-right: 4px;
+    flex: 0 0 auto;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* ✅ Other columns full width below */
+  .billing-container .products-table tr td:nth-child(n+3) {
+    flex: 1 1 100%;
+  }
+
+  /* ✅ Products container spacing */
+  .billing-container .products-table {
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+
+  /* ✅ Header adjustments */
+  .billing-container .billing-header {
+    height: 180px;
+    overflow-y: auto;
+    flex-wrap: wrap;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  .billing-container .header-part {
+    flex: 1 1 48%;
+    min-width: 0;
+    padding: 2px;
+    gap: 2px;
+  }
+
+  .billing-container .header-row {
+    display: flex;
+    align-items: center;
+    margin: 1px 0;
+    gap: 2px;
+  }
+
+  .billing-container .header-row label {
+    font-size: 10px;
+    min-width: 50px;
+  }
+
+  .billing-container .header-row input,
+  .billing-container .header-row select,
+  .billing-container .header-row span {
+    font-size: 10px;
+    height: 22px;
+    padding: 1px 3px;
+  }
+
+
+  /* ✅ Summary card */
+  .billing-container .summary-card {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+
+  .billing-container .summary-row input {
+    width: 70px;
+    font-size: 12px;
+    padding: 3px 5px;
+  }
+
+  .billing-container .total-row {
+    font-size: 14px;
+  }
+  /* Alternating row background colors */
+.billing-container .products-table tr:nth-child(odd) {
+  background-color: #ffffff; /* white for odd rows */
+}
+
+.billing-container .products-table tr:nth-child(even) {
+  background-color: #f9f9f9; /* light gray for even rows */
+}
+/* Add space between mobile rows */
+.billing-container .products-table tr {
+  margin-bottom: 8px; /* space between each row */
+  border-radius: 6px; /* rounded corners for better separation */
+  overflow: hidden;   /* ensure bg color doesn't spill */
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05); /* subtle shadow for depth */
 }
 
 }

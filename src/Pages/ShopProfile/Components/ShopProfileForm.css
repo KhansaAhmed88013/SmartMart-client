@@ -1,0 +1,98 @@
+.shop-profile-container {
+  max-width: 850px; /* fixed width for desktop */
+  margin: 0px auto;
+  padding: 10px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+  padding-bottom: 0px;
+}
+
+.shop-profile-container h2 {
+  text-align: center;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.shop-profile-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Row wrapper for multiple inputs */
+.input-row {
+  display: flex;
+  gap: 15px;
+}
+
+/* Each input in a row */
+.input-row > div {
+  flex: 1;
+}
+
+.shop-profile-container label {
+  font-weight: 600;
+  margin-bottom: 5px;
+  display: block;
+  color: #555;
+}
+
+.shop-profile-container input,
+.shop-profile-container textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.shop-profile-container input:focus,
+.shop-profile-container textarea:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 4px #007bff40;
+  outline: none;
+}
+
+.shop-profile-container textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.shop-profile-container button {
+  padding: 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.shop-profile-container button:hover {
+  background-color: #0056b3;
+}
+
+/* Responsive: stack inputs on tablets and mobile */
+@media (max-width: 768px) {
+  
+.shop-profile-container h2 {
+  text-align: center;
+  margin: 15px;
+  color: #333;
+}
+  .input-row {
+    flex-direction: column;
+  }
+  
+
+.shop-profile-container label {
+  margin: 10px 0px;
+  }
+
+}
+

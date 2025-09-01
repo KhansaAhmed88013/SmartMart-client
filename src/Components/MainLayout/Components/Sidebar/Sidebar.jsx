@@ -1,20 +1,36 @@
 import "./Sidebar.css";
-import React, { useState } from "react";
+
+import React, { useEffect, useState } from "react";
+
 import { 
   FaTimes, FaHome, FaUserSecret, FaBuilding, FaWrench, 
   FaBox, FaTags, FaShoppingCart, FaFileInvoice, 
   FaChartLine, FaUsers, FaCogs, FaSignOutAlt, FaTruck ,FaBoxes,FaPlus,FaChevronDown,FaChevronUp
 } from "react-icons/fa";
+import { getProfileName } from "../../../../UserService";
 
 function Sidebar({ sidebarOpen, closeSidebar }) {
+
   const [isOpen, setIsOpen] = useState(false);
   const [isPurchaseOpen, setIsPurchaseOpen] = useState(false);
+
+
+  const [profilename,setProfileName]=useState("Smart Super ")
+useEffect(()=>{
+  const getname=async()=>{
+    const result=await getProfileName();
+    if(result){
+      setProfileName(result)
+    }
+  }
+  getname()
+},[])
 
   return (
     <div className={sidebarOpen ? "sidebar_responsive" : ""} id="sidebar">
       <div className="sidebar__title">
         <div className="sidebar__img">
-          <h2><strong>Smart</strong>Mart</h2>
+          <h2>{profilename.shopName}</h2>
         </div>
         <FaTimes
           className="sidebar__close"
@@ -40,9 +56,9 @@ function Sidebar({ sidebarOpen, closeSidebar }) {
               <FaPlus />
               <a href="#">Add Product</a>
             </div>
-            <div className="sidebar__link">
+            <div className="sidebar__link" onClick={()=>window.location.href='/categories'}>
               <FaTags />
-              <a href="#">Categories</a>
+              <a href="/categories">Categories</a>
             </div>
             <div className="sidebar__link" onClick={()=>window.location.href='/stock'}>
               <FaBoxes />
@@ -165,13 +181,13 @@ function Sidebar({ sidebarOpen, closeSidebar }) {
         </div>
         <div className="sidebar__link">
           <FaTruck />
-          <a href="#">Supplier Management</a>
+          <a href="/supplierManagement">Supplier Management</a>
         </div>
 
         {/* Settings */}
         <div className="settings">
             <h2>Settings</h2>
-        <div className="sidebar__link">
+        <div className="sidebar__link" onClick={()=>window.location.href='/shopProfile'}>
           <FaCogs />
           <a href="#">System Settings</a>
         </div>

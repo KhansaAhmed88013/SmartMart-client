@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "./InventoryStock.css";
 
 function ExportStock() {
   const [exports, setExports] = useState([

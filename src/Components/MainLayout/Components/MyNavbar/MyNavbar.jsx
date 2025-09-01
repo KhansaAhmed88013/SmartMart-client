@@ -47,7 +47,7 @@ function MyNavbar({ sideBarOpen, openSideBar }) {
                     
                     {openUser && (
                         <div className="dropdown-menu">
-                            <a href="/">Settings</a>
+                            <a href="/shopProfile">Settings</a>
                             <a href="/">Log Out</a>
                         </div>
                     )}
