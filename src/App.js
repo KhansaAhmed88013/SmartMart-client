@@ -6,19 +6,18 @@ import ViewProducts from "./Pages/Products/ViewProducts/ViewProducts";
 import Billing from "./Pages/SalesBilling/Billing/Billing";
 import InventoryStock from "./Pages/Products/InventoryStock/InventoryStock";
 
-
 import SalesRecord from "./Pages/SalesBilling/Billing/SalesRecord";
-import SalesSummary from "./Components/MainLayout/Components/Sidebar/Reports/SalesReports";
-import OTsaleReport from "./Components/MainLayout/Components/Sidebar/Reports/OTsaleReport";
-import StockReport from "./Components/MainLayout/Components/Sidebar/Reports/StockReport";
-import SalariesInvoiceReport from "./Components/MainLayout/Components/Sidebar/Reports/SaleriesInvoiceReport";
-import SalesReturnReport from "./Components/MainLayout/Components/Sidebar/Reports/SalesReturnReport";
-import InvoiceReport from "./Components/MainLayout/Components/Sidebar/Reports/InvoiceReport";
-import DailySaleSummary from "./Components/MainLayout/Components/Sidebar/Reports/TotalSummery";
-import PurchaseReport from "./Components/MainLayout/Components/Sidebar/Reports/PurchaseReport";
-import SupplierReport from "./Components/MainLayout/Components/Sidebar/Reports/SupplierReport";
-import DailyPurchaseSummary from "./Components/MainLayout/Components/Sidebar/Reports/DailyPurchaseSummary";
-import CustomerReport from "./Components/MainLayout/Components/Sidebar/Reports/CustomerReport";
+import SalesSummary from "./Pages/Reports/SalesReport/SalesReports";
+import OTSaleReport from "./Pages/Reports/SalesReport/OTsaleReport";
+import StockReport from "./Pages/Reports/SalesReport/StockReport";
+import SalariesInvoiceReport from "./Pages/Reports/SalesReport/SaleriesInvoiceReport";
+import SalesReturnReport from "./Pages/Reports/SalesReport/SalesReturnReport";
+import InvoiceReport from "./Pages/Reports/SalesReport/InvoiceReport";
+import DailySaleSummary from "./Pages/Reports/SalesReport/TotalSummery";
+import PurchaseReport from "./Pages/Reports/PurchaseReports/PurchaseReport";
+import SupplierReport from "./Pages/Reports/PurchaseReports/SupplierReport";
+import DailyPurchaseSummary from "./Pages/Reports/PurchaseReports/DailyPurchaseSummary";
+import CustomerReport from "./Pages/Reports/CustomerReport/CustomerReport";
 import DiscountOfferSummary from "./Pages/SalesBilling/Discount/DiscountOfferSummary";
 
 import ImportStock from "./Pages/Products/InventoryStock/Components/ImportExport/ImportStock";
@@ -45,7 +44,7 @@ function App() {
 
          <Route path="SalesRecord" element={<SalesRecord/>}/>
          <Route path="SalesSummary" element={<SalesSummary/>}/>
-         <Route path="OTsaleReport" element={<OTsaleReport/>}/>
+         <Route path="OTSaleReport" element={<OTSaleReport/>}/>
          <Route path="StockReport" element={<StockReport/>}/>
          <Route path="SalariesInvoiceReport" element={<SalariesInvoiceReport/>}/>
          <Route path="SalesReturnReport" element={<SalesReturnReport/>}/>
