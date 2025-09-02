@@ -209,7 +209,6 @@ export const getLastInvoiceNo=async()=>{
 export const getProfile=async()=>{
     try{
         const res=await axios.get(`${API_BASE_URL}/getProfile`)
-        console.log(res.data)
         return res.data
     }catch(err){
         const errorMessage = err.response?.data?.message || err.message || "Unknown error";
@@ -219,7 +218,6 @@ export const getProfile=async()=>{
 export const getProfileName=async()=>{
     try{
         const res=await axios.get(`${API_BASE_URL}/getProfileName`)
-        console.log(res.data)
         return res.data
     }catch(err){
         const errorMessage = err.response?.data?.message || err.message || "Unknown error";
@@ -248,4 +246,19 @@ export const GetProductByBarcode = async (barcode) => {
     throw new Error(errorMessage);
   }
 }
-
+export const UpdateDiscountStatus=async(data)=>{
+    try{
+        const res=await axios.put(`${API_BASE_URL}/editDiscountStatus`,data,{
+            headers:{
+                'Content-Type':'application/json'
+            }
+        })
+        return res.data
+    }catch(err){
+        const errorMessage = err.response?.data?.message || err.message || "Unknown error";
+        throw new Error(errorMessage);
+    }
+}
+export const UpdateDiscount=async(data)=>{
+    console.log(data)
+}

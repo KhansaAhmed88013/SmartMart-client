@@ -6,8 +6,7 @@ import ViewProducts from "./Pages/Products/ViewProducts/ViewProducts";
 import Billing from "./Pages/SalesBilling/Billing/Billing";
 import InventoryStock from "./Pages/Products/InventoryStock/InventoryStock";
 
-import ImportStock from "./Pages/Products/InventoryStock/ImportStock";
-import ExportStock from "./Pages/Products/InventoryStock/ExportStock";
+
 import SalesRecord from "./Pages/SalesBilling/Billing/SalesRecord";
 import SalesSummary from "./Components/MainLayout/Components/Sidebar/Reports/SalesReports";
 import OTsaleReport from "./Components/MainLayout/Components/Sidebar/Reports/OTsaleReport";
