@@ -177,35 +177,25 @@ const getFilteredProducts = (categoryName) => {
       const totalOnCost = product.cost_price * product.qty; 
       return (
         <tr key={product.id}>
-  <td data-label="#"> {index + 1} </td>
-  <td data-label="Item Code"> {product.code} </td>
-  <td data-label="Product Name"> {product.name} </td>
-  <td data-label="QTY"> {product.qty} </td>
-  <td data-label="Cost Price"> {product.cost_price} </td>
-  <td data-label="Sale Price"> {product.sale_price} </td>
-  <td data-label="Total on Sale"> {totalOnSale.toFixed(2)} </td>
-  <td data-label="Total on Cost"> {totalOnCost.toFixed(2)} </td>
+  <td data-label="#">{index + 1}</td>
+  <td data-label="Item Code">{product.code}</td>
+  <td data-label="Product Name">{product.name}</td>
+  <td data-label="QTY">{product.qty}</td>
+  <td data-label="Cost Price">{product.cost_price}</td>
+  <td data-label="Sale Price">{product.sale_price}</td>
+  <td data-label="Total on Sale">{totalOnSale.toFixed(2)}</td>
+  <td data-label="Total on Cost">{totalOnCost.toFixed(2)}</td>
 </tr>
       );
     })}
     {filteredProducts.length > 0 && (
-    <tr className="category-summary">
-  <td colSpan="3" data-label=""> <strong>Category Totals</strong> </td>
-  <td data-label="QTY">
-    {filteredProducts.reduce((sum, p) => sum + p.qty, 0)}
-  </td>
-  <td data-label="Cost Price">
-    {filteredProducts.reduce((sum, p) => sum + Number(p.cost_price), 0)}
-  </td>
-  <td data-label="Sale Price">
-    {filteredProducts.reduce((sum, p) => sum + Number(p.sale_price), 0)}
-  </td>
-  <td data-label="Total on Sale">
-    {filteredProducts.reduce((sum, p) => sum + p.qty * p.sale_price, 0)}
-  </td>
-  <td data-label="Total on Cost">
-    {filteredProducts.reduce((sum, p) => sum + p.qty * p.cost_price, 0)}
-  </td>
+   <tr className="category-summary">
+  <td colSpan="3" data-label=""><strong>Category Totals</strong></td>
+  <td data-label="QTY">{filteredProducts.reduce((sum, p) => sum + p.qty, 0)}</td>
+  <td data-label="Cost Price">{filteredProducts.reduce((sum, p) => sum + Number(p.cost_price), 0)}</td>
+  <td data-label="Sale Price">{filteredProducts.reduce((sum, p) => sum + Number(p.sale_price), 0)}</td>
+  <td data-label="Total on Sale">{filteredProducts.reduce((sum, p) => sum + p.qty * p.sale_price, 0)}</td>
+  <td data-label="Total on Cost">{filteredProducts.reduce((sum, p) => sum + p.qty * p.cost_price, 0)}</td>
 </tr>
 
   )}

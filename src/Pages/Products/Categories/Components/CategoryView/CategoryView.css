@@ -1,46 +1,4 @@
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.modal-content {
-  background: #fff;
-  padding: 10px;
-  border-radius: 10px;
-  width: 500px;
-  max-height: 80%;
-  overflow-y: auto;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-}
-
-.details-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
-}
-
-.details-table td {
-  padding: 5px;
-  border-bottom: 1px solid #ddd;
-}
-
-.details-table tr:last-child td {
-  border-bottom: none;
-}
-
-.details-table td:first-child {
-  width: 40%;
-}
-/* Container */
-.supplier-form-container {
+.category-view-container {
   max-width: 1100px;
   margin: 5px auto;
   background: #f9f9f9;
@@ -49,59 +7,76 @@
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Heading */
-.supplier-form-container h2 {
-  margin-bottom: 3px;
+.category-view-container h2 {
+  margin-bottom: 10px;
   color: #333;
   text-align: center;
 }
 
-/* Table */
-.supplier-table {
+.category-view-table {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 10px;
 }
 
-.supplier-table th, .supplier-table td {
-  padding: 5px 10px;
+.category-view-table th,
+.category-view-table td {
+  padding: 8px 10px;
   text-align: left;
   border-bottom: 1px solid #ddd;
+  color: #555;
+  font-size: 1rem;
 }
 
-.supplier-table th {
+.category-view-table th {
   background-color: #489FB5;
   color: #fff;
   font-weight: 600;
 }
 
-.supplier-table tr:hover {
+.category-view-table tr:hover {
   background-color: #f1f1f1;
   transition: 0.2s;
 }
 
-.supplier-table td {
-  color: #555;
-  font-size: 1rem;
-}
-
-/* Modal Overlay */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.5);
+/* Actions */
+.category-view-table .action-td {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  animation: fadeIn 0.3s ease;
+  flex-direction: row;
+  gap: 5px;
 }
 
-/* Modal Content */
-.modal-content {
+.category-view-table .action-b {
+  padding: 3px;
+  border: 1px solid rgba(81, 77, 77, 0.667);
+  cursor: pointer;
+  background: whitesmoke;
+  border-radius: 3px;
+}
+
+.category-view-table .action-b:hover {
+  background: #fefefe;
+}
+
+.category-view-table .action-box {
+  color: rgba(0, 128, 0, 0.8);
+}
+
+.category-view-table .action-trash-box {
+  color: rgb(177, 65, 65);
+}
+
+/* Modal */
+.category-view-modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex; justify-content: center; align-items: center;
+  z-index: 1000;
+}
+
+.category-view-modal-content {
   background: #fff;
   padding: 25px;
   border-radius: 12px;
@@ -109,151 +84,66 @@
   max-height: 85%;
   overflow-y: auto;
   box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-  position: relative;
-  animation: slideIn 0.3s ease;
 }
 
-/* Close Button */
-.modal-content button {
-  display: block;
-  margin: 20px auto 0 auto;
-  padding: 10px 20px;
-  background-color: #489FB5;
-  border: none;
-  border-radius: 6px;
-  color: #fff;
-  font-size: 14px;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.modal-content button:hover {
-  background-color: #326c7a;
-}
-
-/* Details Table inside modal */
-.details-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
-}
-
-.details-table td {
-  padding: 7px;
-  font-size: 14px;
-  border-bottom: 1px solid #eee;
-  color: #333;
-}
-
-.details-table tr:last-child td {
-  border-bottom: none;
-}
-
-.details-table td:first-child {
-  font-weight: 600;
-  width: 35%;
-  color: #555;
-}
-
-/* Animations */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes slideIn {
-  from { transform: translateY(-20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
-/* Responsive Table */
-@media (max-width: 768px) {
-  .supplier-table th, .supplier-table td {
-    padding: 8px;
-    font-size: 13px;
-  }
-
-  .modal-content {
-    width: 90%;
-    padding: 20px;
-  }
-}
-.action-box{
-    padding: 3px;
-    color: rgba(0, 128, 0, 0.799);
-}
-
-/* Edit Form inside Modal */
-.modal-content form {
+/* Form inside modal */
+.category-view-form {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 10px;
 }
 
-.modal-content form label {
+.category-view-form label {
   font-weight: 600;
   color: #333;
-  margin-bottom: 3px;
 }
 
-.modal-content form input,
-.modal-content form select {
-  padding: 5px 7px;
+.category-view-form input,
+.category-view-form select,
+.category-view-form textarea {
+  padding: 6px 8px;
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 14px;
   width: 100%;
   box-sizing: border-box;
-  transition: border 0.2s;
 }
 
-.modal-content form input:focus,
-.modal-content form select:focus {
+.category-view-form input:focus,
+.category-view-form select:focus,
+.category-view-form textarea:focus {
   outline: none;
   border-color: #489FB5;
 }
 
-.modal-content form button {
-  padding: 7px 10px;
-  border: none;
-  border-radius: 6px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.modal-content form button[type="submit"] {
+.category-view-form button[type="submit"] {
   background-color: #489FB5;
   color: #fff;
-  margin-top: 5px;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 12px;
+  cursor: pointer;
 }
 
-.modal-content form button[type="submit"]:hover {
+.category-view-form button[type="submit"]:hover {
   background-color: #397b8c;
 }
 
-.modal-content form button[type="button"] {
+.category-view-form button[type="button"] {
   background-color: #6c757d;
   color: #fff;
-  margin-top: 5px;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 12px;
+  cursor: pointer;
 }
 
-.modal-content form button[type="button"]:hover {
+.category-view-form button[type="button"]:hover {
   background-color: #495057;
 }
 
-/* Responsive for small screens */
-@media (max-width: 768px) {
-  .modal-content form input,
-  .modal-content form select {
-    font-size: 10px;
-  }
-
-  .modal-content form button {
-    font-size: 10px;
-  }
-}
-.editmsg {
+/* Messages */
+.category-view-message {
   position: fixed;
   top: 20px;
   right: 20px;
@@ -263,36 +153,78 @@
   border-radius: 6px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.2);
   z-index: 2000;
-  animation: fadeOut 3s forwards;
 }
 
-.error-message {
-    background: rgba(255, 0, 0, 0.799);
-  color: white;
-  margin-top: 10px;
-}
+.category-view-message.error { background: rgba(255, 0, 0, 0.8); }
+.category-view-message.success { background: rgba(0, 128, 0, 0.78); }
+@media (max-width: 768px) {
+  .category-view-table,
+  .category-view-table thead,
+  .category-view-table tbody,
+  .category-view-table th,
+  .category-view-table td,
+  .category-view-table tr {
+    display: block;
+    width: 100%;
+  }
 
-.success-message {
-    background: rgba(0, 128, 0, 0.788);
-  color: white;
-  margin-top: 10px;
+  .category-view-table thead tr { display: none; }
+
+  .category-view-table tr {
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 12px 10px;
+    background: #fff;
+    box-sizing: border-box;
+  }
+
+  .category-view-table td {
+    text-align: left;
+    padding-left: 40%; /* enough space for label */
+    position: relative;
+    border: none;
+    border-bottom: 1px solid #eee;
+    white-space: normal;
+    word-wrap: break-word;
+    font-size: 0.9rem;
+  }
+
+  .category-view-table td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 10px;
+    width: 35%; /* smaller width to avoid overlap */
+    text-align: left;
+    font-weight: 600;
+    color: #333;
+    font-size: 0.85rem;
+  }
+
+  /* Fix actions */
+  .category-view-table .action-td {
+    padding-left: 10px; /* remove big padding */
+    display: flex;
+    flex-wrap: wrap; /* wrap if needed */
+    gap: 6px;
+  }
+
+  .category-view-table .action-b {
+    padding: 4px 4px;
+    font-size: 0.85rem;
+    min-width: 40px; /* give buttons some minimum width */
+    text-align: center;
+  }
+
+  .category-view-modal-content {
+    width: 95%;
+    padding: 20px;
+  }
+
+  .category-view-form input,
+  .category-view-form select,
+  .category-view-form textarea,
+  .category-view-form button {
+    font-size: 0.9rem;
+  }
 }
-.action-trash-box{
-    color: rgb(177, 65, 65);
-    margin: 0 5px;
-}
-.action-b{
-    padding: 2px;
-    border: 1px solid rgba(81, 77, 77, 0.667);
-    cursor: pointer;
-    background: whitesmoke;
-    border-radius: 3px;
-    margin: 0 2px;
-}
-.action-b:hover{
-    background: rgb(250, 250, 250);
-}
-.action-td{
-    width: 70px;
-display: flex;
-flex-direction: row;}

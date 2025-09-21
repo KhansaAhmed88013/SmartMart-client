@@ -174,12 +174,13 @@
   .products-container .products-table td:nth-child(3)::before { content: "Product Name"; }
   .products-container .products-table td:nth-child(4)::before { content: "Cost Price"; }
   .products-container .products-table td:nth-child(5)::before { content: "QTY"; }
-  .products-container .products-table td:nth-child(6)::before { content: "Supplier"; }
-  .products-container .products-table td:nth-child(7)::before { content: "Category"; }
-  .products-container .products-table td:nth-child(8)::before { content: "Sale Price"; }
-  .products-container .products-table td:nth-child(9)::before { content: "Total Price"; }
-  .products-container .products-table td:nth-child(10)::before { content: "Expiry"; }
-  .products-container .products-table td:nth-child(11)::before { content: "Other"; }
+   .products-container .products-table td:nth-child(6)::before { content: "Unit"; }
+  .products-container .products-table td:nth-child(7)::before { content: "Supplier"; }
+  .products-container .products-table td:nth-child(8)::before { content: "Category"; }
+  .products-container .products-table td:nth-child(9)::before { content: "Sale Price"; }
+  .products-container .products-table td:nth-child(10)::before { content: "Total Price"; }
+  .products-container .products-table td:nth-child(11)::before { content: "Expiry"; }
+  .products-container .products-table td:nth-child(12)::before { content: "Other"; }
 
   .products-container .products-table .controlls {
     display: flex;
@@ -341,7 +342,7 @@
 .products-container .products-table th:nth-child(2),
 .products-container .products-table td:nth-child(2) { width: 120px; }
 .products-container .products-table th:nth-child(3),
-.products-container .products-table td:nth-child(3) { width: 180px; }
+.products-container .products-table td:nth-child(3) { width: 150px; }
 .products-container .products-table th:nth-child(4),
 .products-container .products-table td:nth-child(4),
 .products-container .products-table th:nth-child(5),
@@ -353,11 +354,18 @@
 .products-container .products-table th:nth-child(8),
 .products-container .products-table td:nth-child(8),
 .products-container .products-table th:nth-child(9),
-.products-container .products-table td:nth-child(9) { width: 70px; }
+.products-container .products-table td:nth-child(9) { width: 60px; }
 .products-container .products-table th:nth-child(10),
 .products-container .products-table td:nth-child(10),
 .products-container .products-table th:nth-child(11),
 .products-container .products-table td:nth-child(11) { width: 70px; }
+
+
+/* Title alignment */
+  .products-container .table-title {
+    margin: 10px auto;
+    text-align: center;
+  }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
@@ -394,12 +402,6 @@
   .products-container .products-table td:nth-child(10) {
     flex: 2;         /* ✅ take more space */
     width: 300px;
-  }
-
-  /* Title alignment */
-  .products-container .table-title {
-    margin: 10px auto;
-    text-align: center;
   }
 
   /* Controls styling */
@@ -441,4 +443,31 @@
 .products-container .products-table td:nth-child(11) {
   width: 80px; /* increase from 70px */
   text-align: center; /* center icons nicely */
+}
+.update-msg {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 12px 18px;
+  border-radius: 6px;
+  font-weight: 500;
+  color: #fff;
+  z-index: 1000;
+  animation: fadeOut 3s forwards;
+}
+
+/* Success message */
+.success {
+  background: #4caf50;
+}
+
+/* Error message */
+.error {
+  background: #f44336;
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
 }

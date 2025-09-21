@@ -1,10 +1,10 @@
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
-
 }
 .billing-header {
-  margin: 0;     /* remove default margin */
+  margin: 0; /* remove default margin */
   padding-top: 2px; /* keep only a small padding if needed */
 }
 
@@ -26,7 +26,7 @@ html, body {
   background: #fff;
   padding: 8px 15px;
   border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
   font-family: "Segoe UI", sans-serif;
   overflow-x: auto;
   margin-bottom: 10px;
@@ -94,11 +94,10 @@ html, body {
   width: 180px; /* Product Name */
 }
 
-
 .billing-container .products-table th:nth-child(5),
 .billing-container .products-table td:nth-child(5),
 .billing-container .products-table th:nth-child(6),
-.billing-container .products-table td:nth-child(6){
+.billing-container .products-table td:nth-child(6) {
   width: 80px;
 }
 .billing-container .products-table th:nth-child(7),
@@ -116,13 +115,12 @@ html, body {
   width: 100px;
 }
 
-
 .billing-container .add-btn {
   padding: 6px 12px;
   font-size: 13px;
   border: none;
   border-radius: 15px;
-  background: #489FB5;
+  background: #489fb5;
   color: white;
   cursor: pointer;
   transition: background 0.2s;
@@ -138,17 +136,17 @@ html, body {
   background: #f5f5f5;
   padding: 4px 16px;
   border-radius: 8px 8px 0 0;
-  box-shadow: 0 -2px 3px rgba(0,0,0,0.08);
+  box-shadow: 0 -2px 3px rgba(0, 0, 0, 0.08);
   font-family: "Segoe UI", sans-serif;
   z-index: 10;
 }
 
 .billing-container .summary-row {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   margin-bottom: 2px;
-  font-size: 12px;
+  text-wrap: nowrap;
+  font-size: 14px;
 }
 
 .billing-container .summary-row input {
@@ -158,6 +156,11 @@ html, body {
   border-radius: 4px;
   font-size: 14px;
   text-align: right;
+}
+.billing-container .summary-row div {
+  width: 48%;
+  display: flex;
+  gap: 0.5rem;
 }
 
 .billing-container .total-row {
@@ -187,7 +190,7 @@ html, body {
 }
 
 .billing-container .print-btn {
-  background: #489FB5;
+  background: #489fb5;
   color: #fff;
 }
 .billing-container .print-btn:hover {
@@ -195,7 +198,7 @@ html, body {
 }
 
 .billing-container .save-btn {
-  background: #4CAF50;
+  background: #4caf50;
   color: #fff;
 }
 .billing-container .save-btn:hover {
@@ -203,13 +206,13 @@ html, body {
 }
 
 .billing-container .exit-btn {
-  background: #F44336;
+  background: #f44336;
   color: #fff;
 }
 .billing-container .exit-btn:hover {
   background: #c0392b;
 }
-.billing-container .table-title{
+.billing-container .table-title {
   font-size: 16px;
   margin-bottom: 5px;
 }
@@ -276,15 +279,21 @@ html, body {
   border-radius: 10px;
   width: 350px;
   max-width: 90%;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   font-family: "Segoe UI", sans-serif;
   animation: fadeIn 0.3s ease-out;
 }
 
 /* Animation */
 @keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 /* Modal header */
@@ -360,8 +369,8 @@ html, body {
 }
 
 .billing-container .header-part {
-  flex-direction: row;   /* row instead of column */
-  flex-wrap: wrap;       /* allow wrapping instead of forcing tall block */
+  flex-direction: row; /* row instead of column */
+  flex-wrap: wrap; /* allow wrapping instead of forcing tall block */
   padding: 2px;
   gap: 4px;
   min-width: auto;
@@ -382,11 +391,11 @@ html, body {
 }
 
 .billing-container .header-row label {
-  width: auto;           /* remove fixed width */
+  width: auto; /* remove fixed width */
   min-width: 60px;
   font-size: 11px;
   margin: 0;
-  line-height: 1;        /* tighter line height */
+  line-height: 1; /* tighter line height */
 }
 
 .billing-container .header-row input,
@@ -394,158 +403,316 @@ html, body {
 .billing-container .header-row span {
   font-size: 11px;
   padding: 1px 4px;
-  height: 20px;          /* force small height */
+  height: 20px; /* force small height */
   line-height: 1.2;
 }
-@media (max-width: 768px) {
 
-  /* ✅ Base table reset */
-  .billing-container .products-table,
-  .billing-container .products-table thead,
+.submit-error {
+  color: white;
+  background: rgba(202, 96, 96, 0.82);
+  padding: 10px;
+  border-radius: 10px;
+  font-weight: bold;
+  margin: 10px 0;
+  text-align: center;
+  z-index: 10000;
+}
+.row {
+  display: flex;
+  flex-direction: row;
+}
+.row div {
+  width: 48%;
+}
+/* ---------- Responsive: mobile-friendly table rows ---------- */
+
+/* Breakpoint for tablets/phones */
+@media (max-width: 768px) {
+  .billing-container .products-container {
+    margin-bottom: 15rem;
+    padding-top: 0px;
+  }
+  /* make table scrollable but then use stacked rows for readability */
+  .billing-container .products-table {
+    border: 0;
+    display: block;
+  }
+
+  /* hide header row */
+  .billing-container .products-table thead {
+    display: none;
+  }
+
+  /* each table row becomes a card */
   .billing-container .products-table tbody,
-  .billing-container .products-table th,
   .billing-container .products-table tr {
     display: block;
     width: 100%;
-    margin: 0;
-    padding: 0;
-  }
-
-  .billing-container .products-table th {
-    display: none; /* hide table headers */
-  }
-
-  .billing-container .products-table tr {
-    display: flex;            /* flex rows */
-    flex-wrap: wrap;          /* allow wrapping */
-    margin-bottom: 5px;
-    border-bottom: 1px solid #eee;
-    padding: 2px 0;
+    margin-bottom: 0px;
     background: #fff;
-    box-shadow: none;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+    padding: 8px;
+    box-sizing: border-box;
   }
 
-  /* ✅ All table cells: label + input in same row */
+  /* each cell becomes a flex row: label + value */
   .billing-container .products-table td {
     display: flex;
-    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
-    gap: 4px;
-    padding: 2px 4px;
-    border: none;
-    margin: 0;
-    width: 100%;
+    padding: 6px 4px;
+    border: 0;
+    font-size: 14px;
+    gap: 8px;
+    box-sizing: border-box;
   }
 
+  /* Use the data-label attribute as the left label */
   .billing-container .products-table td::before {
     content: attr(data-label);
-    flex: 0 0 auto;
+    flex: 0 0 42%;
+    max-width: 42%;
+    padding-right: 6px;
     font-weight: 600;
-    font-size: 10px;
     color: #444;
-    margin: 0;
+    white-space: normal;
+    line-height: 1.1;
+    font-size: 13px;
   }
 
-  .billing-container .products-table input {
-    flex: 1 1 auto;
-    margin: 0;
-    font-size: 11px;
-    padding: 2px 4px;
-    height: 22px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    box-sizing: border-box;
+  /* value area (input) */
+  .billing-container .products-table td > input,
+  .billing-container .products-table td > select,
+  .billing-container .products-table td > span {
+    flex: 1 1 56%;
+    width: 100%;
+    min-width: 0;
   }
 
-  /* ✅ First two columns (Number + Barcode) side-by-side */
-  .billing-container .products-table tr td:nth-child(1),
-  .billing-container .products-table tr td:nth-child(2) {
-    display: inline-flex;
-    width: auto;
-    min-width: 50px;
-    margin-right: 4px;
-    flex: 0 0 auto;
-    justify-content: center;
-    align-items: center;
+  /* move small columns (checkbox, row number) into same stacked layout but smaller label */
+  .billing-container .products-table td:first-child::before,
+  .billing-container .products-table td:nth-child(2)::before {
+    flex-basis: 38%;
   }
 
-  /* ✅ Other columns full width below */
-  .billing-container .products-table tr td:nth-child(n+3) {
-    flex: 1 1 100%;
+  /* Buttons & add-row spacing */
+  .billing-container .add-btn {
+    width: 100%;
+    margin-top: 6px;
+    padding: 10px 12px;
+    border-radius: 10px;
   }
 
-  /* ✅ Products container spacing */
-  .billing-container .products-table {
-    margin-top: 0;
-    margin-bottom: 1rem;
-  }
-
-  /* ✅ Header adjustments */
+  /* Header becomes vertical stacked for small screens */
   .billing-container .billing-header {
-    height: 180px;
-    overflow-y: auto;
-    flex-wrap: wrap;
-    padding: 0;
-    box-sizing: border-box;
+    display: block;
+    padding: 4px;
+    gap: 2px;
   }
 
   .billing-container .header-part {
-    flex: 1 1 48%;
-    min-width: 0;
-    padding: 2px;
-    gap: 2px;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    padding: 6px 0;
+    border-bottom: 1px dashed rgba(0, 0, 0, 0.04);
   }
 
-  .billing-container .header-row {
+  .billing-container .products-table th,
+  .billing-container .products-table td {
+    padding: 2px 1px;
+    font-size: 14px;
+  }
+  .billing-container .products-table input {
+    font-size: 14px;
+  }
+}
+
+/* ---------- Tighter mobile layout for very small phones ---------- */
+@media (max-width: 420px) {
+  .billing-container .products-table td::before {
+    font-size: 12px;
+    flex-basis: 45%;
+  }
+
+  .billing-container .products-table td {
+    padding: 6px 2px;
+  }
+
+  /* compact header labels */
+  .billing-container .header-row label {
+    min-width: 48px;
+    font-size: 12px;
+  }
+
+  .billing-container .summary-card {
+    padding: 8px 10px;
+  }
+
+  .billing-container .action-buttons {
+    gap: 8px;
+  }
+
+  .billing-container .action-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ---------- ensure inputs remain full-width and friendly ---------- */
+.billing-container .products-table input,
+.billing-container .products-table select {
+  box-sizing: border-box;
+  font-size: 14px;
+  padding: 8px 6px;
+  border-radius: 6px;
+}
+
+/* keep desktop/tablet styles intact but make table horizontally scrollable if needed */
+@media (min-width: 769px) {
+  .billing-container .products-table {
+    display: table;
+  }
+  .billing-container .products-table tr {
+    display: table-row;
+  }
+  .billing-container .products-table td {
+    display: table-cell;
+  }
+  .billing-container .products-table thead {
+    display: table-header-group;
+  }
+}
+
+/* small visual polish: spacing between stacked product cards */
+.billing-container
+  .products-container
+  .table-wrapper
+  > .products-table
+  > tbody
+  > tr
+  + tr {
+  margin-top: 6px;
+}
+/* ✅ Make summary + action buttons sticky at bottom (small screens) */
+@media (max-width: 768px) {
+  .billing-container .summary-card {
+    position: fixed; /* instead of sticky */
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-radius: 10px 10px 0 0;
+    z-index: 999;
+  }
+
+  .billing-container .action-buttons {
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+
+  .billing-container .action-btn {
+    flex: 1;
+    min-width: 80px;
+    font-size: 12px;
+    padding: 6px;
+  }
+}
+
+/* ✅ Billing header compact: 2 inputs per row */
+.billing-container .billing-header {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 6px;
+  font-size: 11px;
+}
+
+.billing-container .header-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.billing-container .header-row label {
+  font-size: 11px;
+  min-width: 65px; /* small labels */
+}
+
+.billing-container .header-row input,
+.billing-container .header-row select,
+.billing-container .header-row span {
+  font-size: 11px;
+  padding: 2px 4px;
+}
+@media (max-width: 768px) {
+  .billing-container .products-table td {
+    display: grid;
+    grid-template-columns: auto 1fr; /* label | input */
+    align-items: center;
+    gap: 12px; /* distance between label & input */
+  }
+
+  /* Label */
+  .billing-container .products-table td::before {
+    content: attr(data-label);
+    white-space: nowrap; /* keep label in one line */
+    font-weight: 500;
+    font-size: 12px;
+    color: #444;
+  }
+
+  /* Input / Select */
+  .billing-container .products-table td input,
+  .billing-container .products-table td select {
+    min-width: 220px; /* at least 120px wide */
+    width: 100%; /* take remaining space */
+  }
+  .billing-container .products-table input,
+  .billing-container .products-table select {
+    font-size: 14px;
+    padding: 4px 3px;
+    border-radius: 3px;
+  }
+  .billing-container .products-table td:first-child,
+  .billing-container .products-table td:nth-child(2) {
     display: flex;
     align-items: center;
-    margin: 1px 0;
-    gap: 2px;
+    justify-content: flex-start;
+    gap: 6px; /* space between checkbox and ID */
   }
 
-  .billing-container .header-row label {
-    font-size: 10px;
-    min-width: 50px;
+  .billing-container .products-table td:first-child input[type="checkbox"] {
+    margin: 0;
+    width: 16px;
+    height: 16px;
   }
 
+  .row {
+    flex-direction: column;
+  }
   .billing-container .header-row input,
   .billing-container .header-row select,
   .billing-container .header-row span {
     font-size: 10px;
-    height: 22px;
     padding: 1px 3px;
   }
-
-
-  /* ✅ Summary card */
-  .billing-container .summary-card {
-    font-size: 12px;
-    padding: 6px 10px;
+}
+/* ✅ Small screen fix */
+@media (max-width: 600px) {
+  .billing-container .products-table td:nth-child(1),
+  .billing-container .products-table td:nth-child(2) {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px; /* space between checkbox & index */
+    border: none; /* optional: remove extra border */
+    padding: 4px;
+    width: auto; /* let them shrink naturally */
   }
 
-  .billing-container .summary-row input {
-    width: 70px;
-    font-size: 12px;
-    padding: 3px 5px;
+  /* Hide table header for checkbox & index (since they now merge visually) */
+  .billing-container .products-table th:nth-child(1),
+  .billing-container .products-table th:nth-child(2) {
+    display: none;
   }
-
-  .billing-container .total-row {
-    font-size: 14px;
-  }
-  /* Alternating row background colors */
-.billing-container .products-table tr:nth-child(odd) {
-  background-color: #ffffff; /* white for odd rows */
-}
-
-.billing-container .products-table tr:nth-child(even) {
-  background-color: #f9f9f9; /* light gray for even rows */
-}
-/* Add space between mobile rows */
-.billing-container .products-table tr {
-  margin-bottom: 8px; /* space between each row */
-  border-radius: 6px; /* rounded corners for better separation */
-  overflow: hidden;   /* ensure bg color doesn't spill */
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05); /* subtle shadow for depth */
-}
-
 }

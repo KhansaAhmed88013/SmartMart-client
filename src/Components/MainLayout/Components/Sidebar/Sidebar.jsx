@@ -1,200 +1,209 @@
 import "./Sidebar.css";
+import React, { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { ProfileContext } from "../../../../Context/ProfileContext";
+import { useDispatch } from "react-redux";
+import { UserContext } from "../../../../Context/UserContext";
+import { clearRole } from "../../../../redux/Role/roleSlice";
+import { logOut } from "../../../../UserService";
 
-import React, { useEffect, useState } from "react";
 
 import { 
-  FaTimes, FaHome, FaUserSecret, FaBuilding, FaWrench, 
-  FaBox, FaTags, FaShoppingCart, FaFileInvoice, 
-  FaChartLine, FaUsers, FaCogs, FaSignOutAlt, FaTruck ,FaBoxes,FaPlus,FaChevronDown,FaChevronUp
+  FaTimes, FaHome, FaBox, FaTags, FaShoppingCart, FaFileInvoice, 
+  FaChartLine, FaWrench, FaUsers, FaCogs, FaSignOutAlt, FaTruck,
+  FaBoxes, FaPlus, FaChevronDown, FaChevronUp
 } from "react-icons/fa";
-import { getProfileName } from "../../../../UserService";
 
 function Sidebar({ sidebarOpen, closeSidebar }) {
-
-  const [isOpen, setIsOpen] = useState(false);
+  const { ProfileData } = useContext(ProfileContext);
+  const [isSalesOpen, setIsSalesOpen] = useState(false);
   const [isPurchaseOpen, setIsPurchaseOpen] = useState(false);
+  
+  // Helper for link clicks
+  const handleLinkClick = () => {
+    if (sidebarOpen) closeSidebar(); // close sidebar on mobile
+  };
 
+  const { currentUser, setCurrentUser } = useContext(UserContext);
+const dispatch = useDispatch();
+const navigate = useNavigate();
 
-  const [profilename,setProfileName]=useState("Smart Super ")
-useEffect(()=>{
-  const getname=async()=>{
-    const result=await getProfileName();
-    if(result){
-      setProfileName(result)
-    }
+const handleLogout = async () => {
+  if (!currentUser) return;
+  try {
+    await logOut({ userId: currentUser.id });
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    localStorage.removeItem("currentUser");
+    setCurrentUser(null);
+    dispatch(clearRole());
+    if (sidebarOpen) closeSidebar();
+    navigate("/Login");
+  } catch (err) {
+    console.error("Logout failed:", err);
   }
-  getname()
-},[])
+};
+
+  // Navigate to dashboard on shop name click
+  const goToDashboard = () => {
+    navigate("/"); // dashboard route
+    if (sidebarOpen) closeSidebar();
+  };
 
   return (
-    <div className={sidebarOpen ? "sidebar_responsive" : ""} id="sidebar">
+    <div className={`sidebar ${sidebarOpen ? "sidebar_responsive" : ""}`} id="sidebar">
       <div className="sidebar__title">
         <div className="sidebar__img">
-          <h2>{profilename.shopName}</h2>
+          {/* Clickable shop name */}
+          <h2 
+            style={{ cursor: "pointer" }} 
+            title="Go to Dashboard"
+            onClick={goToDashboard}
+          >
+            {ProfileData?.shopName || "Shop Name"}
+          </h2>
         </div>
-        <FaTimes
-          className="sidebar__close"
-          id="sidebarIcon"
-          onClick={closeSidebar}
-        />
+        <FaTimes className="sidebar__close" onClick={closeSidebar} />
       </div>
 
       <div className="sidebar__menu">
         {/* Dashboard */}
         <div className="sidebar__link active_menu_link">
           <FaHome />
-          <a href="/">Dashboard</a>
+          <Link to="/" onClick={handleLinkClick}>Dashboard</Link>
         </div>
 
-         {/* Products */}
+        {/* Products */}
         <h2>Products</h2>
-        <div className="sidebar__link" onClick={()=>window.location.href='/allProducts'}>
-              <FaBox />
-              <a >All Products</a>
-            </div>
-            <div className="sidebar__link" onClick={()=>window.location.href='/addProduct'}>
-              <FaPlus />
-              <a href="#">Add Product</a>
-            </div>
-            <div className="sidebar__link" onClick={()=>window.location.href='/categories'}>
-              <FaTags />
-              <a href="/categories">Categories</a>
-            </div>
-            <div className="sidebar__link" onClick={()=>window.location.href='/stock'}>
-              <FaBoxes />
-              <a href="#">Inventory / Stock</a>
-            </div>
+        <div className="sidebar__link">
+          <FaBox />
+          <Link to="/allProducts" onClick={handleLinkClick}>All Products</Link>
+        </div>
+        <div className="sidebar__link">
+          <FaPlus />
+          <Link to="/addProduct" onClick={handleLinkClick}>Add Product</Link>
+        </div>
+        <div className="sidebar__link">
+          <FaTags />
+          <Link to="/categories" onClick={handleLinkClick}>Categories</Link>
+        </div>
+        <div className="sidebar__link">
+          <FaBoxes />
+          <Link to="/stock" onClick={handleLinkClick}>Inventory / Stock</Link>
+        </div>
 
         {/* Sales & Billing */}
         <h2>Sales & Billing</h2>
-        <div className="sidebar__link" onClick={()=>window.location.href='/SalesRecord'}>
-          <FaShoppingCart />
-          <a href="#">Sales Records</a>
-        </div>
-        <div className="sidebar__link" onClick={()=>window.location.href='/billing'}>
+        <div className="sidebar__link">
           <FaFileInvoice />
-          <a href="/billing">Billing / POS</a>
+          <Link to="/billing" onClick={handleLinkClick}>Billing / POS</Link>
         </div>
-        <div className="sidebar__link" onClick={()=>window.location.href='/DiscountOfferSummary'}>
-              <FaTags />
-              <a href="#">Discounts & Offers</a>
+        <div className="sidebar__link">
+          <FaTags />
+          <Link to="/DiscountOfferSummary" onClick={handleLinkClick}>Discounts & Offers</Link>
         </div>
 
         {/* Purchases */}
         <h2>Purchases</h2>
         <div className="sidebar__link">
           <FaFileInvoice />
-          <a href="#">Purchase Orders</a>
+          <Link to="/PurchaseOrder" onClick={handleLinkClick}>Purchase Orders</Link>
         </div>
         <div className="sidebar__link">
           <FaFileInvoice />
-          <a href="#">Supplier Invoices</a>
+          <Link to="/SuppliersInvoice" onClick={handleLinkClick}>Supplier Invoices</Link>
         </div>
 
         {/* Reports */}
         <h2>Reports</h2>
+        {/* Sales Reports Dropdown */}
         <div className="sidebar__section">
-      {/* Parent Folder */}
-      <div className="sidebar__link" onClick={() => setIsOpen(!isOpen)}>
-        <FaChartLine />
-        <span>Sales Reports</span>
-        {isOpen ? <FaChevronUp className="ml-auto" /> : <FaChevronDown className="ml-auto" />}
-      </div>
+          <div className="sidebar__link" onClick={() => setIsSalesOpen(!isSalesOpen)}>
+            <FaChartLine />
+            <span>Sales Reports</span>
+            {isSalesOpen ? <FaChevronUp className="ml-auto" /> : <FaChevronDown className="ml-auto" />}
+          </div>
+          {isSalesOpen && (
+            <div className="sidebar__dropdown">
+              <div className="sidebar__link">
+                <FaChartLine />
+                <Link to="/SalesSummary" onClick={handleLinkClick}>Sales Report</Link>
+              </div>
+              <div className="sidebar__link">
+                <FaChartLine />
+                <Link to="/OTSaleReport" onClick={handleLinkClick}>OT Sale Report</Link>
+              </div>
+              <div className="sidebar__link">
+                <FaChartLine />
+                <Link to="/StockReport" onClick={handleLinkClick}>Stock Report</Link>
+              </div>
+              <div className="sidebar__link">
+                <FaChartLine />
+                <Link to="/InvoiceReport" onClick={handleLinkClick}>Invoice Report</Link>
+              </div>
+              <div className="sidebar__link">
+                <FaChartLine />
+                <Link to="/DailySaleSummary" onClick={handleLinkClick}>Sale Summary on Slip</Link>
+              </div>
+            </div>
+          )}
+        </div>
 
-      {/* Dropdown Content */}
-      {isOpen && (
-        <div className="sidebar__dropdown">
-          <div className="sidebar__link" onClick={() => (window.location.href = "/SalesSummary")}>
-            <FaChartLine />
-            <span>Sales Report</span>
+        {/* Purchase Reports Dropdown */}
+        <div className="sidebar__section">
+          <div className="sidebar__link" onClick={() => setIsPurchaseOpen(!isPurchaseOpen)}>
+            <FaShoppingCart />
+            <span>Purchase reports</span>
+            {isPurchaseOpen ? <FaChevronUp className="ml-auto" /> : <FaChevronDown className="ml-auto" />}
           </div>
-          <div className="sidebar__link" onClick={() => (window.location.href = "/OTSaleReport")}>
-            <FaChartLine />
-            <span>OT Sale Report</span>
-          </div>
-          <div className="sidebar__link" onClick={() => (window.location.href = "/StockReport")}>
-            <FaChartLine />
-            <span>Stock Report</span>
-          </div>
-          <div className="sidebar__link" onClick={() => (window.location.href = "/SalariesInvoiceReport")}>
-            <FaChartLine />
-            <span>Sales Invoice Wise Report</span>
-          </div>
-          <div className="sidebar__link" onClick={() => (window.location.href = "/SalesReturnReport")}>
-            <FaChartLine />
-            <span>Sale Return</span>
-          </div>
-          <div className="sidebar__link" onClick={() => (window.location.href = "/InvoiceReport")}>
-            <FaChartLine />
-            <span>Invoice Report</span>
-          </div>
-          <div className="sidebar__link" onClick={() => (window.location.href = "/DailySaleSummary")}>
-            <FaChartLine />
-            <span>Sale Summary on Slip</span>
+          {isPurchaseOpen && (
+            <div className="sidebar__dropdown">
+              <div className="sidebar__link">
+                <FaShoppingCart />
+                <Link to="/PurchaseReport" onClick={handleLinkClick}>Purchase Report</Link>
+              </div>
+              <div className="sidebar__link">
+                <FaShoppingCart />
+                <Link to="/SupplierReport" onClick={handleLinkClick}>Supplier Report</Link>
+              </div>
+              <div className="sidebar__link">
+                <FaShoppingCart />
+                <Link to="/DailyPurchaseSummary" onClick={handleLinkClick}>Daily Purchase Summary</Link>
+              </div>
+            </div>
+          )}
+          <div className="sidebar__link">
+            <FaShoppingCart />
+            <Link to="/CustomerReport" onClick={handleLinkClick}>Customer Report</Link>
           </div>
         </div>
-      )}
-    </div>
-    <div className="sidebar__section">
-      {/* Parent Folder */}
-      <div className="sidebar__link" onClick={() => setIsPurchaseOpen(!isPurchaseOpen)}>
-        <FaShoppingCart />
-        <span>Purchase reports</span>
-        {isPurchaseOpen ? <FaChevronUp className="ml-auto" /> : <FaChevronDown className="ml-auto" />}
-      </div>
-
-      {/* Dropdown Content */}
-      {isPurchaseOpen && (
-        <div className="sidebar__dropdown">
-          <div className="sidebar__link" onClick={() => (window.location.href = "/PurchaseReport")}>
-            <FaShoppingCart />
-            <span>purchase report</span>
-          </div>
-          <div className="sidebar__link" onClick={() => (window.location.href = "/SupplierReport")}>
-            <FaShoppingCart />
-            <span>Supplier report</span>
-          </div>
-          
-          <div className="sidebar__link" onClick={() => (window.location.href = "/DailyPurchaseSummary")}>
-            <FaShoppingCart />
-            <span>Daily purchase summary </span>
-          </div>
-        </div>
-      )}
-         <div className="sidebar__link" onClick={() => (window.location.href = "/CustomerReport")}>
-            <FaShoppingCart />
-            <span>Customer Report </span>
-          </div>
-    </div>
-    
-
 
         {/* Management */}
         <h2>MNG</h2>
         <div className="sidebar__link">
           <FaWrench />
-          <a href="#">Employee Management</a>
+          <Link to="/employeeManagement" onClick={handleLinkClick}>Employee Management</Link>
         </div>
         <div className="sidebar__link">
           <FaUsers />
-          <a href="#">Customer Management</a>
+          <Link to="/customerManagement" onClick={handleLinkClick}>Customer Management</Link>
         </div>
         <div className="sidebar__link">
           <FaTruck />
-          <a href="/supplierManagement">Supplier Management</a>
+          <Link to="/supplierManagement" onClick={handleLinkClick}>Supplier Management</Link>
         </div>
 
         {/* Settings */}
         <div className="settings">
-            <h2>Settings</h2>
-        <div className="sidebar__link" onClick={()=>window.location.href='/shopProfile'}>
-          <FaCogs />
-          <a href="#">System Settings</a>
-        </div>
-        <div className="sidebar__link logoutred">
-          <FaSignOutAlt />
-          <a href="#">Logout</a>
-        </div>
+          <h2>Settings</h2>
+          <div className="sidebar__link">
+            <FaCogs />
+            <Link to="/settings" onClick={handleLinkClick}>System Settings</Link>
+          </div>
+          <div className="sidebar__link logoutred" onClick={handleLogout}>
+            <FaSignOutAlt />
+            <span  style={{ cursor: "pointer" }}>Logout</span>
+          </div>
         </div>
       </div>
     </div>

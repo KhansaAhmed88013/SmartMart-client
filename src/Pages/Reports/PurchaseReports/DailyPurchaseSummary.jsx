@@ -1,169 +1,126 @@
-import React, { useState } from "react";
-import { FaPrint } from "react-icons/fa";
+import React, { useState, useEffect,useContext } from "react";
+import { getDailyPurchases } from "../../../UserService";
+import { ProfileContext } from "../../../Context/ProfileContext";
 
 const DailyPurchaseSummary = () => {
-  const purchases = [
-    {
-      id: 1,
-      supplier: "ABC Suppliers",
-      invoiceNo: "INV-001",
-      date: "2025-08-28",
-      items: "Raw Material (500 units)",
-      quantity: 500,
-      amount: 25000,
-      status: "Paid",
-    },
-    {
-      id: 2,
-      supplier: "XYZ Traders",
-      invoiceNo: "INV-002",
-      date: "2025-08-28",
-      items: "Office Supplies (300 units)",
-      quantity: 300,
-      amount: 12000,
-      status: "Pending",
-    },
-    {
-      id: 3,
-      supplier: "Global Imports",
-      invoiceNo: "INV-003",
-      date: "2025-08-28",
-      items: "Packaging Material (200 units)",
-      quantity: 200,
-      amount: 8000,
-      status: "Paid",
-    },
-  ];
-
-  // State for date filter
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
+  const [filtered, setFiltered] = useState([]);
+  const [purchaseData, setPurchaseData] = useState([]); // ✅ start with empty array
+  const [msg, setMsg] = useState(null);
+  const {ProfileData}=useContext(ProfileContext)
 
-  // Filter purchases by date range
-  const filteredPurchases = purchases.filter((p) => {
-    if (!fromDate || !toDate) return true;
-    return p.date >= fromDate && p.date <= toDate;
-  });
+  // ✅ Fetch data on mount
+  useEffect(() => {
+    const fetchPurchaseSummary = async () => {
+      try {
+        const result = await getDailyPurchases();
+        setPurchaseData(result);
 
-  // Total summary
-  const totalAmount = filteredPurchases.reduce((sum, p) => sum + p.amount, 0);
-  const totalTransactions = filteredPurchases.length;
-  const averageBill =
-    totalTransactions > 0 ? (totalAmount / totalTransactions).toFixed(2) : 0;
+        // apply default filter after data loads
+        const { start, end } = getDefaultDateRange();
+        setFromDate(start);
+        setToDate(end);
+        setFiltered(result.filter((p) => p.date >= start && p.date <= end));
+      } catch (err) {
+        console.error(err);
+        setMsg("Failed to fetch data");
+      }
+    };
+    fetchPurchaseSummary();
+  }, []);
+
+  // ✅ helper: get start and end of current month
+  const getDefaultDateRange = () => {
+    const now = new Date();
+    const start = new Date(now.getFullYear(), now.getMonth(), 1);
+    const end = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+    return {
+      start: start.toISOString().slice(0, 10),
+      end: end.toISOString().slice(0, 10),
+    };
+  };
+
+  // ✅ filter purchases by date
+  const filterPurchases = (start, end) => {
+    return purchaseData.filter((p) => p.date >= start && p.date <= end);
+  };
+
+  // ✅ handle filter click
+  const handleFilter = () => {
+    setFiltered(filterPurchases(fromDate, toDate));
+  };
 
   return (
-    <div style={{ maxWidth: "1000px", margin: "0 auto", padding: "20px" }}>
-      {/* Header */}
-      <div style={{ textAlign: "center", padding: "20px" }}>
-        <h2>Smart Super Mart</h2>
-        <p>Behria Enclusive Road Chak Shehzad Islamabad</p>
-        <h2>Daily Purchase Summary</h2>
-      </div>
+    <div style={{ padding: "20px" }}>
+      <div style={{ textAlign: "center", padding: "5px" }}>
+          <h3>{ProfileData.shopName}</h3>
+          <p>{ProfileData.location} </p>
+          <p>{ProfileData.number1} , {ProfileData.number2}</p>
+          <h2>Daily Purchase Summary</h2>
+        </div>
 
-      {/* Date Filters */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          marginBottom: "20px",
-        }}
-      >
-        <div>
-          <label>From: </label>
+      {/* 🔹 Error Message */}
+      {msg && (
+        <p style={{ textAlign: "center", color: "red", fontWeight: "bold" }}>
+          {msg}
+        </p>
+      )}
+
+      {/* Filter Section */}
+      <div style={{ marginBottom: "15px" }}>
+        <label>
+          From:{" "}
           <input
             type="date"
             value={fromDate}
             onChange={(e) => setFromDate(e.target.value)}
           />
-        </div>
-        <div>
-          <label>To: </label>
+        </label>{" "}
+        <label>
+          To:{" "}
           <input
             type="date"
             value={toDate}
             onChange={(e) => setToDate(e.target.value)}
           />
-        </div>
+        </label>{" "}
+        <button onClick={handleFilter}>Filter</button>
       </div>
 
-      {/* Total Summary */}
-      <div
-        style={{
-          margin: "15px 0",
-          fontWeight: "bold",
-          textAlign: "right",
-          fontSize: "16px",
-        }}
-      >
-        Total Purchases: Rs. {totalAmount} | Transactions: {totalTransactions} | Average Bill: Rs. {averageBill}
-      </div>
-
-      {/* Purchase Table */}
+      {/* Summary Table */}
       <table
         border="1"
         cellPadding="8"
-        cellSpacing="0"
-        style={{ width: "100%", borderCollapse: "collapse", marginTop: "10px" }}
+        style={{ borderCollapse: "collapse", width: "100%" }}
       >
-        <thead style={{ backgroundColor: "#f2f2f2" }}>
-          <tr>
-            <th style={{ width: "60px" }}>#</th>
-            <th>Supplier</th>
-            <th>Invoice No</th>
+        <thead>
+          <tr style={{ backgroundColor: "#f0f0f0" }}>
             <th>Date</th>
-            <th>Items</th>
-            <th>Quantity</th>
-            <th>Amount (PKR)</th>
-            <th>Status</th>
+            <th>Total Purchases</th>
+            <th>Paid</th>
+            <th>Pending</th>
           </tr>
         </thead>
         <tbody>
-          {filteredPurchases.length > 0 ? (
-            filteredPurchases.map((purchase) => (
-              <tr key={purchase.id}>
-                <td style={{ textAlign: "center" }}>{purchase.id}</td>
-                <td>{purchase.supplier}</td>
-                <td>{purchase.invoiceNo}</td>
-                <td>{purchase.date}</td>
-                <td>{purchase.items}</td>
-                <td>{purchase.quantity}</td>
-                <td>{purchase.amount}</td>
-                <td
-                  style={{
-                    color: purchase.status === "Paid" ? "green" : "red",
-                    fontWeight: "bold",
-                  }}
-                >
-                  {purchase.status}
-                </td>
+          {filtered.length > 0 ? (
+            filtered.map((p) => (
+              <tr key={p.date}>
+                <td>{p.date}</td>
+                <td>{p.total}</td>
+                <td>{p.paid}</td>
+                <td>{p.pending ?? p.total - p.paid}</td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="8" style={{ textAlign: "center", color: "red" }}>
-                No records found for selected date range.
+              <td colSpan="4" style={{ textAlign: "center" }}>
+                No purchases found
               </td>
             </tr>
           )}
         </tbody>
       </table>
-
-      {/* Print Button */}
-      <div style={{ marginTop: "20px", textAlign: "right" }}>
-        <button
-          onClick={() => window.print()}
-          style={{
-            padding: "8px 12px",
-            background: "#007bff",
-            color: "white",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
-          }}
-        >
-          <FaPrint /> Print
-        </button>
-      </div>
     </div>
   );
 };

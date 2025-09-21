@@ -1,75 +1,79 @@
-import React, { useState } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import { FaPrint } from "react-icons/fa";
+import { getInvoiceReport } from "../../../UserService";
+import { ProfileContext } from "../../../Context/ProfileContext";
+
 const InvoiceReport = () => {
-  // Sample Data
-  const invoices = [
-    {
-      invoiceNo: "INV-1001",
-      date: "2025-08-25",
-      customer: "Ali Khan",
-      items: [
-        { name: "Pepsi 1.5L", qty: 2, rate: 180, discount: 20, tax: 10 },
-        { name: "Lays Chips", qty: 3, rate: 50, discount: 0, tax: 0 }
-      ],
-      paymentMode: "Cash",
-      salesperson: "Ahmed"
-    },
-    {
-      invoiceNo: "INV-1002",
-      date: "2025-08-27",
-      customer: "Sara Ahmed",
-      items: [
-        { name: "Nestle Milk", qty: 1, rate: 250, discount: 0, tax: 0 }
-      ],
-      paymentMode: "Card",
-      salesperson: "Bilal"
-    },
-    {
-      invoiceNo: "INV-1003",
-      date: "2025-08-30",
-      customer: "Usman",
-      items: [
-        { name: "Coca Cola 2L", qty: 1, rate: 220, discount: 10, tax: 5 }
-      ],
-      paymentMode: "Online",
-      salesperson: "Ali"
-    }
-  ];
+  const today = new Date().toISOString().split("T")[0]; // ✅ format: YYYY-MM-DD
 
-  // States for Date Filter
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [invoices, setInvoices] = useState([]);
+  const [startDate, setStartDate] = useState(today); // default today
+  const [endDate, setEndDate] = useState(today);     // default today
+  const [loading, setLoading] = useState(false);
+  const {ProfileData}=useContext(ProfileContext)
 
-  // Function to calculate Net Amount
-  const calculateNetAmount = (items) => {
-    return items.reduce(
+  // ✅ Fetch invoices from backend
+ const fetchInvoices = async () => {
+  try {
+    setLoading(true);
+    const data = await getInvoiceReport({ startDate, endDate });
+
+    // 🔄 Transform Sequelize data → UI-friendly structure
+    const formatted = (data || []).map(inv => ({
+      invoiceNo: inv.id,
+      date: inv.invoice_date,
+      customer: inv.Customer?.name || "Unknown",
+      salesperson: inv.cashier_name,
+      paymentMode: inv.payment_method,
+      items: (inv.InvoiceItems || []).map(it => ({
+        name: it.Product?.name || "N/A",
+        qty: Number(it.quantity),
+        rate: Number(it.price),
+        discount: Number(it.discount || 0),
+        tax: Number(it.tax_percent || 0)
+      })),
+      netAmount: Number(inv.final_total)
+    }));
+
+    console.log("Formatted invoices:", formatted);
+    setInvoices(formatted);
+  } catch (err) {
+    console.error("Error fetching invoices:", err);
+    setInvoices([]);
+  } finally {
+    setLoading(false);
+  }
+};
+
+  // auto-fetch on date change
+  useEffect(() => {
+    fetchInvoices();
+  }, [startDate, endDate]);
+
+  // ✅ Calculate Net Amount safely
+  const calculateNetAmount = (items = []) =>
+    items.reduce(
       (sum, item) =>
-        sum + (item.qty * item.rate - item.discount + item.tax),
+        sum + (Number(item.qty) * Number(item.rate) - Number(item.discount) + Number(item.tax)),
       0
     );
-  };
 
-  // Filter invoices based on Date Range
-  const filteredInvoices = invoices.filter((invoice) => {
-    if (!startDate || !endDate) return true; // If no filter, show all
-    const invoiceDate = new Date(invoice.date);
-    return (
-      invoiceDate >= new Date(startDate) &&
-      invoiceDate <= new Date(endDate)
-    );
-  });
-
-  // 🔹 Summary Data
-  const totalInvoices = filteredInvoices.length;
-  const totalAmount = filteredInvoices.reduce(
-    (sum, inv) => sum + calculateNetAmount(inv.items),
+  // ✅ Summary Data
+  const totalInvoices = invoices.length;
+  const totalAmount = invoices.reduce(
+    (sum, inv) => sum + calculateNetAmount(inv.items || []),
     0
   );
 
   return (
     <div style={{ padding: "20px" }}>
-      <h2 style={{ textAlign: "center" }}>Invoice Report</h2>
-
+      <div style={{ textAlign: "center", padding: "5px" }}>
+          <h2>{ProfileData.shopName}</h2>
+          <p>{ProfileData.location}</p>
+          <p>{ProfileData.number1} , {ProfileData.number2}</p>
+          <h2>Invoice Report</h2>
+        </div>
+      
       {/* Date Range Filter */}
       <div style={{ marginBottom: "20px", textAlign: "center" }}>
         <label>From: </label>
@@ -87,14 +91,14 @@ const InvoiceReport = () => {
         />
       </div>
 
-      {/* 🔹 Summary Section */}
+      {/* Summary Section */}
       <div
         style={{
           border: "1px solid #333",
           padding: "15px",
           marginBottom: "20px",
           borderRadius: "8px",
-          backgroundColor: "#f2f2f2"
+          backgroundColor: "#f2f2f2",
         }}
       >
         <h3>Summary</h3>
@@ -102,25 +106,26 @@ const InvoiceReport = () => {
         <p><b>Total Net Amount:</b> Rs. {totalAmount}</p>
       </div>
 
-      {/* Show Filtered Invoices */}
-      {filteredInvoices.length > 0 ? (
-        filteredInvoices.map((invoice, index) => (
+      {/* Invoice List */}
+      {loading ? (
+        <p style={{ textAlign: "center" }}>Loading...</p>
+      ) : invoices.length > 0 ? (
+        invoices.map((invoice, idx) => (
           <div
-            key={index}
+            key={idx}
             style={{
               border: "1px solid #ccc",
               padding: "15px",
               marginBottom: "20px",
-              borderRadius: "8px"
+              borderRadius: "8px",
             }}
           >
             <h3>Invoice No: {invoice.invoiceNo}</h3>
-            <p><b>Date:</b> {invoice.date}</p>
+            <p><b>Date:</b> {new Date(invoice.date).toLocaleDateString()}</p>
             <p><b>Customer:</b> {invoice.customer}</p>
             <p><b>Salesperson:</b> {invoice.salesperson}</p>
             <p><b>Payment Mode:</b> {invoice.paymentMode}</p>
 
-            {/* Invoice Items Table */}
             <table
               border="1"
               cellPadding="6"
@@ -138,48 +143,48 @@ const InvoiceReport = () => {
                 </tr>
               </thead>
               <tbody>
-                {invoice.items.map((item, i) => (
+                {(invoice.items || []).map((item, i) => (
                   <tr key={i}>
                     <td>{item.name}</td>
                     <td>{item.qty}</td>
                     <td>{item.rate}</td>
                     <td>{item.discount}</td>
                     <td>{item.tax}</td>
-                    <td>{item.qty * item.rate - item.discount + item.tax}</td>
+                    <td>
+                      {Number(item.qty) * Number(item.rate) - Number(item.discount) + Number(item.tax)}
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
 
-            {/* Net Amount */}
             <div style={{ textAlign: "right", marginTop: "10px", fontWeight: "bold" }}>
-              Net Amount: Rs. {calculateNetAmount(invoice.items)}
+              Net Amount: Rs. {calculateNetAmount(invoice.items || [])}
             </div>
           </div>
         ))
       ) : (
-        <p style={{ textAlign: "center", color: "red" }}>No invoices found in this date range.</p>
+        <p style={{ textAlign: "center", color: "red" }}>
+          No invoices found in this date range.
+        </p>
       )}
+
       {/* Print Button */}
-            <div
-              className="action-buttons"
-              style={{ marginTop: "20px", textAlign: "right" }}
-            >
-              <button
-                className="action-btn print-btn"
-                onClick={() => window.print()}
-                style={{
-                  padding: "8px 12px",
-                  background: "#007bff",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "5px",
-                  cursor: "pointer",
-                }}
-              >
-                <FaPrint /> Print
-              </button>
-            </div>
+      <div style={{ marginTop: "20px", textAlign: "right" }}>
+        <button
+          onClick={() => window.print()}
+          style={{
+            padding: "8px 12px",
+            background: "#007bff",
+            color: "white",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+          }}
+        >
+          <FaPrint /> Print
+        </button>
+      </div>
     </div>
   );
 };

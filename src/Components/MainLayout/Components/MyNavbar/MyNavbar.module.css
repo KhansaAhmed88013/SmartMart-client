@@ -1,7 +1,8 @@
+/* Navbar container */
 .navbar {
   background: rgb(244, 244, 235);
   grid-area: nav;
-  height: 40px;
+  height: 45px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -61,7 +62,7 @@
   text-decoration: none;
 }
 
-/* 📱 Responsive */
+/* Responsive */
 @media only screen and (max-width: 978px) {
   .nav_icon {
     display: inline;
@@ -72,17 +73,22 @@
   .navbar__left {
     display: none;
   }
+  .navbar{
+    padding: 5px 10px;
+    height: 50px;
+  }
 }
+
+/* Notification */
 .notification {
   position: relative;
   display: inline-block;
 }
 
-
-.notification .badge {
+.badge {
   position: absolute;
-  top: -5px;   /* move up */
-  right: -5px; /* move right */
+  top: -5px;
+  right: -5px;
   background: red;
   color: white;
   font-size: 10px;
@@ -90,24 +96,13 @@
   border-radius: 50%;
 }
 
-
-.notification .badge {
-  position: absolute;
-  top: -5px;   /* move up */
-  right: -5px; /* move right */
-  background: red;
-  color: white;
-  font-size: 10px;
-  padding: 2px 5px;
-  border-radius: 50%;
-}
 /* Dropdown styling */
-.user-dropdown {
+.user_dropdown {
   position: relative;
   display: inline-block;
 }
 
-.dropdown-menu {
+.dropdown_menu {
   position: absolute;
   top: 35px;
   right: 0;
@@ -119,7 +114,7 @@
   z-index: 1000;
 }
 
-.dropdown-menu a {
+.dropdown_menu a {
   display: block;
   padding: 10px 15px;
   text-decoration: none;
@@ -127,10 +122,12 @@
   transition: background 0.2s;
 }
 
-.dropdown-menu a:hover {
+.dropdown_menu a:hover {
   background: #f3f3f3;
 }
-.user-toggle {
+
+/* User toggle */
+.user_toggle {
   display: flex;
   align-items: center;
   font-size: 15px;
@@ -138,12 +135,10 @@
   padding: 6px 12px;
   border-radius: 8px;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: background 0.3s, color 0.3s;
 }
 
-.user-toggle:hover {
+.user_toggle:hover {
   background: #f3f3f5;
-}
-.user-dropdown h6:hover{
   color: #489FB5;
 }

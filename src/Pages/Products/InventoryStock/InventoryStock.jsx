@@ -1,21 +1,34 @@
 import React, { useState, useEffect } from "react";
-import {  FaEdit, FaDownload, FaUpload, FaListAlt, FaTrash, FaBox } from "react-icons/fa";
-import "./InventoryStock.css";
-import { GetProducts, DelProduct,UpdateProduct } from "../../../UserService";
+import {
+  FaEdit,
+  FaDownload,
+  FaUpload,
+  FaListAlt,
+  FaTrash,
+  FaBox,
+} from "react-icons/fa";
+import styles from "./InventoryStock.module.css"; // import as module
+import {
+  GetProducts,
+  DelProduct,
+  GetCategoriesSuppliers,
+} from "../../../UserService";
+import ProductUpdateModal from "../ViewProducts/Components/ProductViewTable/ProductUpdateModal";
 
 function InventoryStock() {
   const [searchTerm, setSearchTerm] = useState("");
   const [stock, setStock] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [open, setOpen] = useState(null);   
-  const [formData, setFormData] = useState({});
-  const [message, setMessage] = useState(null);
-  const [filterType, setFilterType] = useState("all"); 
-  const itemsPerPage = 10;
+  const [open, setOpen] = useState(null);
+  const [filterType, setFilterType] = useState("all");
+  const [categories, setCategories] = useState([]);
+  const [suppliers, setSuppliers] = useState([]);
+  const [message, setMessage] = useState({ text: "", type: "" });
 
-  // Fetch products
+  const itemsPerPage = 30;
+
   useEffect(() => {
-    const callProduct = async () => {
+    const fetchProducts = async () => {
       try {
         const result = await GetProducts();
         setStock(result);
@@ -23,67 +36,59 @@ function InventoryStock() {
         alert(err.message);
       }
     };
-    callProduct();
+    fetchProducts();
   }, []);
-// When clicking edit → open modal
-  const startEdit = (item) => {
-    setOpen(item);
-    setFormData({
-      name: item.name,
-      cost_price: item.cost_price,
-      qty: item.qty,
-      sale_price: item.sale_price,
-      expiry: item.expiry,
-      supplier: item.supplier || "",
-      total_price: item.qty * item.sale_price
-    });
-  };
 
-  // Handle form input change
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-      total_price:
-        name === "qty" || name === "sale_price"
-          ? (name === "qty" ? value : prev.qty) * (name === "sale_price" ? value : prev.sale_price)
-          : prev.total_price
-    }));
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await GetCategoriesSuppliers();
+        setCategories(data.categories || []);
+        setSuppliers(data.suppliers || []);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchData();
+  }, []);
 
-  // Update product
-  const handleUpdate = async (e) => {
-    e.preventDefault();
+  const deleteProduct = async (code) => {
+    if (!window.confirm(`Do you want to delete ${code} product?`)) return;
     try {
-      const result = await UpdateProduct({ code: open.code, ...formData });
-
-      setMessage(result.message);
-      setOpen(null);
-
-      setTimeout(() => setMessage(null), 3000);
-
-      // refresh products
-      const refreshed = await GetProducts();
-      setStock(refreshed);
+      await DelProduct(code);
+      setStock(stock.filter((item) => item.code !== code));
+      setMessage({ text: "Product deleted successfully", type: "success" });
+      setTimeout(() => setMessage({ text: "", type: "" }), 3000);
     } catch (err) {
-      setMessage(err.message);
-      setTimeout(() => setMessage(null), 3000);
+      setMessage({ text: err.message, type: "error" });
+      setTimeout(() => setMessage({ text: "", type: "" }), 3000);
     }
   };
 
-  // Overlay click closes modal
-  const handleOverlayClick = () => {
-    setOpen(null);
+  const handleUpdateProduct = (code, formData, supplierObj, categoryObj) => {
+    setStock((prev) =>
+      prev.map((item) =>
+        item.code === code
+          ? {
+              ...item,
+              ...formData,
+              Supplier: supplierObj
+                ? { supplier_name: supplierObj.supplier_name }
+                : null,
+              Category: categoryObj ? { name: categoryObj.name } : null,
+            }
+          : item
+      )
+    );
   };
-  
 
-  // 🔍 Apply search + filter
-  const filteredStock = stock.filter(item => {
+  const filteredStock = stock.filter((item) => {
     const matchesSearch =
       item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (item.supplier && item.supplier.toLowerCase().includes(searchTerm.toLowerCase()));
+      (item.Supplier?.supplier_name || "")
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
 
     const isLowStock = item.qty < 10;
     const isExpired = new Date(item.expiry) < new Date();
@@ -100,60 +105,70 @@ function InventoryStock() {
     currentPage * itemsPerPage
   );
 
-  const deleteProduct = async (code) => {
-    const response = window.confirm(`Do you want to delete ${code} product?`);
-    try {
-      if (response) {
-        await DelProduct(code);
-        window.location.reload();
-      }
-    } catch (err) {
-      alert(err.message);
-    }
-  };
-
-  // Separate counts
-  const lowStockCount = stock.filter(item => item.qty < 10).length;
-  const expiredCount = stock.filter(item => new Date(item.expiry) < new Date()).length;
+  const lowStockCount = stock.filter((item) => item.qty < 10).length;
+  const expiredCount = stock.filter(
+    (item) => new Date(item.expiry) < new Date()
+  ).length;
 
   return (
-    <div className="inventory-container">
-      {/* Header Bar */}
-      <div className="inventory-header">
+    <div className={styles["inventory-container"]}>
+      {message.text && (
+  <div
+    className={`${styles["update-msg"]} ${
+      message.type === "success" ? styles.success : styles.error
+    }`}
+  >
+    {message.text}
+  </div>
+)}
+
+
+      <div className={styles["inventory-header"]}>
         <button onClick={() => setFilterType("all")}>
-          <FaBox className="inventoryicon" /> Show All
+          <FaBox className={styles.inventoryicon} /> Show All
         </button>
         <button onClick={() => setFilterType("low")}>
-          <FaBox className="inventoryicon" /> Low Stock ({lowStockCount})
+          <FaBox className={styles.inventoryicon} /> Low Stock ({lowStockCount})
         </button>
         <button onClick={() => setFilterType("expired")}>
-          <FaBox className="inventoryicon" /> Expired Stock ({expiredCount})
+          <FaBox className={styles.inventoryicon} /> Expired Stock (
+          {expiredCount})
         </button>
-        <button onClick={() => window.location.href='/auditLog'}>
-          <FaListAlt className="inventoryicon" /> Audit Log
+        <button onClick={() => (window.location.href = "/auditLog")}>
+          <FaListAlt className={styles.inventoryicon} /> Audit Log
         </button>
-        <button onClick={() => window.location.href = '/import'}>
-          <FaUpload className="inventoryicon" /> Import Stock
+        <button onClick={() => (window.location.href = "/import")}>
+          <FaUpload className={styles.inventoryicon} /> Import Stock
         </button>
-        <button onClick={() => window.location.href = '/export'}>
-          <FaDownload className="inventoryicon" /> Export Stock
+        <button onClick={() => (window.location.href = "/export")}>
+          <FaDownload className={styles.inventoryicon} /> Export Stock
         </button>
       </div>
-    {/* Auto-disappearing message */}
-      {message && (
-        <div className="update-msg">{message}</div>
-      )}
-      <div className="stock-container">
-        <div className="stock-summary">
-          <p><strong>Total Items:</strong> {stock.length}</p>
-          <p><strong>Total Quantity:</strong> {stock.reduce((acc, item) => acc + item.qty, 0)}</p>
-          <p><strong>Total Inventory Cost:</strong> Rs {stock.reduce((acc, item) => acc + (item.qty * item.cost_price), 0).toLocaleString()}</p>
-          <p className="low-stock"><strong>Low Stock Alerts:</strong> {lowStockCount}</p>
-          <p className="expired"><strong>Expired Items:</strong> {expiredCount}</p>
+
+      <div className={styles["stock-container"]}>
+        <div className={styles["stock-summary"]}>
+          <p>
+            <strong>Total Items:</strong> {stock.length}
+          </p>
+          <p>
+            <strong>Total Quantity:</strong>{" "}
+            {stock.reduce((acc, item) => acc + item.qty, 0)}
+          </p>
+          <p>
+            <strong>Total Inventory Cost:</strong> Rs{" "}
+            {stock
+              .reduce((acc, item) => acc + item.qty * item.cost_price, 0)
+              .toLocaleString()}
+          </p>
+          <p className={styles["low-stock"]}>
+            <strong>Low Stock Alerts:</strong> {lowStockCount}
+          </p>
+          <p className={styles.expired}>
+            <strong>Expired Items:</strong> {expiredCount}
+          </p>
         </div>
 
-        {/* Search Bar */}
-        <div className="search-bar">
+        <div className={styles["search-bar"]}>
           <input
             type="text"
             placeholder="Search by Name, Code or Supplier..."
@@ -165,8 +180,7 @@ function InventoryStock() {
           />
         </div>
 
-        {/* Stock Table */}
-        <table className="stock-table">
+        <table className={styles["stock-table"]}>
           <thead>
             <tr>
               <th>#</th>
@@ -175,7 +189,7 @@ function InventoryStock() {
               <th>Cost Price</th>
               <th>Quantity</th>
               <th>Sale Price</th>
-              <th>Total Price</th>
+              <th>Total Sale Price</th>
               <th>Supplier</th>
               <th>Expiry Date</th>
               <th>Actions</th>
@@ -183,93 +197,82 @@ function InventoryStock() {
           </thead>
           <tbody>
             {currentItems.map((item, index) => {
-              const isLowStock = item.qty < 10;
-              const isExpired = new Date(item.expiry) < new Date();
-
+              const rowClass =
+                item.qty < 10
+                  ? styles["low-stock"]
+                  : new Date(item.expiry) < new Date()
+                  ? styles.expired
+                  : "";
               return (
-                <tr
-                  key={index}
-                  className={isLowStock ? "low-stock" : isExpired ? "expired" : ""}
-                >
-                  <td data-label="#">{(currentPage - 1) * itemsPerPage + index + 1}</td>
+                <tr key={index} className={rowClass}>
+                  <td data-label="#">
+                    {(currentPage - 1) * itemsPerPage + index + 1}
+                  </td>
                   <td data-label="Code">{item.code}</td>
-<td data-label="Name">{item.name}</td>
-<td data-label="Cost Price">Rs {item.cost_price}</td>
-<td data-label="Quantity">{item.qty}</td>
-<td data-label="Sale Price">Rs {item.sale_price}</td>
-<td data-label="Total Price">Rs {(item.qty * item.sale_price).toLocaleString()}</td>
-<td data-label="Supplier">{item.supplier || "----"}</td>
-<td data-label="Expiry Date">{item.expiry}</td>
-<td data-label="Actions">
-  <button onClick={() => startEdit(item)}><FaEdit /></button>
-  <button onClick={() => deleteProduct(item.code)} className="delete-btn"><FaTrash /></button>
-</td>
-
+                  <td data-label="Name">{item.name}</td>
+                  <td data-label="Cost Price">PKR {item.cost_price}</td>
+                  <td data-label="Quantity">{item.qty}</td>
+                  <td data-label="Sale Price">PKR {item.sale_price}</td>
+                  <td data-label="Total Sale Price">
+                    PKR {(item.qty * item.sale_price).toLocaleString()}
+                  </td>
+                  <td data-label="Supplier">
+                    {item.Supplier?.supplier_name || "----"}
+                  </td>
+                  <td data-label="Expiry Date">{item.expiry}</td>
+                  <td data-label="Actions">
+                    <button onClick={() => setOpen(item)}>
+                      <FaEdit />
+                    </button>
+                    <button
+                      onClick={() => deleteProduct(item.code)}
+                      className={styles["delete-btn"]}
+                    >
+                      <FaTrash />
+                    </button>
+                  </td>
                 </tr>
               );
             })}
           </tbody>
         </table>
 
-            {/* 🔹 Modal for update */}
-      {open && (
-        <div className="modal--overlay" onClick={handleOverlayClick}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <h3>Update Product ({open.code})</h3>
-            <form onSubmit={handleUpdate} className="update-form">
-              <label>
-                Product Name:
-                <input type="text" name="name" value={formData.name} onChange={handleInputChange} />
-              </label>
-              <label>
-                Cost Price:
-                <input type="number" name="cost_price" value={formData.cost_price} onChange={handleInputChange} />
-              </label>
-              <label>
-                Quantity:
-                <input type="number" name="qty" value={formData.qty} onChange={handleInputChange} />
-              </label>
-              <label>
-                Sale Price:
-                <input type="number" name="sale_price" value={formData.sale_price} onChange={handleInputChange} />
-              </label>
-              <label>
-                Total Price:
-                <input type="number" name="total_price" value={formData.total_price} readOnly />
-              </label>
-              <label>
-                Supplier:
-                <input type="text" name="supplier" value={formData.supplier} onChange={handleInputChange} />
-              </label>
-              <label>
-                Expiry:
-                <input type="date" name="expiry" value={formData.expiry} onChange={handleInputChange} />
-              </label>
-              <div className="row">
-                <button type="submit">Update</button>
-                <button type="button" onClick={() => setOpen(null)}>Cancel</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-        {/* Pagination */}
-        <div className="pagination">
+        <div className={styles.pagination}>
           <button
             disabled={currentPage === 1}
-            onClick={() => setCurrentPage(prev => prev - 1)}
+            onClick={() => setCurrentPage((prev) => prev - 1)}
           >
             Prev
           </button>
-          <span> Page {currentPage} of {totalPages} </span>
+          <span>
+            Page {currentPage} of {totalPages}
+          </span>
           <button
             disabled={currentPage === totalPages}
-            onClick={() => setCurrentPage(prev => prev + 1)}
+            onClick={() => setCurrentPage((prev) => prev + 1)}
           >
             Next
           </button>
         </div>
       </div>
+
+      {open && (
+        <div className={styles["modal--overlay"]} onClick={() => setOpen(null)}>
+          <div
+            className={styles["modal-content"]}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <ProductUpdateModal
+              open={open}
+              setOpen={setOpen}
+              categories={categories}
+              suppliers={suppliers}
+              onUpdate={handleUpdateProduct}
+              setMessage={setMessage}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,0 +1,655 @@
+/* =======================
+   Global Styles
+======================= */
+body {
+  font-family: "Inter", "Segoe UI", sans-serif;
+  background: #f9f9fb;
+  color: #2d2d2d;
+  margin: 0;
+  padding: 0;
+}
+
+h2,
+h3,
+h4 {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+/* =======================
+   Container
+======================= */
+.purchase-container {
+  max-width: 1100px;
+  margin: 1rem auto;
+  padding: 1rem 2rem;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+.purchase-heading {
+  font-size: 1.8rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #222;
+}
+
+/* =======================
+   Inputs & Selects
+======================= */
+.purchase-input {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0;
+}
+
+.purchase-input label {
+  margin-bottom: 0.4rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #555;
+}
+
+.purchase-input input,
+.purchase-input select {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  background: #fafafa;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+.purchase-input input:focus,
+.purchase-input select:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.15);
+}
+
+/* =======================
+   Order Table
+======================= */
+.order-table-container {
+  margin-top: 1.5rem;
+  overflow-x: auto;
+}
+
+.order-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.order-table th,
+.order-table td {
+  padding: 0.9rem;
+  text-align: left;
+}
+
+.order-table-head {
+  background: #f0f4f8;
+  font-size: 0.95rem;
+}
+
+.order-row:nth-child(even) {
+  background: #fafafa;
+}
+
+.order-input {
+  width: 80px;
+  padding: 0.4rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.order-empty {
+  text-align: center;
+  padding: 1rem;
+  font-style: italic;
+  color: #777;
+}
+
+/* =======================
+   Buttons
+======================= */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Primary */
+.btn-submit {
+  background: #4a90e2;
+  color: #fff;
+}
+.btn-submit:hover {
+  background: #3a78c2;
+}
+
+/* Secondary */
+.btn-export {
+  background: #f3f3f3;
+  color: #333;
+}
+.btn-export:hover {
+  background: #e5e5e5;
+}
+
+/* Danger */
+.btn-remove {
+  background: #ffefef;
+  color: #d64545;
+}
+.btn-remove:hover {
+  background: #fddcdc;
+}
+
+/* Modal actions */
+.btn-confirm {
+  background: #4caf50;
+  color: #fff;
+}
+.btn-confirm:hover {
+  background: #3c9d41;
+}
+
+.btn-cancel {
+  background: #f3f3f3;
+  color: #444;
+}
+.btn-cancel:hover {
+  background: #e5e5e5;
+}
+
+/* =======================
+   Summary Section
+======================= */
+.summary-actions {
+  margin-top: 2rem;
+  padding: 1.2rem;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.summary-total-text {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #222;
+}
+
+.summary-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+/* =======================
+   Price Modal
+======================= */
+.price-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+}
+
+.price-modal-content {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  animation: fadeIn 0.25s ease;
+}
+
+.price-modal-title {
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+}
+
+.price-modal-text {
+  font-size: 0.95rem;
+  color: #555;
+  margin-bottom: 1rem;
+}
+
+.price-modal-items {
+  margin-bottom: 1.5rem;
+}
+
+.price-modal-item {
+  margin-bottom: 1rem;
+}
+
+.price-item-name {
+  font-weight: 500;
+  margin-right: 0.5rem;
+}
+
+.price-item-change {
+  color: #d64545;
+  font-weight: 600;
+}
+
+.price-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+/* =======================
+   Animations
+======================= */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* =======================
+   Supplier Section
+======================= */
+.supplier-section {
+  margin: 1.5rem 0;
+}
+
+.supplier-label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: #444;
+}
+
+.supplier-select {
+  margin-bottom: 1rem;
+}
+
+.supplier-add-btn {
+  padding: 0.6rem;
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  color: #4a90e2;
+  border-top: 1px solid #eee;
+  transition: background 0.2s;
+}
+.supplier-add-btn:hover {
+  background: #f5faff;
+}
+.supplier-details {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #fafafa;
+  border-radius: 10px;
+  border: 1px solid #eee;
+  font-size: 0.9rem;
+  line-height: 1.5;
+
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 columns */
+  gap: 0.6rem 1.5rem; /* row gap, column gap */
+}
+
+.supplier-detail {
+  margin: 0; /* reset since grid handles spacing */
+}
+/* =======================
+   Product Section
+======================= */
+.product-section {
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem;
+  margin: 1.5rem 0;
+  flex-wrap: wrap;
+}
+
+.product-select-wrapper {
+  flex: 2;
+  min-width: 250px;
+}
+
+.product-meta {
+  margin-top: 0.4rem;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.product-meta span {
+  margin-right: 0.6rem;
+}
+
+.quantity-wrapper {
+  flex: 1;
+  min-width: 120px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-label {
+  margin-bottom: 0.4rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #555;
+}
+
+/* Add button */
+.add-btn {
+  background: #4a90e2;
+  color: #fff;
+}
+.add-btn:hover {
+  background: #3a78c2;
+}
+
+/* =======================
+   Modal (Shared)
+======================= */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 60;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 16px;
+  max-width: 520px;
+  width: 95%;
+  position: relative;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  animation: fadeIn 0.25s ease;
+}
+
+.modal-title {
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+}
+
+.modal-form,
+.form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+/* Close Button */
+.modal-close-btn,
+.close-btn {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #666;
+  transition: color 0.2s;
+}
+.modal-close-btn:hover,
+.close-btn:hover {
+  color: #111;
+}
+
+/* Form Inputs */
+.form-input,
+.form-select,
+.form-textarea {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  background: #fafafa;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.15);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* Save Buttons inside Modals */
+.save-btn {
+  background: #4caf50;
+  color: #fff;
+  margin-top: 0.5rem;
+}
+.save-btn:hover {
+  background: #3c9d41;
+}
+
+/* =======================
+   Toast Notifications
+======================= */
+.toast {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  padding: 0.8rem 1.2rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #fff;
+  animation: fadeIn 0.25s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 70;
+}
+
+.toast-success {
+  background: #4caf50;
+}
+
+.toast-error {
+  background: #d64545;
+}
+/* =======================
+   Mobile Responsive
+======================= */
+@media (max-width: 768px) {
+  .purchase-container {
+    padding: .5rem;
+    border-radius: 12px;
+  }
+
+  .purchase-heading {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+  }
+
+  /* Inputs stack neatly */
+  .purchase-input {
+    margin: 0.8rem 0;
+  }
+
+  .purchase-input input,
+  .purchase-input select {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.7rem;
+  }
+
+  /* Table scrolls horizontally */
+  .order-table-container {
+    margin-top: 1rem;
+    overflow-x: auto;
+  }
+
+  .order-table th,
+  .order-table td {
+    padding: 0.6rem;
+    font-size: 0.85rem;
+  }
+
+  /* Buttons stack if space is tight */
+  .summary-actions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .summary-buttons {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    width: auto;
+  }
+
+  /* Supplier details → single column */
+  .supplier-details {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  /* Product section stack vertically */
+  .product-section {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .product-select-wrapper,
+  .quantity-wrapper {
+    min-width: 100%;
+  }
+
+  /* Modal smaller padding */
+  .modal-content,
+  .price-modal-content {
+    padding: 1.2rem;
+    border-radius: 12px;
+  }
+
+  .modal-title,
+  .price-modal-title {
+    font-size: 1.2rem;
+  }
+
+  /* Toast reposition for small screens */
+  .toast {
+    bottom: 1rem;
+    right: 1rem;
+    font-size: 0.85rem;
+    padding: 0.6rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .purchase-heading {
+    font-size: 1.2rem;
+  }
+
+  .order-table th,
+  .order-table td {
+    font-size: 0.8rem;
+  }
+
+  .btn {
+    font-size: 0.85rem;
+    padding: 0.45rem 0.9rem;
+  }
+
+  .summary-total-text {
+    font-size: 1rem;
+  }
+}
+/* =======================
+   Fix Table Mobile Scroll
+======================= */
+.order-table-container {
+  margin-top: 1.5rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch; /* smooth scroll on iOS */
+}
+
+.order-table {
+  width: 100%;
+  min-width: 600px; /* prevents columns from squishing too much */
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* On small screens: allow table to scroll smoothly */
+@media (max-width: 768px) {
+  .order-table-container {
+    margin-top: 1rem;
+    overflow-x: auto;
+    scrollbar-width: thin; /* Firefox */
+  }
+
+  .order-table {
+    min-width: 480px; /* fits better on mobile */
+    font-size: 0.85rem;
+  }
+
+  .order-table th,
+  .order-table td {
+    padding: 0.5rem;
+  }
+
+  /* Prevent container from causing extra horizontal scroll */
+  .purchase-container {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+}
+
+@media (max-width: 480px) {
+  .order-table {
+    min-width: 420px;
+    font-size: 0.8rem;
+  }
+
+  .order-input {
+    width: 60px; /* smaller inputs */
+  }
+}
