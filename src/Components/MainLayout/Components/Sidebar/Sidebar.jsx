@@ -175,7 +175,7 @@ useEffect(()=>{
           <FaWrench />
           <a href="#">Employee Management</a>
         </div>
-        <div className="sidebar__link">
+        <div className="sidebar__link"  onClick={() => (window.location.href = "/CustomerManagement")}>
           <FaUsers />
           <a href="#">Customer Management</a>
         </div>

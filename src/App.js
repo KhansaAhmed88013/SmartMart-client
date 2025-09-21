@@ -23,6 +23,7 @@ import DiscountOfferSummary from "./Pages/SalesBilling/Discount/DiscountOfferSum
 import ImportStock from "./Pages/Products/InventoryStock/Components/ImportExport/ImportStock";
 import ExportStock from "./Pages/Products/InventoryStock/Components/ImportExport/ExportStock";
 import AuditLog from "./Pages/Products/InventoryStock/Components/AuditLog/AuditLog";
+import CustomerManagement from "./Pages/MNG/CustomerMNG/CustomerManagement";
 import SupplierMNG from "./Pages/MNG/SupplierMNG/SupplierMNG";
 import SupplierAddForm from "./Pages/MNG/SupplierMNG/Components/SupplierAdd/SupplierAddForm";
 import Categories from "./Pages/Products/Categories/Categories";
@@ -57,6 +58,7 @@ function App() {
           <Route path="DiscountOfferSummary" element={<DiscountOfferSummary/>}/>
   
           <Route path="auditLog" element={<AuditLog/>}/>
+          <Route path="CustomerManagement" element={<CustomerManagement/>}/>
           <Route path="supplierManagement" element={<SupplierMNG/>}/>
           <Route path="addSuppliers" element={<SupplierAddForm/>}/>
           <Route path="categories" element={<Categories/>}/>

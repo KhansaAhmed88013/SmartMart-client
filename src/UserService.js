@@ -184,6 +184,7 @@ export const GetDiscount=async()=>{
 //Billing
 export const AddInvoice=async(data)=>{
     try{
+        console.log(data)
         const res=await axios.post(`${API_BASE_URL}/addInvoice`,data,{
             headers:{
                 'Content-Type':'application/json'
@@ -225,6 +226,7 @@ export const getProfileName=async()=>{
     }
 }
 export const AddProfile=async(data)=>{
+    console.log(data)
     try{
         const res=await axios.post(`${API_BASE_URL}/addProfile`,data,{
             headers:{
@@ -246,6 +248,8 @@ export const GetProductByBarcode = async (barcode) => {
     throw new Error(errorMessage);
   }
 }
+
+
 export const UpdateDiscountStatus=async(data)=>{
     try{
         const res=await axios.put(`${API_BASE_URL}/editDiscountStatus`,data,{
@@ -262,3 +266,51 @@ export const UpdateDiscountStatus=async(data)=>{
 export const UpdateDiscount=async(data)=>{
     console.log(data)
 }
+
+//customer
+// Customer
+export const AddCustomer = async (data) => {
+  try {
+    const res = await axios.post(`${API_BASE_URL}/addCustomer`, data, {
+      headers: { "Content-Type": "application/json" },
+    });
+    return res.data;
+  } catch (err) {
+    const errorMessage = err.response?.data?.message || err.message || "Unknown error";
+    throw new Error(errorMessage);
+  }
+};
+
+export const GetCutomers = async () => {
+  try {
+    const res = await axios.get(`${API_BASE_URL}/getCustomers`);
+    return res.data;
+  } catch (err) {
+    const errorMessage = err.response?.data?.message || err.message || "Unknown error";
+    throw new Error(errorMessage);
+  }
+};
+
+// ✅ delete uses id in URL
+export const DeleteCustomer = async (id) => {
+  try {
+    const res = await axios.delete(`${API_BASE_URL}/delCustomer/${id}`);
+    return res.data;
+  } catch (err) {
+    const errorMessage = err.response?.data?.message || err.message || "Unknown error";
+    throw new Error(errorMessage);
+  }
+};
+
+// ✅ update sends full object in body (must include id)
+export const UpdateCustomer = async (id, data) => {
+  try {
+    const res = await axios.put(`${API_BASE_URL}/updateCustomer`, data, {
+      headers: { "Content-Type": "application/json" },
+    });
+    return res.data;
+  } catch (err) {
+    const errorMessage = err.response?.data?.message || err.message || "Unknown error";
+    throw new Error(errorMessage);
+  }
+};
