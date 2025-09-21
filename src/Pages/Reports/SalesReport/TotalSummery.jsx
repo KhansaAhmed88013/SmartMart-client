@@ -1,87 +1,119 @@
-import React from "react";
+import React, { useState, useEffect, useRef,useContext } from "react";
 import { FaPrint } from "react-icons/fa";
+import { getSalesSummaryReport } from "../../../UserService";
+import { useReactToPrint } from "react-to-print";
+import { ProfileContext } from "../../../Context/ProfileContext";
+
+
 const DailySaleSummary = () => {
-  // Sample Data: invoices of whole day
-  const invoices = [
-    {
-      invoiceNo: "INV-001",
-      items: [
-        { item: "Pepsi 1.5L", qty: 2, rate: 180, discount: 20, tax: 10 },
-        { item: "Lays Chips", qty: 3, rate: 50, discount: 0, tax: 0 }
-      ]
-    },
-    {
-      invoiceNo: "INV-002",
-      items: [
-        { item: "Nestle Milk", qty: 1, rate: 250, discount: 0, tax: 0 },
-        { item: "Oreo Biscuit", qty: 2, rate: 100, discount: 10, tax: 0 }
-      ]
-    }
-  ];
+  // ✅ Get today's date in YYYY-MM-DD format
+  const today = new Date().toISOString().split("T")[0];
 
-  // --- Calculate Totals ---
-  let totalQty = 0,
-    totalDiscount = 0,
-    totalTax = 0,
-    grossAmount = 0;
+  const [summary, setSummary] = useState(null);
+  const [startDate, setStartDate] = useState(today);
+  const [endDate, setEndDate] = useState(today);
+  const {ProfileData}=useContext(ProfileContext)
 
-  invoices.forEach(inv => {
-    inv.items.forEach(s => {
-      totalQty += s.qty;
-      totalDiscount += s.discount;
-      totalTax += s.tax;
-      grossAmount += s.qty * s.rate;
-    });
+  const slipRef = useRef();
+
+  // ✅ Print only the slip
+  const handlePrint = useReactToPrint({
+    contentRef: slipRef, // 👈 NEW API (v3+)
+    documentTitle: "Sales_Summary", // optional: set title of printed doc
   });
 
-  const netAmount = grossAmount - totalDiscount + totalTax;
+  // Fetch summary from backend
+  const fetchSummary = async () => {
+    try {
+      const data = await getSalesSummaryReport({ startDate, endDate });
+      setSummary(data.summary);
+    } catch (err) {
+      console.error("Error fetching summary:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchSummary();
+  }, [startDate, endDate]);
 
   return (
-    <div
-      style={{
-        width: "300px",
-        margin: "auto",
-        border: "1px solid #000",
-        padding: "10px",
-        fontFamily: "monospace"
-      }}
-    >
-      <h3 style={{ textAlign: "center" }}>Daily Sale Summary</h3>
-      <p style={{ textAlign: "center" }}>Date: 2025-08-27</p>
-      <hr />
+    <div style={{ width: "340px", margin: "auto" }}>
+      {/* The Slip Section */}
+      <div
+        ref={slipRef}
+        style={{
+          border: "1px solid #000",
+          padding: "12px",
+          fontFamily: "monospace",
+        }}
+      >
+       <div style={{ textAlign: "center", padding: "5px" }}>
+          <h3>{ProfileData.shopName}</h3>
+          <p>{ProfileData.location}</p>
+          <p>{ProfileData.number1} , {ProfileData.number2}</p>
+          <h3>Sales Summary</h3>
+        </div>
 
-      {/* Summary Section */}
-      <div style={{ fontSize: "14px" }}>
-        <p>Total Invoices: {invoices.length}</p>
-        <p>Total Qty Sold: {totalQty}</p>
-        <p>Gross Amount: Rs. {grossAmount}</p>
-        <p>Discount: Rs. {totalDiscount}</p>
-        <p>Tax: Rs. {totalTax}</p>
-        <p style={{ fontWeight: "bold" }}>Net Sale: Rs. {netAmount}</p>
+        {/* Interval selection */}
+        <div style={{ marginBottom: "10px" }}>
+          <label>From: </label>
+          <input
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            style={{ width: "60%" }}
+          />
+          <br />
+          <label>To: </label>
+          <input
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            style={{ width: "60%" }}
+          />
+        </div>
+
+        <p style={{ textAlign: "center" }}>
+          Interval: {startDate} → {endDate}
+        </p>
+        <hr />
+
+        {/* Summary Section */}
+        {summary ? (
+          <div style={{ fontSize: "14px" }}>
+            <p>Total Invoices: {summary.totalInvoices}</p>
+            <p>Total Qty Sold: {summary.totalQty}</p>
+            <p>Gross Amount: Rs. {summary.grossAmount}</p>
+            <p>Discount: Rs. {summary.totalDiscount}</p>
+            <p>Tax: Rs. {summary.totalTax}</p>
+            <p style={{ fontWeight: "bold" }}>
+              Net Sale: Rs. {summary.netAmount}
+            </p>
+          </div>
+        ) : (
+          <p style={{ textAlign: "center" }}>Loading...</p>
+        )}
+
+        <hr />
+        <p style={{ textAlign: "center" }}>--- End of Report ---</p>
       </div>
 
-      <hr />
-      <p style={{ textAlign: "center" }}>--- End of Report ---</p>
       {/* Print Button */}
-                  <div
-                    className="action-buttons"
-                    style={{ marginTop: "20px", textAlign: "right" }}
-                  >
-                    <button
-                      className="action-btn print-btn"
-                      onClick={() => window.print()}
-                      style={{
-                        padding: "8px 12px",
-                        background: "#007bff",
-                        color: "white",
-                        border: "none",
-                        borderRadius: "5px",
-                        cursor: "pointer",
-                      }}
-                    >
-                      <FaPrint /> Print
-                    </button>
-                  </div>
+      <div style={{ marginTop: "20px", textAlign: "right" }}>
+        <button
+          onClick={handlePrint}
+          style={{
+            padding: "8px 12px",
+            background: "#007bff",
+            color: "white",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+          }}
+        >
+          <FaPrint /> Print
+        </button>
+      </div>
     </div>
   );
 };

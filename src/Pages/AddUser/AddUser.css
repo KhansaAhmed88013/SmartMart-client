@@ -1,0 +1,87 @@
+.addUserContainer {
+  max-width: 600px;
+  margin: 15px auto;
+  padding: 15px 25px;
+  background: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.addUserContainer h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.addUserForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.addUserForm div {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.addUserForm label {
+  font-weight: 500;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+.addUserForm input,
+.addUserForm select {
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.addUserForm input:focus,
+.addUserForm select:focus {
+  border-color: #489fb5;
+  box-shadow: 0 0 5px rgba(72,159,181,0.3);
+}
+
+.addUserForm button {
+  padding: 10px 15px;
+  background-color: #489fb5;
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.addUserForm button:hover {
+  background-color: #367a91;
+}
+
+.message {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #444;
+}
+
+/* Mobile view */
+@media only screen and (max-width: 480px) {
+  .addUserContainer {
+    margin: 20px;
+    padding: 15px;
+  }
+
+  .addUserForm input,
+  .addUserForm select {
+    font-size: 13px;
+    padding: 7px 10px;
+  }
+
+  .addUserForm button {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+}

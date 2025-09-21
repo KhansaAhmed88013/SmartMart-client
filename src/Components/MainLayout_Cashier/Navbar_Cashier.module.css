@@ -1,0 +1,189 @@
+.navbar-cashier {
+  box-sizing: border-box; /* include padding in width */
+  width: 100%;
+  overflow-x: hidden;
+}
+.navbar-cashier {
+  background: rgb(244, 244, 235);
+  grid-area: nav;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  border-bottom: 1px solid rgb(234, 227, 227);
+} /* Hamburger Icon */
+.nav_icon-cashier {
+  display: none;
+  cursor: pointer;
+  padding-left: 1rem;
+}
+.icon-cashier {
+  font-size: 16px;
+  color: #a5aaad;
+  border-radius: 50px;
+  background: #ffffff;
+  box-shadow: 2px 2px 5px #d9d9d9, -2px -2px 5px #ffffff;
+  padding: 6px;
+  transition: all 0.2s ease-in-out;
+}
+.icon-cashier:hover {
+  color: #489fb5;
+} /* Shop name */
+.shopname-cashier {
+  font-size: 18px;
+  font-weight: 600;
+  color: #444;
+  cursor: pointer;
+} /* Left Links */
+.navbar__left-cashier > a {
+  margin-right: 30px;
+  text-decoration: none;
+  color: #a5aaad;
+  font-size: 15px;
+  font-weight: 700;
+  transition: 0.2s ease-in-out;
+}
+.navbar__left-cashier > a:hover {
+  color: #489fb5;
+}
+.navbar__left-cashier .active_link {
+  color: #489fb5;
+  border-bottom: 3px solid #489fb5;
+  padding-bottom: 12px;
+} /* Right Icons */
+.navbar__right-cashier {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  align-items: center;
+}
+.navbar__right-cashier > a {
+  margin-left: 15px; /* reduced gap for mobile */
+  text-decoration: none;
+} /* 📱 Responsive (Mobile) */
+@media only screen and (max-width: 800px) {
+  .nav_icon-cashier {
+    display: inline;
+  }
+  .navbar__left-cashier {
+    display: none; /* hide links at <=800px */
+  }
+  .shopname-cashier {
+    font-size: 14px; /* smaller shop name */
+    font-weight: 500;
+  }
+  .nav_icon-cashier {
+    display: inline;
+  }
+  .navbar-cashier {
+    padding: 0 0; /* less left padding */
+  }
+  .navbar__right-cashier {
+  gap: 5px;
+  }
+  .navbar__left-cashier {
+    display: none; /* hide links at <=800px */
+  }
+} /* Notification */
+.notification-cashier {
+  position: relative;
+  display: inline-block;
+}
+.notification-cashier .badge-cashier {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: red;
+  color: white;
+  font-size: 10px;
+  padding: 2px 5px;
+  border-radius: 50%;
+} /* User Toggle */
+.user-toggle-cashier {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 5px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.user-toggle-cashier:hover {
+  background: #f3f3f5;
+} /* Side Toggle (hidden by default) */
+.side-toggle {
+  position: fixed;
+  top: 0;
+  left: -100%; /* fully hidden */
+  width: 220px; /* slightly smaller for mobile */
+  height: 100%;
+  background: #f9f9f9;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.25);
+  padding: 15px;
+  transition: left 0.3s ease-in-out;
+  z-index: 1200;
+  display: flex;
+  flex-direction: column;
+}
+.side-toggle.open {
+  left: 0; /* visible */
+}
+.side-toggle a {
+  padding: 14px 0;
+  text-decoration: none;
+  color: #444;
+  font-weight: 600;
+  font-size: 15px;
+  border-bottom: 1px solid #eee;
+  transition: color 0.2s;
+}
+.side-toggle a:hover {
+  color: #489fb5;
+} /* Hide sidebar on desktop */
+@media only screen and (max-width: 48px) {
+  .nav_icon-cashier {
+    padding-left: 0rem;
+  }
+  .navbar-cashier {
+  padding: 0 0;
+  margin: 0;
+  }
+  .shopname-cashier {
+  font-size: 11px;
+  font-weight: 500;
+  color: #444;
+} /* Left Links */
+
+} 
+.side-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+}
+.side-header h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+.close-icon {
+  cursor: pointer;
+  font-size: 20px;
+  color: #333;
+}
+.close-icon:hover {
+  color: #489fb5;
+} /* Overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 1100;
+}

@@ -136,6 +136,7 @@ function SupplierView() {
       {/* Search */}
       <div className="search-bar">
         <input
+        style={{padding:'5px',fontSize:'14px',minWidth:'280px',margin:'0.5rem 0',border:'2px solid lightblue'}}
           type="text"
           placeholder="Search by Supplier Name or Contact Person..."
           value={searchQuery}

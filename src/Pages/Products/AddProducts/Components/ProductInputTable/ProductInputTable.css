@@ -110,6 +110,9 @@
     border: none;
   }
 
+  .barcode-sticky-wrapper .add-btn{
+    width: 100%;
+  }
   .product-input-container .products-table td::before {
     content: attr(data-label);
     font-weight: 600;
@@ -476,6 +479,7 @@
 
 .product-input-container .products-container .supplier-select {
   flex: 0 0 220px;
+  padding: 10px 1rem;
 }
 .products-table {
   table-layout: fixed; /* forces width rules to apply */
@@ -486,9 +490,9 @@
 .products-table th:nth-child(1),
 .products-table td:nth-child(1) { width: 10px; text-align: center; } /* No */
 .products-table th:nth-child(2),
-.products-table td:nth-child(2) { width: 90px; } /* Barcode */
+.products-table td:nth-child(2) { width: 80px; } /* Barcode */
 .products-table th:nth-child(3),
-.products-table td:nth-child(3) { width: 170px; } /* Product Name */
+.products-table td:nth-child(3) { width: 160px; } /* Product Name */
 .products-table th:nth-child(4),
 .products-table td:nth-child(4) { width: 110px; } /* Category */
 .products-table th:nth-child(5),
@@ -496,11 +500,15 @@
 .products-table th:nth-child(6),
 .products-table td:nth-child(6) { width: 70px; } /* Cost */
 .products-table th:nth-child(7),
+.products-table td:nth-child(7) { width: 50px; } /* Qty */
+
+.products-table th:nth-child(7),
 .products-table td:nth-child(7) { width: 55px; } /* Qty */
+
 .products-table th:nth-child(8),
-.products-table td:nth-child(8) { width: 70px; } /* Sale Price */
+.products-table td:nth-child(8) { width: 40px; } /* Sale Price */
 .products-table th:nth-child(9),
-.products-table td:nth-child(9) { width: 85px; } /* Total Price */
+.products-table td:nth-child(9) { width: 75px; } /* Total Price */
 .products-table th:nth-child(10),
 .products-table td:nth-child(10) { width: 100px; } /* Expiry */
 .products-table th:nth-child(11),
@@ -551,4 +559,19 @@ td.barcode div {
 .supplier-select {
   display: flex;
   align-items: center;
+}
+.sticky-barcode-btn {
+  position: sticky;
+  top: 0;                  /* stick to top of viewport */
+  background-color: transparent;  /* match container */
+  z-index: 100;
+  padding: 8px 0;          /* optional spacing */
+  }
+.barcode-sticky-wrapper {
+  position: sticky;
+  top: 0; /* sticks to top of viewport */
+  background-color: #fff; /* same as container */
+  z-index: 200;
+  padding: 0px 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* optional shadow */
 }

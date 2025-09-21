@@ -1,91 +1,110 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useRef,useContext } from "react";
 import { FaPrint } from "react-icons/fa";
+import { useReactToPrint } from "react-to-print";
+import { GetSalesReportData } from "../../../UserService";
+import { ProfileContext } from "../../../Context/ProfileContext";
 
 function SalesSummary() {
-  // 🔹 Helper function: Format date in dd/mm/yyyy
-  const formatDate = (date) => {
-    return date.toLocaleDateString("en-GB"); 
-  };
-
-  // Dummy data (with today's date automatically)
-  const salesData = [
-    {
-      date: formatDate(new Date("2025-07-27")),
-      cashier: "ADMINISTRATOR",
-      total: 149335,
-      discountItems: 0,
-      saleTax: 0,
-      netTotal: 149335,
-      discountTotal: 315,
-      grandTotal: 149020,
-      profit: 16104.32,
-    },
-    {
-      date: formatDate(new Date("2025-08-05")),
-      cashier: "ADMINISTRATOR",
-      total: 207575,
-      discountItems: 0,
-      saleTax: 0,
-      netTotal: 207575,
-      discountTotal: 50,
-      grandTotal: 207525,
-      profit: 21055.44,
-    },
-    {
-      date: formatDate(new Date("2025-08-20")),
-      cashier: "ADMINISTRATOR",
-      total: 110000,
-      discountItems: 100,
-      saleTax: 0,
-      netTotal: 109900,
-      discountTotal: 0,
-      grandTotal: 109900,
-      profit: 15000,
-    },
-  ];
-
-  // 🔹 State for Date Filtering
+ const [salesData, setSalesData] = useState([]);
+  const [errMessage, setErrMessage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [users, setUsers] = useState([]);
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
+  const [selectedUser, setSelectedUser] = useState(""); // 🔥 new state
+  const { ProfileData } = useContext(ProfileContext);
 
-  // 🔹 Function to parse "dd/mm/yyyy" → JS Date
-  const parseDate = (dateStr) => {
-    const [day, month, year] = dateStr.split("/").map(Number);
-    return new Date(year, month - 1, day);
-  };
-
-  // 🔹 Filter sales data by date range
+  // Fetch sales data
+  useEffect(() => {
+    const getData = async () => {
+      setIsLoading(true);
+      try {
+        const result = await GetSalesReportData();
+        setSalesData(result.formatted);
+        setUsers(result.users)
+      } catch (err) {
+        console.error(err);
+        setErrMessage("Failed to fetch sales data");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    getData();
+  }, []);
+console.log(users)
   const filteredData = salesData.filter((row) => {
-    const rowDate = parseDate(row.date);
-
+    const rowDate = new Date(row.invoice_date);
     if (fromDate && rowDate < new Date(fromDate)) return false;
     if (toDate && rowDate > new Date(toDate)) return false;
-
+    if (selectedUser && row.cashier_name !== selectedUser) return false; // 🔥 filter by cashier
     return true;
   });
-
-  // 🔹 Totals
-  const totalSales = filteredData.reduce((sum, row) => sum + row.grandTotal, 0);
-  const totalProfit = filteredData.reduce((sum, row) => sum + row.profit, 0);
+  // Totals
+  const totalCost = filteredData.reduce(
+    (sum, row) => sum + parseFloat(row.costPrice || 0),
+    0
+  );
+  const totalTaxOnItems = filteredData.reduce(
+    (sum, row) => sum + parseFloat(row.tax_on_items || 0),
+    0
+  );
+  const totalSaleTax = filteredData.reduce(
+    (sum, row) => sum + parseFloat(row.sale_tax || 0),
+    0
+  );
+  const totalSales = filteredData.reduce(
+    (sum, row) => sum + parseFloat(row.grand_total || 0),
+    0
+  );
+  const totalProfit = filteredData.reduce(
+    (sum, row) => sum + parseFloat(row.profit || 0),
+    0
+  );
   const transactions = filteredData.length;
   const avgBill = transactions > 0 ? (totalSales / transactions).toFixed(2) : 0;
 
-  // 🔹 Date Range for report
-  const reportFrom = filteredData[0]?.date || "N/A";
-  const reportTo = filteredData[filteredData.length - 1]?.date || "N/A";
+  // Report date range
+  const reportFrom = filteredData[0]
+    ? new Date(filteredData[0].invoice_date).toLocaleDateString("en-GB")
+    : "N/A";
+  const reportTo = filteredData[filteredData.length - 1]
+    ? new Date(filteredData[filteredData.length - 1].invoice_date).toLocaleDateString("en-GB")
+    : "N/A";
+ const contentRef = useRef();
+
+  const handlePrint = useReactToPrint({
+    contentRef, // ✅ required in v3 instead of content: () => ref.current
+    documentTitle: "Sales Summary Report",
+  });
+  if (isLoading) return <p>Loading...</p>;
+  if (errMessage) return <p style={{ color: "red" }}>{errMessage}</p>;
 
   return (
     <div style={{ maxWidth: "1000px", margin: "0 auto", padding: "20px" }}>
-      {/* Header */}
-      <div style={{ textAlign: "center", padding: "20px" }}>
-        <h2>smart super Mart</h2>
-        <p>Behria Enclusive Road Chak Shezad Islamabad</p>
-        <h2>Daily Sale Summary Report</h2>
-      </div>
+      {/* User Filter Dropdown */}
+      <div ref={contentRef}>
+      
+<div style={{ marginBottom: "20px", textAlign: "center" }}>
+  <label>
+    Cashier:{" "}
+    <select
+      value={selectedUser}
+      onChange={(e) => setSelectedUser(e.target.value)}
+      style={{ margin: "0 10px", padding: "5px" }}
+    >
+      <option value="">All</option>
+      {users.map((u, i) => (
+        <option key={i} value={u.username}>
+          {u.username}
+        </option>
+      ))}
+    </select>
+  </label>
+</div>
 
       {/* Date Filter Inputs */}
-      <div style={{ marginBottom: "20px", textAlign: "center" }}>
-        <label>
+      <div style={{ marginBottom: "20px", textAlign: "center" ,display:'flex',flexDirection:'row',textAlign:'center',alignItems:'center'}} >
+        <label style={{display:'flex',flexDirection:'row'}}>
           From:{" "}
           <input
             type="date"
@@ -95,7 +114,7 @@ function SalesSummary() {
           />
         </label>
 
-        <label>
+        <label style={{display:'flex',flexDirection:'row'}}>
           To:{" "}
           <input
             type="date"
@@ -106,91 +125,118 @@ function SalesSummary() {
         </label>
       </div>
 
-      {/* Report Date Range */}
-      <hr style={{ border: "2px solid black", margin: "2px 0" }} />
-      <p style={{ fontWeight: "bold", textAlign: "center" }}>
-        Date From {reportFrom} to {reportTo}
-      </p>
-       {/* Totals Row */}
-      <div
-        style={{
-          marginTop: "20px",
-          padding: "15px",
-          border: "1px solid #ddd",
-          borderRadius: "8px",
-          background: "#f9f9f9",
-          display: "flex",
-          justifyContent: "space-between",
-          textAlign: "center",
-          fontWeight: "bold",
-        }}
-      >
-        <span>Total Sales: {totalSales.toLocaleString()}</span>
-        <span>Total Profit: {totalProfit.toFixed(2)}</span>
-        <span>Transactions: {transactions}</span>
-        <span>Average Bill: {avgBill}</span>
-      </div>
+      {/* The printable section */}
+        {/* Header */}
+        <div style={{ textAlign: "center", padding: "5px" }}>
+          <h2>{ProfileData.shopName}</h2>
+          <p>{ProfileData.location}</p>
+          <p>{ProfileData.number1} , {ProfileData.number2}</p>
+          <h2>Daily Sale Summary Report</h2>
+        </div>
 
-      <hr style={{ border: "2px solid black", margin: "2px 0" }} />
+        <hr style={{ border: "2px solid black", margin: "2px 0" }} />
+        <p style={{ fontWeight: "bold", textAlign: "center" }}>
+          Date From {reportFrom} to {reportTo}
+        </p>
 
-      {/* Sales Table */}
-      <table border="1" cellPadding="6" cellSpacing="0" width="100%">
-        <thead>
-          <tr style={{ background: "#f2f2f2" }}>
-            <th>Invoice Date</th>
-            <th>Cashier Name</th>
-            <th>Total</th>
-            <th>Disc. on Items</th>
-            <th>Sale Tax</th>
-            <th>Net Total</th>
-            <th>Disc. on Total</th>
-            <th>G. Total</th>
-            <th>Profit</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredData.length > 0 ? (
-            filteredData.map((row, i) => (
-              <tr key={i}>
-                <td>{row.date}</td>
-                <td>{row.cashier}</td>
-                <td>{row.total}</td>
-                <td>{row.discountItems}</td>
-                <td>{row.saleTax}</td>
-                <td>{row.netTotal}</td>
-                <td>{row.discountTotal}</td>
-                <td>{row.grandTotal}</td>
-                <td>{row.profit}</td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="9" style={{ textAlign: "center", color: "red" }}>
-                No records found for selected date range
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-
-     
-      {/* Print Button */}
-      <div
-        className="action-buttons"
-        style={{ marginTop: "20px", textAlign: "right" }}
-      >
-        <button
-          className="action-btn print-btn"
-          onClick={() => window.print()}
+        {/* Totals Row */}
+        <div
           style={{
-            padding: "8px 12px",
-            background: "#007bff",
-            color: "white",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
+            marginTop: "20px",
+            padding: "15px",
+            border: "1px solid #ddd",
+            borderRadius: "8px",
+            background: "#f9f9f9",
+            display: "flex",
+            flexDirection:'column',
+            justifyContent: "space-between",
+            textAlign: "center",
+            fontWeight: "600",
+            flexWrap: "wrap",
+            gap: "5px",
           }}
         >
+          <div  style={{
+            display:'flex',
+            flexDirection:'row',
+            justifyContent:'space-between',
+          }}>
+            <span>Total Cost: {totalCost.toLocaleString()}</span>
+          <span>Total Tax on Items: {totalTaxOnItems.toLocaleString()}</span>
+          <span>Total Sale Tax: {totalSaleTax.toLocaleString()}</span>
+          </div>
+          <div  style={{
+            display:'flex',
+            flexDirection:'row',
+            justifyContent:'space-between',
+          }}>
+            <span>Total Profit: {totalProfit.toFixed(2)}</span>
+          <span>Transactions: {transactions}</span>
+          <span>Average Bill: {avgBill}</span>
+        
+          </div>
+          <span>Total Sales: {totalSales.toLocaleString()}</span>
+          
+          </div>
+
+        <hr style={{ border: "2px solid black", margin: "2px 0" }} />
+
+        {/* Sales Table */}
+        <table
+          border="1"
+          cellPadding="2"
+          cellSpacing="0"
+          width="100%"
+          style={{ fontSize: "14px" }}
+        >
+          <thead>
+            <tr style={{ background: "#f2f2f2" }}>
+              <th>Invoice Date</th>
+              <th>Invoice No</th>
+              <th>Cashier</th>
+              <th>Total Cost</th>
+              <th>Total</th>
+              <th>Disc on Items</th>
+              <th>Sale Tax</th>
+              <th>Net Total</th>
+              <th>Disc. on Total</th>
+              <th>G. Total</th>
+              <th>Profit</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredData.length > 0 ? (
+              filteredData.map((row, i) => (
+                <tr key={i}>
+                  <td>{new Date(row.invoice_date).toLocaleDateString("en-GB")}</td>
+                  <td>{row.invoice_no}</td>
+                  <td>{row.cashier_name}</td>
+                  <td>{parseFloat(row.costPrice).toLocaleString()}</td>
+                  <td>{parseFloat(row.total_before_tax).toLocaleString()}</td>
+                  <td>{parseFloat(row.discountItems).toLocaleString()}</td>
+                  <td>{parseFloat(row.sale_tax).toLocaleString()}</td>
+                  <td>{parseFloat(row.net_total).toLocaleString()}</td>
+                  <td>{parseFloat(row.discountTotal).toLocaleString()}</td>
+                  <td>{parseFloat(row.grand_total).toLocaleString()}</td>
+                  <td>{parseFloat(row.profit).toLocaleString()}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="12" style={{ textAlign: "center", color: "red" }}>
+                  No records found for selected date range
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Print Button */}
+      <div style={{ marginTop: "20px", textAlign: "right" }}>
+        <button
+          onClick={handlePrint}
+          >
           <FaPrint /> Print
         </button>
       </div>

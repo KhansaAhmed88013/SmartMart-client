@@ -1,0 +1,179 @@
+.employee-container {
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  font-family: Arial, sans-serif;
+}
+
+.employee-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.employee-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+}
+
+.employee-table th,
+.employee-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+.employee-table th {
+  background-color: #489FB5;
+  color: #fff;
+}
+
+.employee-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Responsive: mobile-friendly cards */
+@media screen and (max-width: 600px) {
+  .employee-table, 
+  .employee-table thead, 
+  .employee-table tbody, 
+  .employee-table th, 
+  .employee-table td, 
+  .employee-table tr {
+    display: block;
+    width: 100%;
+  }
+
+  .employee-table thead tr {
+    display: none; /* hide table header */
+  }
+
+  .employee-table tr {
+    margin-bottom: 15px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 10px;
+  }
+
+  .employee-table td {
+    text-align: left; /* show data next to label */
+    padding-left: 0;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    position: relative;
+    border: none;
+    border-bottom: 1px solid #ddd;
+    font-size: 0.95rem;
+  }
+
+  .employee-table td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    display: inline-block;
+    width: 120px; /* fixed label width */
+    margin-right: 10px;
+    text-align: left;
+  }
+
+  .employee-table td:last-child {
+    border-bottom: 0;
+  }
+}
+.add-user-btn {
+  padding: 5px 8px;
+  margin-bottom: 15px;
+  background-color: #28a745;
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.add-user-btn:hover {
+  background-color: #218838;
+}
+.status-active {
+  color: #28a745; /* green */
+  font-weight: bold;
+}
+
+.delete-btn {
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+
+.delete-btn:hover:not(:disabled) {
+  background-color: #c82333;
+}
+
+.delete-btn:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+}
+.delete-btn {
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+
+.delete-btn:hover:not(:disabled) {
+  background-color: #c82333;
+}
+
+.delete-btn:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+}
+
+.success-message {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 10px 15px;
+  border-radius: 6px;
+  margin: 15px 0;
+  font-weight: bold;
+}
+.delete-btn:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+  position: relative;
+}
+
+/* Optional: custom tooltip (instead of default title) */
+.delete-btn:disabled:hover::after {
+  content: "You can't delete yourself";
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  z-index: 10;
+}

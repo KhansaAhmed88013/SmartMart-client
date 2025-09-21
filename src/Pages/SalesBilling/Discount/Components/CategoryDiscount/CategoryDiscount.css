@@ -1,0 +1,261 @@
+/* ====== Page Layout ====== */
+.Bill-discount-page {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.Bill-discount-page h2 {
+  margin-bottom: 15px;
+  font-size: 22px;
+  color: #333;
+}
+
+/* ====== Add Button ====== */
+.Bill-discount-page .add-btn {
+  padding: 8px 16px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  font-size: 14px;
+  transition: background 0.3s ease;
+}
+
+.Bill-discount-page .add-btn:hover {
+  background: #0056b3;
+}
+
+/* ====== Overlay ====== */
+.Bill-discount-page .overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.Bill-discount-page .overlay-content {
+  background: #fff;
+  padding: 25px;
+  border-radius: 10px;
+  width: 450px;
+  max-width: 95%;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.Bill-discount-page .overlay-content h3 {
+  margin-bottom: 15px;
+  color: #444;
+}
+
+/* ====== Form ====== */
+.Bill-discount-page .form-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.Bill-discount-page .form-row input,
+.Bill-discount-page .form-row select {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.Bill-discount-page .form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.Bill-discount-page .form-actions button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.Bill-discount-page .form-actions button:first-child {
+  background: #28a745;
+  color: white;
+}
+
+.Bill-discount-page .form-actions .cancel {
+  background: #e0e0e0;
+  color: #333;
+}
+
+/* ====== Table ====== */
+.Bill-discount-page .table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.Bill-discount-page .table thead {
+  background: #f1f1f1;
+}
+
+.Bill-discount-page .table th,
+.Bill-discount-page .table td {
+  text-align: left;
+  padding: 05px;
+  font-size: 14px;
+}
+
+.Bill-discount-page .table th {
+  color: #444;
+}
+
+.Bill-discount-page .table tr:nth-child(even) {
+  background: #fafafa;
+}
+
+.Bill-discount-page .table tr:hover {
+  background: #f0f8ff;
+}
+
+.Bill-discount-page .no-records {
+  text-align: center;
+  padding: 15px;
+  color: #777;
+}
+
+/* ====== Status Colors ====== */
+.Bill-discount-page td[style*="green"] {
+  font-weight: bold;
+}
+.Bill-discount-page td[style*="blue"] {
+  font-weight: bold;
+}
+.Bill-discount-page td[style*="red"] {
+  font-weight: bold;
+}
+.Bill-discount-page td[style*="gray"] {
+  font-weight: bold;
+}
+
+/* ====== Icon Buttons ====== */
+.Bill-discount-page .icon-action-btn{
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 16px;
+  color: #33a6ee;
+  transition: transform 0.2s ease;
+}
+
+.Bill-discount-page .icon-action-btn:hover {
+  transform: scale(1.2);
+  color: #007bff;
+}
+
+/* ====== Animations ====== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.Bill-discount-page {
+  text-align: center;
+  padding: 5px;
+}
+.Bill-discount-page h2 {
+  margin: 5px 0;
+}
+.Bill-discount-page p {
+  margin: 0;
+  font-size: 12px;
+}
+
+.add-btn-container {
+  margin: 20px 5px;
+  text-align: right;
+}
+
+/* ====== Header ====== */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* title left, button right */
+  margin-bottom: 15px;
+}
+
+.Bill-discount-page .page-header h2 {
+  flex: 1;
+  text-align: center; /* keep heading centered */
+  margin: 0;
+}
+
+.Bill-discount-page .page-header .header-actions {
+  text-align: right;
+}
+
+.Bill-discount-page .filter-row {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: 15px 0;
+}
+
+.Bill-discount-page .filter-row div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.msg {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2000;  /* higher than overlay (1000) */
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: bold;
+  min-width: 250px;
+  text-align: center;
+}
+
+.msg-success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.msg-error {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.Bill-discount-page .date-filters {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: 15px 0;
+}
+
+.Bill-discount-page .date-filters div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

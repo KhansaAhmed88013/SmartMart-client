@@ -1,53 +1,40 @@
-import React, { useState } from "react";
+import React, { useEffect, useState,useContext } from "react";
 import { FaPrint } from "react-icons/fa";
+import { GetSupplierReport } from "../../../UserService";
+import { ProfileContext } from "../../../Context/ProfileContext";
 
 const SupplierReport = () => {
-  const suppliers = [
-    {
-      id: 1,
-      name: "ABC Suppliers",
-      contactPerson: "Ali Khan",
-      phone: "0300-1234567",
-      email: "abc@suppliers.com",
-      address: "Lahore, Pakistan",
-      totalPurchases: 250000,
-      pendingAmount: 0,
-      status: "Active",
-      date: "2025-08-01",
-    },
-    {
-      id: 2,
-      name: "XYZ Traders",
-      contactPerson: "Sara Ahmed",
-      phone: "0301-7654321",
-      email: "xyz@traders.com",
-      address: "Karachi, Pakistan",
-      totalPurchases: 150000,
-      pendingAmount: 12000,
-      status: "Pending",
-      date: "2025-08-05",
-    },
-    {
-      id: 3,
-      name: "Global Imports",
-      contactPerson: "Bilal Hassan",
-      phone: "0321-9876543",
-      email: "global@imports.com",
-      address: "Islamabad, Pakistan",
-      totalPurchases: 80000,
-      pendingAmount: 8000,
-      status: "Active",
-      date: "2025-08-08",
-    },
-  ];
-
+  const [suppliers,setSupplier]=useState([])
+  const [msg,setMsg]=useState(null)
+  const {ProfileData}=useContext(ProfileContext)
+ useEffect(() => {
+     const fetchPurchase = async () => {
+       try {
+         const supplierData = await GetSupplierReport();
+         setSupplier(supplierData);
+       } catch (err) {
+         console.error(err);
+         setMsg("❌ Failed to fetch Suppliers data from server.");
+       }
+     };
+     fetchPurchase();
+   }, []);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
-  const filteredSuppliers = suppliers.filter((supplier) => {
-    if (!startDate || !endDate) return true;
-    return supplier.date >= startDate && supplier.date <= endDate;
-  });
+  // helper: format ISO string into YYYY-MM-DD
+const formatDate = (isoDate) => {
+  if (!isoDate) return "";
+  return new Date(isoDate).toISOString().split("T")[0];
+};
+
+// Filtered suppliers by comparing date objects
+const filteredSuppliers = suppliers.filter((supplier) => {
+  if (!startDate || !endDate) return true;
+
+  const supplierDate = formatDate(supplier.date);
+  return supplierDate >= startDate && supplierDate <= endDate;
+});
 
   const totalPurchases = filteredSuppliers.reduce(
     (sum, supplier) => sum + supplier.totalPurchases,
@@ -61,12 +48,13 @@ const SupplierReport = () => {
   return (
     <div style={{ maxWidth: "1000px", margin: "0 auto", padding: "20px" }}>
       {/* Header */}
-      <div style={{ textAlign: "center", padding: "20px" }}>
-        <h2>Smart Super Mart</h2>
-        <p>Behria Enclusive Road Chak Shehzad Islamabad</p>
-        <h2>Supplier Report</h2>
-      </div>
-
+      <div style={{ textAlign: "center", padding: "5px" }}>
+          <h2>{ProfileData.shopName}</h2>
+          <p>{ProfileData.location}</p>
+          <p>{ProfileData.number1} , {ProfileData.number2}</p>
+          <h2>Supplier Report</h2>
+        </div>
+      
       {/* Date Filters */}
       <div
         style={{
@@ -120,7 +108,6 @@ const SupplierReport = () => {
             <th>Contact Person</th>
             <th>Phone</th>
             <th>Email</th>
-            <th>Address</th>
             <th>Date</th>
             <th>Total Purchases (PKR)</th>
             <th>Pending Amount (PKR)</th>
@@ -136,8 +123,7 @@ const SupplierReport = () => {
                 <td>{supplier.contactPerson}</td>
                 <td>{supplier.phone}</td>
                 <td>{supplier.email}</td>
-                <td>{supplier.address}</td>
-                <td>{supplier.date}</td>
+                <td>{formatDate(supplier.date)}</td>
                 <td>{supplier.totalPurchases}</td>
                 <td>{supplier.pendingAmount}</td>
                 <td
