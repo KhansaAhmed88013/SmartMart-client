@@ -4,7 +4,7 @@ import {store} from "./redux/store";
 const getDynamicBaseURL = () => {
   const state = store.getState();
   const reduxPath = state?.path?.path;
-  return reduxPath && reduxPath.trim() !== "" ? reduxPath : "http://localhost:3000";
+  return reduxPath;
 };
 
 const API_BASE_URL = getDynamicBaseURL();
