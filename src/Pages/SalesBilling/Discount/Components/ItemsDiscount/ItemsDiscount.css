@@ -278,3 +278,168 @@
     align-items: center;
   }
 }
+/* === Form Modal Styling (Add / Edit Discount) === */
+
+.modal-box {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 25px 30px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 85vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  animation: popup 0.25s ease;
+  transition: all 0.3s ease;
+}
+
+@keyframes popup {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Header colors for Add / Edit */
+.modal-header.green {
+  color: #28a745;
+  font-size: 20px;
+  margin-bottom: 15px;
+  text-align: center;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.modal-header.blue {
+  color: #007bff;
+  font-size: 20px;
+  margin-bottom: 15px;
+  text-align: center;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Form fields */
+.modal-box form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.modal-box label {
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+}
+
+.modal-box input,
+.modal-box select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d0d0d0;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  transition: border 0.2s ease;
+}
+
+.modal-box input:focus,
+.modal-box select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+}
+
+/* React Select adjustments */
+.modal-box .css-13cymwt-control {
+  border-radius: 6px;
+  border: 1px solid #d0d0d0 !important;
+  min-height: 42px;
+}
+
+.modal-box .css-1fdsijx-ValueContainer {
+  padding: 4px 8px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+/* Buttons */
+.btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.25s ease;
+}
+
+.btn-green {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.btn-green:hover {
+  background-color: #218838;
+}
+
+.btn-blue {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.btn-blue:hover {
+  background-color: #0069d9;
+}
+
+.btn-red {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.btn-red:hover {
+  background-color: #c82333;
+}
+
+/* Close Button */
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 20px;
+  cursor: pointer;
+  color: #dc3545;
+  transition: color 0.2s ease;
+}
+
+.close-btn:hover {
+  color: #a71d2a;
+}
+
+/* Scrollbar inside modal */
+.modal-box::-webkit-scrollbar {
+  width: 6px;
+}
+.modal-box::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+  .modal-box {
+    padding: 20px;
+  }
+  .form-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+}

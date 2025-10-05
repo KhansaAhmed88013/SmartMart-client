@@ -27,21 +27,24 @@ function Navbar_Cashier() {
     getname();
   }, []);
 
-  const handleLogout = async () => {
-    if (!currentUser) return;
+const handleLogout = async () => {
+  if (!currentUser) return;
 
-    try {
-      await logOut({ userId: currentUser.id });
-      localStorage.removeItem("token");
-      localStorage.removeItem("role");
-      localStorage.removeItem("currentUser");
-      setCurrentUser(null);
-      dispatch(clearRole());
-      window.location.href = "/Login";
-    } catch (err) {
-      console.error("Logout failed:", err);
-    }
-  };
+  const confirmLogout = window.confirm("Are you sure you want to log out?");
+  if (!confirmLogout) return;
+
+  try {
+    await logOut({ userId: currentUser.id });
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    localStorage.removeItem("currentUser");
+    setCurrentUser(null);
+    dispatch(clearRole());
+    window.location.href = "/recovery/login";
+  } catch (err) {
+    console.error("Logout failed:", err);
+  }
+};
 
   return (
     <>
@@ -74,8 +77,9 @@ function Navbar_Cashier() {
           
         </div>
 
-        {/* Right Icons */}
-        <div className={`${styles["navbar__right-cashier"]}`}>
+               
+          <div className={`${styles["navbar__right-cashier"]}`}>
+            {/*
           <a href="/">
             <div className={`${styles["notification-cashier"]}`}>
               <FaBell className={`${styles["icon-cashier"]}`} />
@@ -85,6 +89,7 @@ function Navbar_Cashier() {
           <a href="/">
             <FaSearch className={`${styles["icon-cashier"]}`} />
           </a>
+          */}
 
           {currentUser && (
             <h6 className={`${styles["user-toggle-cashier"]}`}>
@@ -94,7 +99,7 @@ function Navbar_Cashier() {
 
           {!currentUser && (
             <a
-              href="/Login"
+              href="/recovery/login"
               className={`${styles["login-link-cashier"]}`}
             >
               Login

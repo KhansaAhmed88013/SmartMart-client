@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
 import "./ProductInputTable.css";
 import { FaPlus } from "react-icons/fa";
 import Select from "react-select";
@@ -87,6 +87,21 @@ const unitOptions = [
       addRow();
   };
 
+  // Keep refs for all row first inputs
+const rowRefs = useRef([]);
+
+const focusNextRow = (currentIndex) => {
+  const nextRow = rowRefs.current[currentIndex + 1];
+  if (nextRow) {
+    nextRow.focusItemCode(); // call the exposed function
+  } else {
+    addRow();
+    setTimeout(() => {
+      rowRefs.current[currentIndex + 1]?.focusItemCode();
+    }, 50);
+  }
+};
+
   const showMessage = (msg, type) => {
     setMessage(msg);
     setMsgType(type);
@@ -131,16 +146,27 @@ const unitOptions = [
     ...suppliers.map((s) => ({ value: s.id, label: s.supplier_name })),
   ];
 
-  const handleBarcodeSubmit = () => {
-    if (!barcodeValue) return;
-    const updatedRows = [...rows];
-    const emptyIndex = updatedRows.findIndex((r) => r.code === "");
-    if (emptyIndex !== -1) updatedRows[emptyIndex].code = barcodeValue;
-    else updatedRows.push({ ...initialRow, code: barcodeValue });
-    setRows(updatedRows);
-    setBarcodeValue("");
-    setOpenBarcode(false);
-  };
+ const handleBarcodeSubmit = () => {
+  if (!barcodeValue) return;
+  const updatedRows = [...rows];
+  let rowIndex = updatedRows.findIndex((r) => r.code === "");
+
+  if (rowIndex !== -1) {
+    updatedRows[rowIndex].code = barcodeValue;
+  } else {
+    updatedRows.push({ ...initialRow, code: barcodeValue });
+    rowIndex = updatedRows.length - 1;
+  }
+
+  setRows(updatedRows);
+  setBarcodeValue("");
+  setOpenBarcode(false);
+
+  // Move focus to Product Name input after barcode is added
+  setTimeout(() => {
+    rowRefs.current[rowIndex]?.focusNextInput();
+  }, 50);
+};
 
   return (
     <div className="product-input-container">
@@ -220,19 +246,23 @@ const unitOptions = [
             </tr>
           </thead>
           <tbody>
-            {rows.map((row, idx) => (
-              <ProductRow
-                key={idx}
-                row={row}
-                index={idx}
-                handleChange={handleChange}
-                categoryOptions={categoryOptions}
-                supplierOptions={supplierOptions}
-                unitOptions={unitOptions}
-                setShowModal={setShowCategoryModal}
-              />
-            ))}
-          </tbody>
+  {rows.map((row, idx) => (
+    <ProductRow
+      key={idx}
+      row={row}
+      index={idx}
+      handleChange={handleChange}
+      categoryOptions={categoryOptions}
+      supplierOptions={supplierOptions}
+      unitOptions={unitOptions}
+      setShowModal={setShowCategoryModal}
+      focusNextRow={focusNextRow}
+      ref={(el) => (rowRefs.current[idx] = el)} // just assign ref
+    />
+  ))}
+</tbody>
+
+
         </table>
       </div>
 

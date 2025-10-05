@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { getDailyPurchases } from "../../../UserService";
 import { ProfileContext } from "../../../Context/ProfileContext";
 
@@ -6,9 +6,9 @@ const DailyPurchaseSummary = () => {
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [filtered, setFiltered] = useState([]);
-  const [purchaseData, setPurchaseData] = useState([]); // ✅ start with empty array
+  const [purchaseData, setPurchaseData] = useState([]); 
   const [msg, setMsg] = useState(null);
-  const {ProfileData}=useContext(ProfileContext)
+  const { ProfileData } = useContext(ProfileContext);
 
   // ✅ Fetch data on mount
   useEffect(() => {
@@ -17,7 +17,6 @@ const DailyPurchaseSummary = () => {
         const result = await getDailyPurchases();
         setPurchaseData(result);
 
-        // apply default filter after data loads
         const { start, end } = getDefaultDateRange();
         setFromDate(start);
         setToDate(end);
@@ -30,7 +29,6 @@ const DailyPurchaseSummary = () => {
     fetchPurchaseSummary();
   }, []);
 
-  // ✅ helper: get start and end of current month
   const getDefaultDateRange = () => {
     const now = new Date();
     const start = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -41,12 +39,10 @@ const DailyPurchaseSummary = () => {
     };
   };
 
-  // ✅ filter purchases by date
   const filterPurchases = (start, end) => {
     return purchaseData.filter((p) => p.date >= start && p.date <= end);
   };
 
-  // ✅ handle filter click
   const handleFilter = () => {
     setFiltered(filterPurchases(fromDate, toDate));
   };
@@ -54,13 +50,14 @@ const DailyPurchaseSummary = () => {
   return (
     <div style={{ padding: "20px" }}>
       <div style={{ textAlign: "center", padding: "5px" }}>
-          <h3>{ProfileData.shopName}</h3>
-          <p>{ProfileData.location} </p>
-          <p>{ProfileData.number1} , {ProfileData.number2}</p>
-          <h2>Daily Purchase Summary</h2>
-        </div>
+        <h3>{ProfileData.shopName}</h3>
+        <p>{ProfileData.location}</p>
+        <p>
+          {ProfileData.number1} , {ProfileData.number2}
+        </p>
+        <h2>Daily Purchase Summary</h2>
+      </div>
 
-      {/* 🔹 Error Message */}
       {msg && (
         <p style={{ textAlign: "center", color: "red", fontWeight: "bold" }}>
           {msg}
@@ -88,7 +85,6 @@ const DailyPurchaseSummary = () => {
         <button onClick={handleFilter}>Filter</button>
       </div>
 
-      {/* Summary Table */}
       <table
         border="1"
         cellPadding="8"
@@ -97,6 +93,7 @@ const DailyPurchaseSummary = () => {
         <thead>
           <tr style={{ backgroundColor: "#f0f0f0" }}>
             <th>Date</th>
+            <th>Supplier</th>
             <th>Total Purchases</th>
             <th>Paid</th>
             <th>Pending</th>
@@ -104,17 +101,37 @@ const DailyPurchaseSummary = () => {
         </thead>
         <tbody>
           {filtered.length > 0 ? (
-            filtered.map((p) => (
-              <tr key={p.date}>
-                <td>{p.date}</td>
-                <td>{p.total}</td>
-                <td>{p.paid}</td>
-                <td>{p.pending ?? p.total - p.paid}</td>
-              </tr>
+            filtered.map((day, i) => (
+              <React.Fragment key={day.date}>
+                {/* Supplier rows */}
+                {day.suppliers.map((s) => (
+                  <tr key={`${day.date}-${s.supplier_id}`}>
+                    <td>{day.date}</td>
+                    <td>{s.supplier_name}</td>
+                    <td>{s.total}</td>
+                    <td>{s.paid}</td>
+                    <td>{s.pending}</td>
+                  </tr>
+                ))}
+
+                {/* Daily total row (highlighted) */}
+                <tr style={{ fontWeight: "bold", backgroundColor: "#dbeafe" }}>
+                  <td>{day.date}</td>
+                  <td>Total</td>
+                  <td>{day.total}</td>
+                  <td>{day.paid}</td>
+                  <td>{day.pending}</td>
+                </tr>
+
+                {/* Spacer row */}
+                <tr>
+                  <td colSpan="5" style={{ height: "10px", border: "none" }}></td>
+                </tr>
+              </React.Fragment>
             ))
           ) : (
             <tr>
-              <td colSpan="4" style={{ textAlign: "center" }}>
+              <td colSpan="5" style={{ textAlign: "center" }}>
                 No purchases found
               </td>
             </tr>

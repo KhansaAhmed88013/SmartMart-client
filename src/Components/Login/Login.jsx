@@ -4,6 +4,7 @@ import { loginUser } from "../../UserService";
 import { UserContext } from "../../Context/UserContext";
 import { useDispatch } from "react-redux";
 import { setRole } from "../../redux/Role/roleSlice";
+import { setPath as setPathRedux } from "../../redux/Path/pathSlice";
 import { jwtDecode } from "jwt-decode";
 import "./Login.css";
 
@@ -11,6 +12,8 @@ const Login = () => {
   const { currentUser, setCurrentUser } = useContext(UserContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
+  const [path, setLocalPath] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -19,12 +22,17 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError("");
+
     try {
-      const response = await loginUser({ username, password });
+      const response = await loginUser({ username, password, rememberMe });
+
       if (response.success && response.token) {
         localStorage.setItem("token", response.token);
         const decoded = jwtDecode(response.token);
+
         dispatch(setRole(decoded.role));
+
         const userData = {
           id: decoded.id,
           role: decoded.role,
@@ -33,7 +41,7 @@ const Login = () => {
         };
         setCurrentUser(userData);
         localStorage.setItem("currentUser", JSON.stringify(userData));
-        setError("");
+
         if (decoded.role === "Admin") navigate("/");
         else if (decoded.role === "Cashier") navigate("/cashier");
       } else {
@@ -48,7 +56,6 @@ const Login = () => {
   };
 
   const token = localStorage.getItem("token");
-
   if (currentUser && token) {
     const decoded = jwtDecode(token);
     return (
@@ -69,11 +76,24 @@ const Login = () => {
     );
   }
 
+  const NavigateToOTP = () => {
+    navigate("/recovery/Recovery-Info");
+  };
+
+  const handleAddPath = () => {
+    if (path.trim() === "") {
+      alert("Please enter a valid path");
+      return;
+    }
+    dispatch(setPathRedux(path)); // ✅ dispatching Redux action
+    alert(`Path "${path}" has been stored in Redux!`);
+  };
+
   return (
     <div className="login-container">
       <h2>Login</h2>
       <form onSubmit={handleLogin}>
-        <div>
+        <div className="form-group">
           <label>Username:</label>
           <input
             type="text"
@@ -82,7 +102,8 @@ const Login = () => {
             required
           />
         </div>
-        <div>
+
+        <div className="form-group">
           <label>Password:</label>
           <input
             type="password"
@@ -91,12 +112,47 @@ const Login = () => {
             required
           />
         </div>
-        <a href="/ForgotPassword">Forgot Password?</a>
-        {error && <p>{error}</p>}
+
+        {/* Remember Me Checkbox */}
+        <div className="checkbox-row">
+          <input
+            type="checkbox"
+            id="rememberMe"
+            checked={rememberMe}
+            onChange={(e) => setRememberMe(e.target.checked)}
+          />
+          <label htmlFor="rememberMe">Remember Me</label>
+        </div>
+
+        {error && <p className="error-message">{error}</p>}
+
         <button type="submit" disabled={loading}>
           {loading ? "Logging in..." : "Login"}
         </button>
       </form>
+
+      <a
+        href="#"
+        onClick={(e) => {
+          e.preventDefault();
+          setError("");
+          NavigateToOTP();
+        }}
+      >
+        Forgot Password?
+      </a>
+
+      {/* Path Input Section */}
+      <div className="path-section">
+        <label>Add Path:</label>
+        <input
+          type="text"
+          placeholder="Enter path"
+          value={path}
+          onChange={(e) => setLocalPath(e.target.value)}
+        />
+        <button onClick={handleAddPath}>Add</button>
+      </div>
     </div>
   );
 };

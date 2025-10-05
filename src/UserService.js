@@ -1,8 +1,13 @@
 import axios from "axios";
+import {store} from "./redux/store";
 
-const API_BASE_URL = "http://localhost:3000";
+const getDynamicBaseURL = () => {
+  const state = store.getState();
+  const reduxPath = state?.path?.path;
+  return reduxPath && reduxPath.trim() !== "" ? reduxPath : "http://localhost:3000";
+};
 
-//Products
+const API_BASE_URL = getDynamicBaseURL();
 export const AddProduct = async (data) => {
   try {
     const res = await axios.post(`${API_BASE_URL}/addProducts`, data, {
@@ -359,6 +364,17 @@ export const getLastInvoiceNo=async()=>{
         throw new Error(errorMessage);
     }
 }
+
+export const getCustomerBillingRecord=async(id)=>{
+    try{
+        const res=await axios.get(`${API_BASE_URL}/getCustomerBillingRecord/${id}`)
+        return res.data
+    }catch(err){
+         const errorMessage = err.response?.data?.message || err.message || "Unknown error";
+        throw new Error(errorMessage);
+    }
+}
+
 //Profile
 export const getProfile=async()=>{
     try{
@@ -433,6 +449,18 @@ export const AddCustomer = async (data) => {
         throw new Error(errorMessage);
     }
 }
+
+export const GetDailySalesReport = async () => {
+  try {
+    const res = await axios.get(`${API_BASE_URL}/DailySalesReport`);
+    return res.data;
+  } catch (err) {
+    const errorMessage =
+      err.response?.data?.message || err.message || "Unknown error";
+    throw new Error(errorMessage);
+  }
+};
+
 export const GetSalesReportData = async () => {
   try {
     const res = await axios.get(`${API_BASE_URL}/getSalesReport`);
@@ -446,6 +474,18 @@ export const GetSalesReportData = async () => {
 export const GetCashierSalesReport = async (username, role) => {
   try {
     const res = await axios.get(`${API_BASE_URL}/getCashierSalesReport`, {
+      params: { username, role },
+    });
+    return res.data;
+  } catch (err) {
+    const errorMessage =
+      err.response?.data?.message || err.message || "Unknown error";
+    throw new Error(errorMessage);
+  }
+};
+export const getCashierDashboardReport = async (username, role) => {
+  try {
+    const res = await axios.get(`${API_BASE_URL}/getCashierDashboardReport`, {
       params: { username, role },
     });
     return res.data;
@@ -539,12 +579,24 @@ export const getSalesSummaryReport = async (data) => {
     throw new Error(errorMessage);
   }
 };
+export const getOTsalesReport = async (data) => {
+  try {
+    const res = await axios.get(
+      `${API_BASE_URL}/getOTsalesReport`
+    );
+    return res.data;
+  } catch (err) {
+    const errorMessage =
+      err.response?.data?.message || err.message || "Unknown error";
+    throw new Error(errorMessage);
+  }
+}
+
 export const getInvoiceReport = async (data) => {
   try {
     const res = await axios.get(
       `${API_BASE_URL}/getInvoiceReports?from=${data.startDate}&to=${data.endDate}`
     );
-    console.log(res.data);
     return res.data;
   } catch (err) {
     const errorMessage =
@@ -552,6 +604,7 @@ export const getInvoiceReport = async (data) => {
     throw new Error(errorMessage);
   }
 };
+
 export const addUser = async (data) => {
   try {
     const res = await axios.post(`${API_BASE_URL}/addusers`, data, {
@@ -566,7 +619,7 @@ export const addUser = async (data) => {
     return { success: false, message: err.message || "Unknown error" };
   }
 };
-export const getUsers = async (data) => {
+export const getUsers = async () => {
   try {
     const res = await axios.get(`${API_BASE_URL}/users`);
     return res.data;
@@ -605,6 +658,16 @@ export const logOut = async (data) => {
 export const GetCutomers = async () => {
   try {
     const res = await axios.get(`${API_BASE_URL}/getCustomers`);
+    return res.data;
+  } catch (err) {
+    const errorMessage = err.response?.data?.message || err.message || "Unknown error";
+    throw new Error(errorMessage);
+  }
+};
+
+export const GetCutomersReport = async () => {
+  try {
+    const res = await axios.get(`${API_BASE_URL}/getCustomerSalesReport`);
     return res.data;
   } catch (err) {
     const errorMessage = err.response?.data?.message || err.message || "Unknown error";
@@ -709,13 +772,9 @@ export const deleteUser = async (username) => {
     throw new Error(errorMessage);
   }
 };
-export const forgotpassword = async (data) => {
+export const getRecoveryEmail = async (data) => {
   try {
-    const res = await axios.post(`${API_BASE_URL}/forgot-Password`, data, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const res = await axios.post(`${API_BASE_URL}/getRecoveryEmail`, data);
     return res.data;
   } catch (err) {
     const errorMessage =
@@ -723,17 +782,46 @@ export const forgotpassword = async (data) => {
     throw new Error(errorMessage);
   }
 };
-export const resetpassword = async (data) => {
+export const getAdminDashboard = async () => {
   try {
-    const res = await axios.post(`${API_BASE_URL}/reset-password`, data, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const res = await axios.get(`${API_BASE_URL}/getAdminDashboard`);
     return res.data;
   } catch (err) {
     const errorMessage =
       err.response?.data?.message || err.message || "Unknown error";
     throw new Error(errorMessage);
+  }
+};
+export const notifications = async () => {
+  try {
+    const res = await axios.get(`${API_BASE_URL}/notifications`);
+    return res.data;
+  } catch (err) {
+    const errorMessage =
+      err.response?.data?.message || err.message || "Unknown error";
+    throw new Error(errorMessage);
+  }
+};
+export const clearNotification = async (ids) => {
+  try {
+    const res = await axios.post(`${API_BASE_URL}/clearNotifications`, { ids });
+    return res.data;
+  } catch (err) {
+    const errorMessage =
+      err.response?.data?.message || err.message || "Unknown error";
+    throw new Error(errorMessage);
+  }
+};
+export const addPath = async (data) => {
+  try {
+    const res = await axios.post(`${API_BASE_URL}/addPath`, data, {
+      headers: { "Content-Type": "application/json" },
+    });
+    return res.data; 
+  } catch (err) {
+    if (err.response && err.response.data) {
+      return err.response.data;
+    }
+    return { success: false, message: err.message || "Unknown error" };
   }
 };

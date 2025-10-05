@@ -134,7 +134,7 @@ function InventoryStock() {
           <FaBox className={styles.inventoryicon} /> Expired Stock (
           {expiredCount})
         </button>
-        <button onClick={() => (window.location.href = "/auditLog")}>
+       {/*} <button onClick={() => (window.location.href = "/auditLog")}>
           <FaListAlt className={styles.inventoryicon} /> Audit Log
         </button>
         <button onClick={() => (window.location.href = "/import")}>
@@ -142,9 +142,9 @@ function InventoryStock() {
         </button>
         <button onClick={() => (window.location.href = "/export")}>
           <FaDownload className={styles.inventoryicon} /> Export Stock
-        </button>
-      </div>
-
+        </button>*/}
+      </div>  
+      
       <div className={styles["stock-container"]}>
         <div className={styles["stock-summary"]}>
           <p>

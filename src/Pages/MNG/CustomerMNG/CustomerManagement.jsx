@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
-import { AddCustomer, GetCutomers, DeleteCustomer, UpdateCustomer } from "../../../UserService";
-import './CustomerMNG.css';
+import {
+  AddCustomer,
+  GetCutomers,
+  DeleteCustomer,
+  UpdateCustomer,
+} from "../../../UserService";
+import "./CustomerMNG.css";
 
 function CustomerManagement() {
   const [customers, setCustomers] = useState([]);
@@ -14,6 +20,7 @@ function CustomerManagement() {
     balance: 0.0,
   });
 
+  const navigate = useNavigate();
   // ✅ Fetch customers safely
   const getCustomers = async () => {
     try {
@@ -93,11 +100,14 @@ function CustomerManagement() {
 
       {/* Actions Row */}
       <div className="customer-actions">
-        <button className="add-customer-btn" onClick={() => { 
-          setEditingCustomer(null); 
-          setNewCustomer({ name: "", phone: "", address: "", balance: 0.0 });
-          setShowForm(true);
-        }}>
+        <button
+          className="add-customer-btn"
+          onClick={() => {
+            setEditingCustomer(null);
+            setNewCustomer({ name: "", phone: "", address: "", balance: 0.0 });
+            setShowForm(true);
+          }}
+        >
           <FaPlus /> Add Customer
         </button>
       </div>
@@ -118,9 +128,9 @@ function CustomerManagement() {
         </thead>
         <tbody>
           {customers.length > 0 ? (
-            customers.map((customer) => (
+            customers.map((customer,index) => (
               <tr key={customer.id}>
-                <td>{customer.id}</td>
+                <td>{index+1}</td>
                 <td>{customer.name}</td>
                 <td>{customer.phone || "-"}</td>
                 <td>{customer.address || "-"}</td>
@@ -128,17 +138,17 @@ function CustomerManagement() {
                   {parseFloat(customer.balance).toFixed(2)}
                 </td>
                 <td>
-                  <button 
-                    className="edit-btn" 
+                  <button
+                    className="edit-btn"
                     onClick={() => handleEdit(customer)}
                   >
-                    <FaEdit /> 
+                    <FaEdit />
                   </button>
-                  <button 
-                    className="delete-btn" 
+                  <button
+                    className="delete-btn"
                     onClick={() => handleDelete(customer.id)}
                   >
-                    <FaTrash /> 
+                    <FaTrash />
                   </button>
                 </td>
               </tr>
@@ -156,8 +166,8 @@ function CustomerManagement() {
       {/* Add/Edit Customer Modal */}
       {showForm && (
         <div className="customer-overlay" onClick={() => setShowForm(false)}>
-          <div 
-            className="customer-modal" 
+          <div
+            className="customer-modal"
             onClick={(e) => e.stopPropagation()} // prevent closing when clicking inside
           >
             <h3>{editingCustomer ? "Edit Customer" : "Add New Customer"}</h3>
@@ -204,8 +214,12 @@ function CustomerManagement() {
               </div>
 
               <div className="form-buttons">
-                <button type="submit">{editingCustomer ? "Update" : "Save"}</button>
-                <button type="button" onClick={() => setShowForm(false)}>Cancel</button>
+                <button type="submit">
+                  {editingCustomer ? "Update" : "Save"}
+                </button>
+                <button type="button" onClick={() => setShowForm(false)}>
+                  Cancel
+                </button>
               </div>
             </form>
           </div>

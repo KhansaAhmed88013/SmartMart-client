@@ -258,4 +258,141 @@
   display: flex;
   align-items: center;
   gap: 8px;
+}/* ====== Overlay Styling (Add/Edit Category Discount) ====== */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1500;
+  animation: fadeIn 0.25s ease-in-out;
+  backdrop-filter: blur(3px);
+}
+
+.overlay-content {
+  background: #ffffff;
+  width: 400px;
+  max-width: 95%;
+  border-radius: 12px;
+  padding: 25px 30px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  animation: slideUp 0.25s ease;
+  position: relative;
+}
+
+.overlay-content h3 {
+  margin-bottom: 18px;
+  color: #333;
+  font-size: 20px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.overlay-content label {
+  display: block;
+  margin: 10px 0 5px;
+  font-weight: 500;
+  color: #444;
+  font-size: 14px;
+}
+
+.overlay-content input,
+.overlay-content select {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.overlay-content input:focus,
+.overlay-content select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 4px rgba(0, 123, 255, 0.3);
+}
+
+/* ====== Buttons ====== */
+.overlay-content .form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.overlay-content .form-actions button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.25s ease;
+}
+
+.overlay-content .form-actions button:first-child {
+  background: linear-gradient(135deg, #28a745, #218838);
+  color: #fff;
+}
+
+.overlay-content .form-actions button:first-child:hover {
+  background: linear-gradient(135deg, #34c759, #28a745);
+  transform: translateY(-1px);
+}
+
+.overlay-content .form-actions .cancel {
+  background: #f1f1f1;
+  color: #333;
+}
+
+.overlay-content .form-actions .cancel:hover {
+  background: #e0e0e0;
+  transform: translateY(-1px);
+}
+
+/* ====== Subtle Animations ====== */
+@keyframes slideUp {
+  from {
+    transform: translateY(15px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Optional: Add fade-in transition for smoother appearance */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ====== Responsive ====== */
+@media (max-width: 480px) {
+  .overlay-content {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .overlay-content h3 {
+    font-size: 18px;
+  }
+
+  .overlay-content input,
+  .overlay-content select {
+    font-size: 13px;
+  }
+
+  .overlay-content .form-actions button {
+    font-size: 13px;
+    padding: 6px 12px;
+  }
 }

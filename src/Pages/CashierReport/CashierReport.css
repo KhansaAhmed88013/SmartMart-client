@@ -82,3 +82,86 @@
     border: none;
   }
 }
+.sales-table,
+.items-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+/* ✅ Only apply block layout + scroll on small screens */
+@media (max-width: 768px) {
+  .sales-table,
+  .items-table {
+    overflow-x: auto;
+    display: block;
+  }
+
+  .sales-table thead {
+    display: none;
+  }
+
+  .sales-table tr {
+    display: block;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    background: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  }
+
+  .sales-table td {
+    display: flex;
+    justify-content: space-between;
+    text-align: left;
+    padding: 8px 10px;
+    border: none;
+    border-bottom: 1px solid #f1f1f1;
+    font-size: 14px;
+  }
+
+  .sales-table td:last-child {
+    border-bottom: none;
+  }
+
+  /* Labels before cells */
+  .sales-table td:nth-child(1)::before { content: "#"; font-weight: bold; }
+  .sales-table td:nth-child(2)::before { content: "Invoice #"; font-weight: bold; }
+  .sales-table td:nth-child(3)::before { content: "Date & Time"; font-weight: bold; }
+  .sales-table td:nth-child(4)::before { content: "Payment Type"; font-weight: bold; }
+  .sales-table td:nth-child(5)::before { content: "Total (PKR)"; font-weight: bold; }
+  .sales-table td:nth-child(6)::before { content: "Discount"; font-weight: bold; }
+  .sales-table td:nth-child(7)::before { content: "Items"; font-weight: bold; }
+
+  /* Items table inside expanded row */
+  .items-table thead {
+    display: none;
+  }
+
+  .items-table tr {
+    display: block;
+    border: 1px solid #ddd;
+    margin: 5px 0;
+    border-radius: 6px;
+    padding: 8px;
+  }
+
+  .items-table td {
+    display: flex;
+    justify-content: space-between;
+    border: none;
+    border-bottom: 1px solid #eee;
+    padding: 6px 8px;
+    font-size: 13px;
+  }
+
+  .items-table td:last-child {
+    border-bottom: none;
+  }
+
+  .items-table td:nth-child(1)::before { content: "Product"; font-weight: bold; }
+  .items-table td:nth-child(2)::before { content: "Qty"; font-weight: bold; }
+  .items-table td:nth-child(3)::before { content: "Price"; font-weight: bold; }
+  .items-table td:nth-child(4)::before { content: "Total"; font-weight: bold; }
+}

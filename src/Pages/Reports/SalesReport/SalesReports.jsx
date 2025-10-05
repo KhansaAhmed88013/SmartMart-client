@@ -1,18 +1,21 @@
-import React, { useEffect, useState, useRef,useContext } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import { FaPrint } from "react-icons/fa";
 import { useReactToPrint } from "react-to-print";
 import { GetSalesReportData } from "../../../UserService";
 import { ProfileContext } from "../../../Context/ProfileContext";
 
 function SalesSummary() {
- const [salesData, setSalesData] = useState([]);
+  const [salesData, setSalesData] = useState([]);
   const [errMessage, setErrMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [users, setUsers] = useState([]);
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
-  const [selectedUser, setSelectedUser] = useState(""); // 🔥 new state
+  const [selectedUser, setSelectedUser] = useState("");
   const { ProfileData } = useContext(ProfileContext);
+
+  // ✅ safe number parser
+  const toNum = (val) => (val ? parseFloat(val) : 0);
 
   // Fetch sales data
   useEffect(() => {
@@ -21,7 +24,7 @@ function SalesSummary() {
       try {
         const result = await GetSalesReportData();
         setSalesData(result.formatted);
-        setUsers(result.users)
+        setUsers(result.users);
       } catch (err) {
         console.error(err);
         setErrMessage("Failed to fetch sales data");
@@ -31,35 +34,22 @@ function SalesSummary() {
     };
     getData();
   }, []);
-console.log(users)
+
   const filteredData = salesData.filter((row) => {
     const rowDate = new Date(row.invoice_date);
     if (fromDate && rowDate < new Date(fromDate)) return false;
     if (toDate && rowDate > new Date(toDate)) return false;
-    if (selectedUser && row.cashier_name !== selectedUser) return false; // 🔥 filter by cashier
+    if (selectedUser && row.cashier_name !== selectedUser) return false;
     return true;
   });
+
   // Totals
-  const totalCost = filteredData.reduce(
-    (sum, row) => sum + parseFloat(row.costPrice || 0),
-    0
-  );
-  const totalTaxOnItems = filteredData.reduce(
-    (sum, row) => sum + parseFloat(row.tax_on_items || 0),
-    0
-  );
-  const totalSaleTax = filteredData.reduce(
-    (sum, row) => sum + parseFloat(row.sale_tax || 0),
-    0
-  );
-  const totalSales = filteredData.reduce(
-    (sum, row) => sum + parseFloat(row.grand_total || 0),
-    0
-  );
-  const totalProfit = filteredData.reduce(
-    (sum, row) => sum + parseFloat(row.profit || 0),
-    0
-  );
+  const totalCost = filteredData.reduce((sum, row) => sum + toNum(row.costPrice), 0);
+  const totalTaxOnItems = filteredData.reduce((sum, row) => sum + toNum(row.totalTax), 0);
+  const totalSaleTax = filteredData.reduce((sum, row) => sum + toNum(row.invoiceTax), 0);
+  const totalSales = filteredData.reduce((sum, row) => sum + toNum(row.net_total), 0);
+  const totalProfit = filteredData.reduce((sum, row) => sum + toNum(row.profit), 0);
+
   const transactions = filteredData.length;
   const avgBill = transactions > 0 ? (totalSales / transactions).toFixed(2) : 0;
 
@@ -70,12 +60,14 @@ console.log(users)
   const reportTo = filteredData[filteredData.length - 1]
     ? new Date(filteredData[filteredData.length - 1].invoice_date).toLocaleDateString("en-GB")
     : "N/A";
- const contentRef = useRef();
+
+  const contentRef = useRef();
 
   const handlePrint = useReactToPrint({
-    contentRef, // ✅ required in v3 instead of content: () => ref.current
+    contentRef,
     documentTitle: "Sales Summary Report",
   });
+
   if (isLoading) return <p>Loading...</p>;
   if (errMessage) return <p style={{ color: "red" }}>{errMessage}</p>;
 
@@ -83,54 +75,62 @@ console.log(users)
     <div style={{ maxWidth: "1000px", margin: "0 auto", padding: "20px" }}>
       {/* User Filter Dropdown */}
       <div ref={contentRef}>
-      
-<div style={{ marginBottom: "20px", textAlign: "center" }}>
-  <label>
-    Cashier:{" "}
-    <select
-      value={selectedUser}
-      onChange={(e) => setSelectedUser(e.target.value)}
-      style={{ margin: "0 10px", padding: "5px" }}
-    >
-      <option value="">All</option>
-      {users.map((u, i) => (
-        <option key={i} value={u.username}>
-          {u.username}
-        </option>
-      ))}
-    </select>
-  </label>
-</div>
+        <div style={{ marginBottom: "20px", textAlign: "center" }}>
+          <label>
+            Cashier:{" "}
+            <select
+              value={selectedUser}
+              onChange={(e) => setSelectedUser(e.target.value)}
+              style={{ margin: "0 10px", padding: "5px" }}
+            >
+              <option value="">All</option>
+              {users.map((u, i) => (
+                <option key={i} value={u.username}>
+                  {u.username}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
 
-      {/* Date Filter Inputs */}
-      <div style={{ marginBottom: "20px", textAlign: "center" ,display:'flex',flexDirection:'row',textAlign:'center',alignItems:'center'}} >
-        <label style={{display:'flex',flexDirection:'row'}}>
-          From:{" "}
-          <input
-            type="date"
-            value={fromDate}
-            onChange={(e) => setFromDate(e.target.value)}
-            style={{ margin: "0 10px", padding: "5px" }}
-          />
-        </label>
+        {/* Date Filter Inputs */}
+        <div
+          style={{
+            marginBottom: "20px",
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <label style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+            From:{" "}
+            <input
+              type="date"
+              value={fromDate}
+              onChange={(e) => setFromDate(e.target.value)}
+              style={{ margin: "0 10px", padding: "5px" }}
+            />
+          </label>
 
-        <label style={{display:'flex',flexDirection:'row'}}>
-          To:{" "}
-          <input
-            type="date"
-            value={toDate}
-            onChange={(e) => setToDate(e.target.value)}
-            style={{ margin: "0 10px", padding: "5px" }}
-          />
-        </label>
-      </div>
+          <label style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+            To:{" "}
+            <input
+              type="date"
+              value={toDate}
+              onChange={(e) => setToDate(e.target.value)}
+              style={{ margin: "0 10px", padding: "5px" }}
+            />
+          </label>
+        </div>
 
-      {/* The printable section */}
-        {/* Header */}
+        {/* Report Header */}
         <div style={{ textAlign: "center", padding: "5px" }}>
           <h2>{ProfileData.shopName}</h2>
           <p>{ProfileData.location}</p>
-          <p>{ProfileData.number1} , {ProfileData.number2}</p>
+          <p>
+            {ProfileData.number1} , {ProfileData.number2}
+          </p>
           <h2>Daily Sale Summary Report</h2>
         </div>
 
@@ -139,7 +139,7 @@ console.log(users)
           Date From {reportFrom} to {reportTo}
         </p>
 
-        {/* Totals Row */}
+        {/* Totals */}
         <div
           style={{
             marginTop: "20px",
@@ -147,48 +147,26 @@ console.log(users)
             border: "1px solid #ddd",
             borderRadius: "8px",
             background: "#f9f9f9",
-            display: "flex",
-            flexDirection:'column',
-            justifyContent: "space-between",
-            textAlign: "center",
             fontWeight: "600",
-            flexWrap: "wrap",
-            gap: "5px",
           }}
         >
-          <div  style={{
-            display:'flex',
-            flexDirection:'row',
-            justifyContent:'space-between',
-          }}>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
             <span>Total Cost: {totalCost.toLocaleString()}</span>
-          <span>Total Tax on Items: {totalTaxOnItems.toLocaleString()}</span>
-          <span>Total Sale Tax: {totalSaleTax.toLocaleString()}</span>
+            <span>Total Tax on Items: {totalTaxOnItems.toLocaleString()}</span>
+            <span>Total Sale Tax: {totalSaleTax.toLocaleString()}</span>
           </div>
-          <div  style={{
-            display:'flex',
-            flexDirection:'row',
-            justifyContent:'space-between',
-          }}>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
             <span>Total Profit: {totalProfit.toFixed(2)}</span>
-          <span>Transactions: {transactions}</span>
-          <span>Average Bill: {avgBill}</span>
-        
+            <span>Transactions: {transactions}</span>
+            <span>Average Bill: {avgBill}</span>
           </div>
           <span>Total Sales: {totalSales.toLocaleString()}</span>
-          
-          </div>
+        </div>
 
         <hr style={{ border: "2px solid black", margin: "2px 0" }} />
 
         {/* Sales Table */}
-        <table
-          border="1"
-          cellPadding="2"
-          cellSpacing="0"
-          width="100%"
-          style={{ fontSize: "14px" }}
-        >
+        <table border="1" cellPadding="2" cellSpacing="0" width="100%" style={{ fontSize: "14px" }}>
           <thead>
             <tr style={{ background: "#f2f2f2" }}>
               <th>Invoice Date</th>
@@ -197,9 +175,10 @@ console.log(users)
               <th>Total Cost</th>
               <th>Total</th>
               <th>Disc on Items</th>
-              <th>Sale Tax</th>
+              <th>Tax on Item</th>
               <th>Net Total</th>
               <th>Disc. on Total</th>
+              <th>Tax on Bill</th>
               <th>G. Total</th>
               <th>Profit</th>
             </tr>
@@ -211,14 +190,15 @@ console.log(users)
                   <td>{new Date(row.invoice_date).toLocaleDateString("en-GB")}</td>
                   <td>{row.invoice_no}</td>
                   <td>{row.cashier_name}</td>
-                  <td>{parseFloat(row.costPrice).toLocaleString()}</td>
-                  <td>{parseFloat(row.total_before_tax).toLocaleString()}</td>
-                  <td>{parseFloat(row.discountItems).toLocaleString()}</td>
-                  <td>{parseFloat(row.sale_tax).toLocaleString()}</td>
-                  <td>{parseFloat(row.net_total).toLocaleString()}</td>
-                  <td>{parseFloat(row.discountTotal).toLocaleString()}</td>
-                  <td>{parseFloat(row.grand_total).toLocaleString()}</td>
-                  <td>{parseFloat(row.profit).toLocaleString()}</td>
+                  <td>{toNum(row.costPrice).toLocaleString()}</td>
+                  <td>{toNum(row.gross).toLocaleString()}</td>
+                  <td>{toNum(row.itemDiscount).toLocaleString()}</td>
+                  <td>{toNum(row.totalTax).toLocaleString()}</td>
+                  <td>{toNum(row.net_total).toLocaleString()}</td>
+                  <td>{toNum(row.invoiceDiscount).toLocaleString()}</td>
+                  <td>{toNum(row.invoiceTax).toLocaleString()}</td>
+                  <td>{toNum(row.net_total).toLocaleString()}</td>
+                  <td>{toNum(row.profit).toLocaleString()}</td>
                 </tr>
               ))
             ) : (
@@ -234,9 +214,7 @@ console.log(users)
 
       {/* Print Button */}
       <div style={{ marginTop: "20px", textAlign: "right" }}>
-        <button
-          onClick={handlePrint}
-          >
+        <button onClick={handlePrint}>
           <FaPrint /> Print
         </button>
       </div>

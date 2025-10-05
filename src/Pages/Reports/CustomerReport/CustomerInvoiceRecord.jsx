@@ -1,21 +1,25 @@
 import React, { useState, useEffect, useContext } from "react";
 import { FaPrint } from "react-icons/fa";
-import { getInvoiceReport } from "../../../UserService";
+import { getInvoiceReport, GetCutomers } from "../../../UserService";
 import { ProfileContext } from "../../../Context/ProfileContext";
 
-const InvoiceReport = () => {
+const CustomerInvoiceRecord = () => {
   const today = new Date().toISOString().split("T")[0];
 
   const [invoices, setInvoices] = useState([]);
   const [startDate, setStartDate] = useState(today);
   const [endDate, setEndDate] = useState(today);
   const [loading, setLoading] = useState(false);
+  const [customers, setCustomers] = useState([]);
+  const [selectedCustomer, setSelectedCustomer] = useState("all"); // default all
   const { ProfileData } = useContext(ProfileContext);
 
   const fetchInvoices = async () => {
     try {
       setLoading(true);
       const data = await getInvoiceReport({ startDate, endDate });
+      const customersData = await GetCutomers();
+      setCustomers(customersData);
       setInvoices(data);
     } catch (err) {
       console.error("Error fetching invoices:", err);
@@ -28,9 +32,20 @@ const InvoiceReport = () => {
   useEffect(() => {
     fetchInvoices();
   }, [startDate, endDate]);
+
   // Calculate subtotal of an invoice
   const calculateSubtotal = (items) =>
     items.reduce((sum, item) => sum + Number(item.total_amount), 0);
+
+  // Filter invoices by selected customer
+  const filteredInvoices =
+    selectedCustomer === "all"
+      ? invoices
+      : invoices.filter(
+          (inv) =>
+            inv.customer_id === Number(selectedCustomer) || // filter by id
+            inv.Customer?.name === selectedCustomer // filter by name (fallback)
+        );
 
   return (
     <div style={{ padding: "20px" }}>
@@ -57,14 +72,29 @@ const InvoiceReport = () => {
           type="date"
           value={endDate}
           onChange={(e) => setEndDate(e.target.value)}
+          style={{ marginRight: "20px" }}
         />
+
+        {/* Customer Filter */}
+        <label>Customer: </label>
+        <select
+          value={selectedCustomer}
+          onChange={(e) => setSelectedCustomer(e.target.value)}
+        >
+          <option value="all">All Customers</option>
+          {customers.map((cust) => (
+            <option key={cust.id} value={cust.id}>
+              {cust.name}
+            </option>
+          ))}
+        </select>
       </div>
 
       {/* Invoice List */}
       {loading ? (
         <p style={{ textAlign: "center" }}>Loading...</p>
-      ) : invoices.length > 0 ? (
-        invoices.map((invoice) => (
+      ) : filteredInvoices.length > 0 ? (
+        filteredInvoices.map((invoice) => (
           <div
             key={invoice.id}
             style={{
@@ -132,7 +162,7 @@ const InvoiceReport = () => {
                       style={{
                         display: "flex",
                         justifyContent: "space-between",
-                        padding: "5px 0", // spreads them across the row
+                        padding: "5px 0",
                         paddingRight: "10px",
                         paddingLeft: "10px",
                       }}
@@ -160,7 +190,7 @@ const InvoiceReport = () => {
         ))
       ) : (
         <p style={{ textAlign: "center", color: "red" }}>
-          No invoices found in this date range.
+          No invoices found for this customer in this date range.
         </p>
       )}
 
@@ -184,4 +214,4 @@ const InvoiceReport = () => {
   );
 };
 
-export default InvoiceReport;
+export default CustomerInvoiceRecord;

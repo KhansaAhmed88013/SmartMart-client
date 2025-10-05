@@ -7,7 +7,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   const token = localStorage.getItem("token");
 
   if (!token) {
-    return <Navigate to="/Login" replace />;
+    return <Navigate to="/recovery/Login" replace />;
   }
 
   try {
@@ -16,7 +16,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
 
     if (decoded.exp && decoded.exp < currentTime) {
       localStorage.removeItem("token");
-      return <Navigate to="/Login" replace />;
+      return <Navigate to="/recovery/Login" replace />;
     }
 
     const userRole = decoded.role; // ✅ read role from JWT
@@ -27,7 +27,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   } catch (error) {
     console.error("Invalid token", error);
     localStorage.removeItem("token");
-    return <Navigate to="/Login" replace />;
+    return <Navigate to="/recovery/Login" replace />;
   }
 
   return children;

@@ -1,12 +1,11 @@
 import "./Sidebar.css";
 import React, { useState, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ProfileContext } from "../../../../Context/ProfileContext";
 import { useDispatch } from "react-redux";
 import { UserContext } from "../../../../Context/UserContext";
 import { clearRole } from "../../../../redux/Role/roleSlice";
 import { logOut } from "../../../../UserService";
-
 
 import { 
   FaTimes, FaHome, FaBox, FaTags, FaShoppingCart, FaFileInvoice, 
@@ -18,43 +17,39 @@ function Sidebar({ sidebarOpen, closeSidebar }) {
   const { ProfileData } = useContext(ProfileContext);
   const [isSalesOpen, setIsSalesOpen] = useState(false);
   const [isPurchaseOpen, setIsPurchaseOpen] = useState(false);
-  
-  // Helper for link clicks
-  const handleLinkClick = () => {
-    if (sidebarOpen) closeSidebar(); // close sidebar on mobile
-  };
+  const [isCustomerOpen, setIsCustomerOpen] = useState(false);
 
   const { currentUser, setCurrentUser } = useContext(UserContext);
-const dispatch = useDispatch();
-const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-const handleLogout = async () => {
-  if (!currentUser) return;
-  try {
-    await logOut({ userId: currentUser.id });
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
-    localStorage.removeItem("currentUser");
-    setCurrentUser(null);
-    dispatch(clearRole());
-    if (sidebarOpen) closeSidebar();
-    navigate("/Login");
-  } catch (err) {
-    console.error("Logout failed:", err);
-  }
-};
-
-  // Navigate to dashboard on shop name click
-  const goToDashboard = () => {
-    navigate("/"); // dashboard route
+  const handleLinkClick = (path) => {
+    navigate(path);
     if (sidebarOpen) closeSidebar();
   };
+
+  const handleLogout = async () => {
+    if (!currentUser) return;
+    try {
+      await logOut({ userId: currentUser.id });
+      localStorage.removeItem("token");
+      localStorage.removeItem("role");
+      localStorage.removeItem("currentUser");
+      setCurrentUser(null);
+      dispatch(clearRole());
+      if (sidebarOpen) closeSidebar();
+      navigate("/recovery/login");
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
+  };
+
+  const goToDashboard = () => handleLinkClick("/");
 
   return (
     <div className={`sidebar ${sidebarOpen ? "sidebar_responsive" : ""}`} id="sidebar">
       <div className="sidebar__title">
         <div className="sidebar__img">
-          {/* Clickable shop name */}
           <h2 
             style={{ cursor: "pointer" }} 
             title="Go to Dashboard"
@@ -68,54 +63,55 @@ const handleLogout = async () => {
 
       <div className="sidebar__menu">
         {/* Dashboard */}
-        <div className="sidebar__link active_menu_link">
+        <div className="sidebar__link active_menu_link" onClick={() => handleLinkClick("/")}>
           <FaHome />
-          <Link to="/" onClick={handleLinkClick}>Dashboard</Link>
+          <span>Dashboard</span>
         </div>
 
         {/* Products */}
         <h2>Products</h2>
-        <div className="sidebar__link">
+        <div className="sidebar__link" onClick={() => handleLinkClick("/allProducts")}>
           <FaBox />
-          <Link to="/allProducts" onClick={handleLinkClick}>All Products</Link>
+          <span>All Products</span>
         </div>
-        <div className="sidebar__link">
+        <div className="sidebar__link" onClick={() => handleLinkClick("/addProduct")}>
           <FaPlus />
-          <Link to="/addProduct" onClick={handleLinkClick}>Add Product</Link>
+          <span>Add Product</span>
         </div>
-        <div className="sidebar__link">
+        <div className="sidebar__link" onClick={() => handleLinkClick("/categories")}>
           <FaTags />
-          <Link to="/categories" onClick={handleLinkClick}>Categories</Link>
+          <span>Categories</span>
         </div>
-        <div className="sidebar__link">
+        <div className="sidebar__link" onClick={() => handleLinkClick("/stock")}>
           <FaBoxes />
-          <Link to="/stock" onClick={handleLinkClick}>Inventory / Stock</Link>
+          <span>Inventory / Stock</span>
         </div>
 
         {/* Sales & Billing */}
         <h2>Sales & Billing</h2>
-        <div className="sidebar__link">
+        <div className="sidebar__link" onClick={() => handleLinkClick("/billing")}>
           <FaFileInvoice />
-          <Link to="/billing" onClick={handleLinkClick}>Billing / POS</Link>
+          <span>Billing / POS</span>
         </div>
-        <div className="sidebar__link">
+        <div className="sidebar__link" onClick={() => handleLinkClick("/DiscountOfferSummary")}>
           <FaTags />
-          <Link to="/DiscountOfferSummary" onClick={handleLinkClick}>Discounts & Offers</Link>
+          <span>Discounts & Offers</span>
         </div>
 
         {/* Purchases */}
         <h2>Purchases</h2>
-        <div className="sidebar__link">
+        <div className="sidebar__link" onClick={() => handleLinkClick("/PurchaseOrder")}>
           <FaFileInvoice />
-          <Link to="/PurchaseOrder" onClick={handleLinkClick}>Purchase Orders</Link>
+          <span>Purchase Orders</span>
         </div>
-        <div className="sidebar__link">
+        <div className="sidebar__link" onClick={() => handleLinkClick("/SuppliersInvoice")}>
           <FaFileInvoice />
-          <Link to="/SuppliersInvoice" onClick={handleLinkClick}>Supplier Invoices</Link>
+          <span>Supplier Invoices</span>
         </div>
 
         {/* Reports */}
         <h2>Reports</h2>
+
         {/* Sales Reports Dropdown */}
         <div className="sidebar__section">
           <div className="sidebar__link" onClick={() => setIsSalesOpen(!isSalesOpen)}>
@@ -125,25 +121,29 @@ const handleLogout = async () => {
           </div>
           {isSalesOpen && (
             <div className="sidebar__dropdown">
-              <div className="sidebar__link">
+              <div className="sidebar__link" onClick={() => handleLinkClick("/DailySalesReport")}>
                 <FaChartLine />
-                <Link to="/SalesSummary" onClick={handleLinkClick}>Sales Report</Link>
+                <span>Daily Sales Report</span>
               </div>
-              <div className="sidebar__link">
+              <div className="sidebar__link" onClick={() => handleLinkClick("/SalesSummary")}>
                 <FaChartLine />
-                <Link to="/OTSaleReport" onClick={handleLinkClick}>OT Sale Report</Link>
+                <span>Sales Report</span>
               </div>
-              <div className="sidebar__link">
+              <div className="sidebar__link" onClick={() => handleLinkClick("/OTSaleReport")}>
                 <FaChartLine />
-                <Link to="/StockReport" onClick={handleLinkClick}>Stock Report</Link>
+                <span>OT Sale Report</span>
               </div>
-              <div className="sidebar__link">
+              <div className="sidebar__link" onClick={() => handleLinkClick("/StockReport")}>
                 <FaChartLine />
-                <Link to="/InvoiceReport" onClick={handleLinkClick}>Invoice Report</Link>
+                <span>Stock Report</span>
               </div>
-              <div className="sidebar__link">
+              <div className="sidebar__link" onClick={() => handleLinkClick("/InvoiceReport")}>
                 <FaChartLine />
-                <Link to="/DailySaleSummary" onClick={handleLinkClick}>Sale Summary on Slip</Link>
+                <span>Invoice Report</span>
+              </div>
+              <div className="sidebar__link" onClick={() => handleLinkClick("/DailySaleSummary")}>
+                <FaChartLine />
+                <span>Sale Summary on Slip</span>
               </div>
             </div>
           )}
@@ -153,56 +153,73 @@ const handleLogout = async () => {
         <div className="sidebar__section">
           <div className="sidebar__link" onClick={() => setIsPurchaseOpen(!isPurchaseOpen)}>
             <FaShoppingCart />
-            <span>Purchase reports</span>
+            <span>Purchase Reports</span>
             {isPurchaseOpen ? <FaChevronUp className="ml-auto" /> : <FaChevronDown className="ml-auto" />}
           </div>
           {isPurchaseOpen && (
             <div className="sidebar__dropdown">
-              <div className="sidebar__link">
+              <div className="sidebar__link" onClick={() => handleLinkClick("/PurchaseReport")}>
                 <FaShoppingCart />
-                <Link to="/PurchaseReport" onClick={handleLinkClick}>Purchase Report</Link>
+                <span>Purchase Report</span>
               </div>
-              <div className="sidebar__link">
+              <div className="sidebar__link" onClick={() => handleLinkClick("/SupplierReport")}>
                 <FaShoppingCart />
-                <Link to="/SupplierReport" onClick={handleLinkClick}>Supplier Report</Link>
+                <span>Supplier Report</span>
               </div>
-              <div className="sidebar__link">
+              <div className="sidebar__link" onClick={() => handleLinkClick("/DailyPurchaseSummary")}>
                 <FaShoppingCart />
-                <Link to="/DailyPurchaseSummary" onClick={handleLinkClick}>Daily Purchase Summary</Link>
+                <span>Daily Purchase Summary</span>
               </div>
             </div>
           )}
-          <div className="sidebar__link">
+        </div>
+
+        {/* Customer Reports Dropdown */}
+        <div className="sidebar__section">
+          <div className="sidebar__link" onClick={() => setIsCustomerOpen(!isCustomerOpen)}>
             <FaShoppingCart />
-            <Link to="/CustomerReport" onClick={handleLinkClick}>Customer Report</Link>
+            <span>Customer Report</span>
+            {isCustomerOpen ? <FaChevronUp className="ml-auto" /> : <FaChevronDown className="ml-auto" />}
           </div>
+          {isCustomerOpen && (
+            <div className="sidebar__dropdown">
+              <div className="sidebar__link" onClick={() => handleLinkClick("/CustomerReport")}>
+                <FaShoppingCart />
+                <span>Customer Wise Record</span>
+              </div>
+              <div className="sidebar__link" onClick={() => handleLinkClick("/CustomerInvoiceRecord")}>
+                <FaShoppingCart />
+                <span>Customer Invoice Record</span>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Management */}
         <h2>MNG</h2>
-        <div className="sidebar__link">
+        <div className="sidebar__link" onClick={() => handleLinkClick("/employeeManagement")}>
           <FaWrench />
-          <Link to="/employeeManagement" onClick={handleLinkClick}>Employee Management</Link>
+          <span>Employee Management</span>
         </div>
-        <div className="sidebar__link"  onClick={() => (window.location.href = "/CustomerManagement")}>
+        <div className="sidebar__link" onClick={() => handleLinkClick("/customerManagement")}>
           <FaUsers />
-          <Link to="/customerManagement" onClick={handleLinkClick}>Customer Management</Link>
+          <span>Customer Management</span>
         </div>
-        <div className="sidebar__link">
+        <div className="sidebar__link" onClick={() => handleLinkClick("/supplierManagement")}>
           <FaTruck />
-          <Link to="/supplierManagement" onClick={handleLinkClick}>Supplier Management</Link>
+          <span>Supplier Management</span>
         </div>
 
         {/* Settings */}
         <div className="settings">
           <h2>Settings</h2>
-          <div className="sidebar__link">
+          <div className="sidebar__link" onClick={() => handleLinkClick("/settings")}>
             <FaCogs />
-            <Link to="/settings" onClick={handleLinkClick}>System Settings</Link>
+            <span>System Settings</span>
           </div>
           <div className="sidebar__link logoutred" onClick={handleLogout}>
             <FaSignOutAlt />
-            <span  style={{ cursor: "pointer" }}>Logout</span>
+            <span style={{ cursor: "pointer" }}>Logout</span>
           </div>
         </div>
       </div>

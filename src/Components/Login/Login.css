@@ -100,3 +100,262 @@
 .already-logged button:hover {
   background: #0056b3;
 }
+/* OTP Inputs Container */
+.otp-inputs {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 25px;
+}
+
+/* OTP Input Box */
+.otp-inputs input {
+  width: 55px;
+  height: 55px;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.otp-inputs input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.4);
+}
+
+/* Verify Button */
+.verify-btn {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #4b6cb7, #182848);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.verify-btn:hover {
+  background: linear-gradient(135deg, #182848, #4b6cb7);
+  transform: translateY(-2px);
+}
+/* Resend OTP text */
+.resend-otp {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 14px;
+  color: #555;
+}
+
+.resend-otp span {
+  color: #007bff;
+  cursor: pointer;
+  font-weight: 500;
+  margin-left: 5px;
+  transition: color 0.3s ease;
+}
+
+.resend-otp span:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+/* Error message (only errors, not all <p>) */
+.error-message {
+  color: red;
+  background: rgba(209, 64, 64, 0.372);
+  font-size: 14px;
+  margin-top: -10px;
+  padding: 5px;
+}
+
+/* Normal text inside login/OTP */
+.login-container p {
+  margin: 10px 0;
+  color: #555;
+  font-size: 14px;
+  text-align: center;
+}
+/* Terms and conditions */
+.terms {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 15px 0 25px;
+  font-size: 14px;
+  color: #555;
+}
+
+.terms input {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+/* ✅ Mobile Responsiveness */
+@media (max-width: 480px) {
+  .login-container {
+    margin: 40px 15px;     /* smaller margins on mobile */
+    padding: 20px;         /* reduce padding */
+    max-width: 100%;       /* take full width */
+  }
+
+  .login-container h2 {
+    font-size: 20px;       /* smaller heading */
+    margin-bottom: 20px;
+  }
+
+  .login-container input {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+
+  .login-container button,
+  .verify-btn {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  /* OTP inputs stack better */
+  .otp-inputs {
+    justify-content: center;
+    gap: 10px;             /* add gap for spacing */
+    flex-wrap: wrap;       /* wrap if small screen */
+  }
+
+  .otp-inputs input {
+    width: 45px;
+    height: 45px;
+    font-size: 18px;
+  }
+
+  /* Terms and conditions text smaller */
+  .terms {
+    font-size: 12px;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  /* Error & info text */
+  .login-container p {
+    font-size: 13px;
+  }
+}
+@media (max-width: 480px) {
+  .login-container {
+    padding: 20px 15px;
+  }
+
+  .login-container h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  .login-container input {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+
+  .otp-inputs input {
+    width: 40px;
+    height: 45px;
+    font-size: 16px;
+  }
+
+  button,
+  .verify-btn {
+    font-size: 14px;
+    padding: 10px;
+  }
+}
+@media (max-width: 480px) {
+  .login-container {
+    padding: 20px 15px;
+  }
+
+  .login-container h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  .login-container input {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+
+  .otp-inputs input {
+    width: 40px;
+    height: 45px;
+    font-size: 16px;
+  }
+
+  button,
+  .verify-btn {
+    font-size: 14px;
+    padding: 10px;
+  }
+}
+/* Make select match input styling */
+.login-container select {
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  background: #fff;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  appearance: none; /* Remove default arrow */
+}
+
+.login-container select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.4);
+}
+
+/* Optional: add custom arrow */
+.login-container select {
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%23777' stroke-width='2'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 12px 8px;
+}
+.remember-me {
+  display: flex;
+  align-items: center; /* vertically center checkbox and label */
+  gap: 8px;            /* space between checkbox and label */
+  margin-bottom: 20px; /* same as other fields */
+}
+.terms {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+/* Form groups for username/password */
+.form-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Checkbox row for horizontal layout */
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.checkbox-row input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+/* Optional: style checkbox label */
+.checkbox-row label {
+  font-size: 14px;
+  color: #555;
+}

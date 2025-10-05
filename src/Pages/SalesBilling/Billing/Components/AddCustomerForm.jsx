@@ -1,8 +1,7 @@
-// AddCustomerForm.js
+import './CustomerList.css'
 import React, { useState } from "react";
 
 function AddCustomerForm({ onClose, onCustomerAdded }) {
-  // Local state for customer form
   const [form, setForm] = useState({
     name: "",
     phone: "",
@@ -13,7 +12,6 @@ function AddCustomerForm({ onClose, onCustomerAdded }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Send data to backend API
       const res = await fetch("http://localhost:3000/addCustomer", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -23,12 +21,8 @@ function AddCustomerForm({ onClose, onCustomerAdded }) {
       const data = await res.json();
 
       if (res.ok) {
-        // ⚡ Make sure backend returns new customer WITH id
-        // Example: { customer: { id: 7, name: "Ali", ... } }
-        onCustomerAdded(data.customer);
-
-        // Close modal after success
-        onClose();
+        onCustomerAdded(data.customer); // ✅ backend must return new customer with id
+        onClose(); // close modal
       } else {
         alert(data.message || "Error adding customer");
       }
@@ -38,11 +32,14 @@ function AddCustomerForm({ onClose, onCustomerAdded }) {
   };
 
   return (
-    <div className="overlay">
-      <div className="customer-modal">
+  <div className="customer-list">
+    <div className="overlay" onClick={onClose}>
+      <div
+        className="customer-modal"
+        onClick={(e) => e.stopPropagation()}
+      >
         <h3>Add New Customer</h3>
         <form onSubmit={handleSubmit}>
-          {/* Customer name */}
           <input
             type="text"
             placeholder="Name"
@@ -50,21 +47,18 @@ function AddCustomerForm({ onClose, onCustomerAdded }) {
             onChange={(e) => setForm({ ...form, name: e.target.value })}
             required
           />
-          {/* Phone number */}
           <input
             type="text"
             placeholder="Phone"
             value={form.phone}
             onChange={(e) => setForm({ ...form, phone: e.target.value })}
           />
-          {/* Address */}
           <input
             type="text"
             placeholder="Address"
             value={form.address}
             onChange={(e) => setForm({ ...form, address: e.target.value })}
           />
-          {/* Opening balance */}
           <input
             type="number"
             placeholder="Balance"
@@ -73,14 +67,18 @@ function AddCustomerForm({ onClose, onCustomerAdded }) {
               setForm({ ...form, balance: Number(e.target.value) })
             }
           />
-          <button type="submit">Save</button>
-          <button type="button" onClick={onClose}>
-            Cancel
-          </button>
+
+          <div className="form-actions">
+            <button type="submit">Save</button>
+            <button type="button" onClick={onClose}>
+              Cancel
+            </button>
+          </div>
         </form>
       </div>
     </div>
-  );
+  </div>
+);
 }
 
 export default AddCustomerForm;

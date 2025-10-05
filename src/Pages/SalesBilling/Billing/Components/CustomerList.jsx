@@ -1,28 +1,45 @@
-// CustomerList.js
-import React, { useState } from "react";
+import { GetCutomers } from "../../../../UserService";
+import React, { useState, useEffect } from "react";
+import './CustomerList.css'
 
-function CustomerList({ customers = [], onClose, onSelect, onAddNew }) {
+function CustomerList({ onClose, onSelect, onAddNew }) {
   const [search, setSearch] = useState("");
+  const [customer, setCustomers] = useState([]);
 
-  // 🔍 Filter customers by name or phone
-  const filteredCustomers = customers.filter(
+  useEffect(() => {
+    const fetchCustomers = async () => {
+      try {
+        const customers = await GetCutomers();
+        setCustomers(customers);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchCustomers();
+  }, []);
+
+  const filteredCustomers = customer.filter(
     (cust) =>
       cust.name.toLowerCase().includes(search.toLowerCase()) ||
       cust.phone?.includes(search)
   );
 
   return (
-    <div className="overlay">
-      <div className="customer-modal">
+    <div className="customer-list">
+      <div className="overlay" onClick={onClose}>
+      <div
+        className="customer-modal"
+        onClick={(e) => e.stopPropagation()} // ✅ Prevent closing when clicking inside
+      >
         <h3>Select Customer</h3>
-        <button className="close-btn" onClick={onClose}>X</button>
-        
-        {/* 🔹 Add New Customer Button */}
+        <button className="close-btn" onClick={onClose}>
+          X
+        </button>
+
         <button className="add-customer-btn" onClick={onAddNew}>
           ➕ Add Customer
         </button>
 
-        {/* 🔍 Search Input */}
         <input
           type="text"
           placeholder="Search by name or phone..."
@@ -34,38 +51,16 @@ function CustomerList({ customers = [], onClose, onSelect, onAddNew }) {
         <table className="customer-table">
           <thead>
             <tr>
-              <th>ID</th>
+              <th>#</th>
               <th>Name</th>
-              <th>Phone</th>
-              <th>Balance</th>
               <th>Select</th>
             </tr>
           </thead>
           <tbody>
-            {/* Default "Cash" customer option */}
-            <tr>
-              <td>0</td>
-              <td>Cash</td>
-              <td>-</td>
-              <td>0</td>
-              <td>
-                <button
-                  onClick={() => {
-                    onSelect({ id: 0, name: "Cash" });
-                    onClose();
-                  }}
-                >
-                  Select
-                </button>
-              </td>
-            </tr>
-
-            {filteredCustomers.map((cust) => (
+            {filteredCustomers.map((cust, index) => (
               <tr key={cust.id}>
-                <td>{cust.id}</td>
+                <td>{index + 1}</td>
                 <td>{cust.name}</td>
-                <td>{cust.phone}</td>
-                <td>{cust.balance}</td>
                 <td>
                   <button
                     onClick={() => {
@@ -80,8 +75,8 @@ function CustomerList({ customers = [], onClose, onSelect, onAddNew }) {
             ))}
           </tbody>
         </table>
-
       </div>
+    </div>
     </div>
   );
 }

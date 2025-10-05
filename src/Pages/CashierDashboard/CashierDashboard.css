@@ -1,0 +1,71 @@
+.dashboard-container {
+  min-height: 100vh;
+  background-color: #f3f4f6;
+  padding: 40px 24px;
+  font-family: 'Arial', sans-serif;
+}
+
+.dashboard-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+.dashboard-card {
+  border-radius: 16px;
+  padding: 30px 20px;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 25px rgba(0,0,0,0.15);
+}
+
+.icon-circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  font-size: 28px;
+  color: #fff;
+}
+
+.dashboard-card h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.dashboard-card p {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.9);
+}
+
+/* Card Colors */
+.card-blue .icon-circle { background-color: #2563eb; }
+.card-green .icon-circle { background-color: #059669; }
+.card-yellow .icon-circle { background-color: #d97706; }
+
+.card-blue { background-color: #3b82f6; }
+.card-green { background-color: #10b981; }
+.card-yellow { background-color: #f59e0b; }
+.card-purple .icon-circle { background-color: #7c3aed; }
+.card-purple { background-color: #8b5cf6; }

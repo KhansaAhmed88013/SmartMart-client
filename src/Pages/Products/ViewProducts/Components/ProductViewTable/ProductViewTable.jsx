@@ -29,8 +29,7 @@ export default function ProductViewTable() {
     };
     fetchProducts();
   }, []);
-  console.log(products)
-
+  
   // Fetch categories & suppliers
   useEffect(() => {
     const fetchData = async () => {

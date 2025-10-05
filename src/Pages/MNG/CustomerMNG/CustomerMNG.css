@@ -111,7 +111,7 @@
 /* Add customer main button */
 .add-customer-btn {
   padding: 10px 16px;
-  background: #28a745;
+  background: #28a746de;
   color: white;
   border: none;
   border-radius: 6px;
@@ -127,7 +127,7 @@
   background: #218838;
 }
 .edit-btn {
-  background: #ffc107;
+  background: #ffc107ca;
   color: white;
   border: none;
   border-radius: 6px;
@@ -138,9 +138,21 @@
 .edit-btn:hover {
   background: #e0a800;
 }
+.list-btn{
+  background: #28a746de;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  margin-right: 5px;
+  cursor: pointer;
+}
+.list-btn:hover{
+  background: #28a746;
+  }
 
 .delete-btn {
-  background: #dc3545;
+  background: #dc3546d2;
   color: white;
   border: none;
   border-radius: 6px;
@@ -156,4 +168,49 @@
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-20px); }
   to { opacity: 1; transform: translateY(0); }
+}
+/* ===== Customer Table ===== */
+.customer-management table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 15px;
+  font-size: 13px;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.customer-management th,
+.customer-management td {
+  padding: 5px 6px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.customer-management th {
+  background: #489FB5;
+  color: #fff;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 14px;
+}
+
+.customer-management tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+.customer-management tr:hover {
+  background: #f1f7ff;
+}
+
+.customer-management td.right {
+  text-align: right;
+}
+
+.customer-no-results {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+  font-style: italic;
 }

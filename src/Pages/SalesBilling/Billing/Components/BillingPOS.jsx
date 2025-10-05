@@ -1,13 +1,42 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import "./BillingPOS.css";
 import { FaPrint, FaSave, FaTimes, FaPlus } from "react-icons/fa";
 import { ProfileContext } from "../../../../Context/ProfileContext";
 import { UserContext } from "../../../../Context/UserContext";
-import { AddInvoice, getLastInvoiceNo, GetProductByBarcode } from "../../../../UserService";
+import {
+  AddInvoice,
+  getLastInvoiceNo,
+  GetProductByBarcode,
+  GetCutomers,
+} from "../../../../UserService";
+import CustomerList from "./CustomerList";
+import AddCustomerForm from "./AddCustomerForm";
 
 function BillingPOS() {
+  const [showCustomerList, setShowCustomerList] = useState(false);
+  const [showAddCustomer, setShowAddCustomer] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState("Cash Sale");
+  const [selectedCustomer, setSelectedCustomer] = useState({
+    id: 1,
+    name: "Cash",
+  });
+
+  const rowRefs = useRef([]); // Array of refs per row
+
   const [rows, setRows] = useState([
-    { selected: true, code: "", name: "", price: "", cost_price: "", qty: "", tax: "", net: "", discountRs: 0, itemdiscount: null, categorydiscount: null }
+    {
+      selected: true,
+      code: "",
+      name: "",
+      price: "",
+      cost_price: "",
+      qty: "",
+      tax: "",
+      net: "",
+      discountRs: 0,
+      itemdiscount: null,
+      categorydiscount: null,
+    },
   ]);
   const [dateTime, setDateTime] = useState(new Date());
   const [paidAmount, setPaidAmount] = useState(0);
@@ -16,7 +45,7 @@ function BillingPOS() {
   const [invoiceNo, setInvoiceNo] = useState(null);
   const [submitError, setSubmitError] = useState("");
   const { ProfileData } = useContext(ProfileContext);
-  const {currentUser}=useContext(UserContext)
+  const { currentUser } = useContext(UserContext);
 
   // billDiscount may be present on product object — we will collect from product fetch and store at top-level
   const [billDiscountObj, setBillDiscountObj] = useState(null);
@@ -46,7 +75,22 @@ function BillingPOS() {
   }, []);
 
   const addRow = () => {
-    setRows(prev => [...prev, { selected: true, code: "", name: "", price: "", cost_price: "", qty: "", tax: "", net: "", discountRs: 0, itemdiscount: null, categorydiscount: null }]);
+    setRows((prev) => [
+      ...prev,
+      {
+        selected: true,
+        code: "",
+        name: "",
+        price: "",
+        cost_price: "",
+        qty: "",
+        tax: "",
+        net: "",
+        discountRs: 0,
+        itemdiscount: null,
+        categorydiscount: null,
+      },
+    ]);
   };
 
   // compute discount Rs per unit from itemdiscount/categorydiscount and price
@@ -88,7 +132,7 @@ function BillingPOS() {
       net: net.toFixed(2),
       subtotal: subtotal.toFixed(2),
       totalDiscount: totalDiscount.toFixed(2),
-      taxAmount: taxAmount.toFixed(2)
+      taxAmount: taxAmount.toFixed(2),
     };
   };
 
@@ -104,70 +148,96 @@ function BillingPOS() {
     setRows(updated);
 
     // if user typed something in last row, add a new blank row
-    if (index === rows.length - 1 && (field === "code" || field === "name" || field === "price" || field === "qty") && value !== "") {
+    if (
+      index === rows.length - 1 &&
+      (field === "code" ||
+        field === "name" ||
+        field === "price" ||
+        field === "qty") &&
+      value !== ""
+    ) {
       addRow();
     }
   };
 
-  // handle barcode Enter -> fetch product and fill row, including discount logic
   const handleBarcodeEnter = async (index, e) => {
-    if (e.key === "Enter") {
-      const barcode = e.target.value.trim();
-      if (!barcode) return;
-      try {
-        const product = await GetProductByBarcode(barcode);
-        if (product) {
-          const updated = [...rows];
-          // fill basic fields
-          updated[index].code = product.code || "";
-          updated[index].name = product.name || "";
-          updated[index].price = parseFloat(product.sale_price || 0).toFixed(2);
-          updated[index].cost_price = product.cost_price || 0;
-          updated[index].qty = updated[index].qty || 1; // default 1 if empty
-          updated[index].tax = updated[index].tax || 0;
+  if (e.key === "Enter") {
+    const barcode = e.target.value.trim();
+    if (!barcode) return;
 
-          // Save discount objects so we can use later if needed
-          updated[index].itemdiscount = product.itemdiscount || null;
-          updated[index].categorydiscount = product.categorydiscount || null;
+    try {
+      const product = await GetProductByBarcode(barcode);
+      if (product) {
+        const updated = [...rows];
+        updated[index].code = product.code || "";
+        updated[index].name = product.name || "";
+        updated[index].price = parseFloat(product.sale_price || 0).toFixed(2);
+        updated[index].cost_price = product.cost_price || 0;
+        updated[index].qty = updated[index].qty || 1;
+        updated[index].tax = updated[index].tax || 0;
+        updated[index].itemdiscount = product.itemdiscount || null;
+        updated[index].categorydiscount = product.categorydiscount || null;
 
-          // compute default discount per unit according to priority (item > category)
-          const defaultDiscPerUnit = computeDefaultDiscountPerUnit(product);
-          updated[index].discountRs = parseFloat(defaultDiscPerUnit || 0).toFixed(2);
+        // compute discount
+        updated[index].discountRs = parseFloat(
+          computeDefaultDiscountPerUnit(product)
+        ).toFixed(2);
 
-          // If API returned a billDiscount (global), store it in top-level state (we will evaluate it on totals)
-          if (product.billDiscount) {
-            setBillDiscountObj(product.billDiscount);
-          }
+        updated[index] = recalcRowNet(updated[index]);
+        setRows(updated);
 
-          // recalc net
-          updated[index] = recalcRowNet(updated[index]);
+        if (index === rows.length - 1) addRow();
 
-          setRows(updated);
-          setBarcodeError("");
-          if (index === rows.length - 1) addRow();
-        } else {
-          setBarcodeError("❌ Product not found");
-          setTimeout(() => setBarcodeError(""), 3000);
-        }
-      } catch (err) {
+        // ✅ Move focus to Quantity input
+        setTimeout(() => {
+          rowRefs.current[index]?.qtyInput?.focus();
+        }, 50);
+      } else {
         setBarcodeError("❌ Product not found");
         setTimeout(() => setBarcodeError(""), 3000);
       }
+    } catch (err) {
+      setBarcodeError("❌ Product not found");
+      setTimeout(() => setBarcodeError(""), 3000);
     }
-  };
+  }
+};
+const handleQtyEnter = (index, e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    // Move focus to Item Code of next row
+    const nextIndex = index + 1;
+    if (!rows[nextIndex]) addRow(); // add row if it doesn’t exist
+
+    setTimeout(() => {
+      rowRefs.current[nextIndex]?.codeInput?.focus();
+    }, 50);
+  }
+};
 
   // Filter rows that have data
-  const filledRows = rows.filter(row => row.selected && (row.name || row.code || parseFloat(row.qty) > 0));
+  const filledRows = rows.filter(
+    (row) => row.selected && (row.name || row.code || parseFloat(row.qty) > 0)
+  );
 
   // Grand totals before bill discount/global tax:
   // We'll sum per-row taxable base + item tax (i.e., each row.net)
-  const grandSubtotalIncludingItemTax = filledRows.reduce((sum, row) => sum + (parseFloat(row.net) || 0), 0);
+  const grandSubtotalIncludingItemTax = filledRows.reduce(
+    (sum, row) => sum + (parseFloat(row.net) || 0),
+    0
+  );
 
   // Sum of item-level discounts
-  const totalItemDiscount = filledRows.reduce((sum, row) => sum + (parseFloat(row.totalDiscount) || 0), 0);
+  const totalItemDiscount = filledRows.reduce(
+    (sum, row) => sum + (parseFloat(row.totalDiscount) || 0),
+    0
+  );
 
   // Sum of item-level tax (for info)
-  const itemTaxTotal = filledRows.reduce((sum, row) => sum + (parseFloat(row.taxAmount) || 0), 0);
+  const itemTaxTotal = filledRows.reduce(
+    (sum, row) => sum + (parseFloat(row.taxAmount) || 0),
+    0
+  );
 
   // ===== Apply Bill Discount (if any) =====
   const computeBillDiscountValue = (baseAmount) => {
@@ -192,11 +262,17 @@ function BillingPOS() {
     }
   };
 
-  const billDiscountValue = computeBillDiscountValue(grandSubtotalIncludingItemTax);
+  const billDiscountValue = computeBillDiscountValue(
+    grandSubtotalIncludingItemTax
+  );
 
   // Global tax (applied after bill discount)
-  const taxableAfterBillDiscount = Math.max(0, grandSubtotalIncludingItemTax - billDiscountValue);
-  const globalTaxAmount = (taxableAfterBillDiscount * (parseFloat(taxPercent) || 0)) / 100;
+  const taxableAfterBillDiscount = Math.max(
+    0,
+    grandSubtotalIncludingItemTax - billDiscountValue
+  );
+  const globalTaxAmount =
+    (taxableAfterBillDiscount * (parseFloat(taxPercent) || 0)) / 100;
 
   const finalTotal = taxableAfterBillDiscount + globalTaxAmount;
 
@@ -250,30 +326,50 @@ function BillingPOS() {
         </head>
         <body>
           <h2>${ProfileData?.shopName || ""}</h2>
-          <div class="center"><strong>Phone:</strong> ${ProfileData?.number1 || ""}</div>
-          <div class="center"><strong>${ProfileData?.location || ""}</strong></div>
+          <div class="center"><strong>Phone:</strong> ${
+            ProfileData?.number1 || ""
+          }</div>
+          <div class="center"><strong>${
+            ProfileData?.location || ""
+          }</strong></div>
           
           <div class="divider"></div>
-          <div class="row"><div><strong>Invoice no: ${invoiceNo || ""}</strong></div><div><strong>Type:</strong> Sale</div></div>
+          <div class="row"><div><strong>Invoice no: ${
+            invoiceNo || ""
+          }</strong></div><div><strong>Type:</strong> Sale</div></div>
           <div class="row"><div><strong>Date:</strong> ${dateTime.toLocaleDateString()} ${dateTime.toLocaleTimeString()}</div></div>
-          <div className="row"><strong>Cashier:</strong> ${currentUser.username || ""}</div>
+          <div className="row"><strong>Cashier:</strong> ${
+            currentUser.username || ""
+          }</div>
           <div class="divider"></div>
           <table>
             <thead>
               <tr><th>#</th><th>Item</th><th class="right">Price</th><th class="right">Qty</th><th class="right">Disc</th><th class="right">Tax</th><th class="right">Net</th></tr>
             </thead>
             <tbody>
-              ${filledRows.map((row, idx) => `
+              ${filledRows
+                .map(
+                  (row, idx) => `
                 <tr>
-                  <td>${idx+1}</td>
+                  <td>${idx + 1}</td>
                   <td>${row.name}</td>
-                  <td style="text-align:right">${parseFloat(row.price||0).toFixed(2)}</td>
+                  <td style="text-align:right">${parseFloat(
+                    row.price || 0
+                  ).toFixed(2)}</td>
                   <td style="text-align:right">${row.qty}</td>
-                  <td style="text-align:right">${parseFloat(row.totalDiscount||0).toFixed(2)}</td>
-                  <td style="text-align:right">${parseFloat(row.taxAmount||0).toFixed(2)}</td>
-                  <td style="text-align:right">${parseFloat(row.net||0).toFixed(2)}</td>
+                  <td style="text-align:right">${parseFloat(
+                    row.totalDiscount || 0
+                  ).toFixed(2)}</td>
+                  <td style="text-align:right">${parseFloat(
+                    row.taxAmount || 0
+                  ).toFixed(2)}</td>
+                  <td style="text-align:right">${parseFloat(
+                    row.net || 0
+                  ).toFixed(2)}</td>
                 </tr>
-              `).join("")}
+              `
+                )
+                .join("")}
             </tbody>
           </table>
           <div class="divider"></div>
@@ -281,17 +377,23 @@ function BillingPOS() {
   <div class="summary-left">
     <div><strong>Total Items: ${filledRows.length}</strong></div>
     <div><strong>Discount: ${billDiscountValue}</strong></div>
-    <div><strong>Tax: ${(itemTaxTotal+globalTaxAmount).toFixed(2)}</strong></div>
+    <div><strong>Tax: ${(itemTaxTotal + globalTaxAmount).toFixed(
+      2
+    )}</strong></div>
   </div>
   <div class="summary-right">
-    <div><strong>Sub Total: ${grandSubtotalIncludingItemTax.toFixed(2)}</strong></div>
+    <div><strong>Sub Total: ${grandSubtotalIncludingItemTax.toFixed(
+      2
+    )}</strong></div>
     <div><strong>Final Total: ${finalTotal.toFixed(2)}</strong></div>
     <div><strong>Paid: ${paidAmount}</strong></div>
     <div><strong>Change: ${changeAmount.toFixed(2)}</strong></div>
   </div>
 </div>
           <div class="divider"></div>
-          <div class="footer"><p>${ProfileData?.description || ""}</p><p>Thank you for shopping!</p></div>
+          <div class="footer"><p>${
+            ProfileData?.description || ""
+          }</p><p>Thank you for shopping!</p></div>
         </body>
       </html>
     `;
@@ -314,14 +416,16 @@ function BillingPOS() {
     );
 
     if (validItems.length === 0) {
-      setSubmitError("❌ Cannot submit empty invoice. Please add at least one product with Code, Name, Price, and Quantity.");
+      setSubmitError(
+        "❌ Cannot submit empty invoice. Please add at least one product with Code, Name, Price, and Quantity."
+      );
       setTimeout(() => setSubmitError(""), 5000);
       return;
     }
 
     try {
       // Build items payload with applied discount per item (per unit discount)
-      const itemsPayload = validItems.map(row => ({
+      const itemsPayload = validItems.map((row) => ({
         product_code: row.code,
         price: parseFloat(row.price) || 0,
         cost_price: parseFloat(row.cost_price) || 0,
@@ -330,20 +434,20 @@ function BillingPOS() {
         tax_percent: parseFloat(row.tax) || 0,
         discount_per_unit: parseFloat(row.discountRs) || 0,
         total_discount: parseFloat(row.totalDiscount) || 0,
-        net_total: parseFloat(row.net) || 0
+        net_total: parseFloat(row.net) || 0,
       }));
 
       await AddInvoice({
         invoice: {
           account_id: "Cash",
-          cashier_name: currentUser.username || "",
-          payment_method: "Cash Sale",
+          created_by: currentUser.id,
+          payment_method: paymentMethod,
           remarks: "POS Billing",
           discount: billDiscountValue.toFixed(2),
           tax_percent: taxPercent,
           final_total: finalTotal,
           paid_amount: paidAmount,
-          customer_id: 1,
+          customer_id: selectedCustomer.id,
           is_return: false,
         },
         items: itemsPayload,
@@ -351,7 +455,21 @@ function BillingPOS() {
 
       setSubmitError("");
       handlePrintClick();
-      setRows([{ selected: true, code: "", name: "", price: "", cost_price: "", qty: "", tax: "", net: "", discountRs: 0, itemdiscount: null, categorydiscount: null }]);
+      setRows([
+        {
+          selected: true,
+          code: "",
+          name: "",
+          price: "",
+          cost_price: "",
+          qty: "",
+          tax: "",
+          net: "",
+          discountRs: 0,
+          itemdiscount: null,
+          categorydiscount: null,
+        },
+      ]);
       setPaidAmount(0);
       setBillDiscountObj(null);
       fetchInvoiceNo();
@@ -372,27 +490,81 @@ function BillingPOS() {
 
       <div className="billing-header">
         <div className="header-part">
-          <div className="header-row"><label>Acc ID:</label><input type="text" defaultValue="Cash" /></div>
-          <div className="header-row"><label>Return Quantity:</label><input type="checkbox" /></div>
-          <div className="header-row"><label>Name:</label><input type="text" defaultValue="Cash" /></div>
+          
+          <div className="header-row">
+            <label>Return Quantity:</label>
+            <input type="checkbox" />
+          </div>
+          {/* Name input */}
+          <div className="header-row">
+            <label>Name:</label>
+            <input
+              type="text"
+              value={selectedCustomer.name}
+              readOnly
+              onClick={() => setShowCustomerList(true)} // 👈 List open
+            />
+          </div>
+
+          {/* Customer List Modal */}
+          {showCustomerList && (
+            <CustomerList
+              onClose={() => setShowCustomerList(false)}
+              onSelect={(cust) => setSelectedCustomer(cust)}
+              onAddNew={() => {
+                setShowCustomerList(false);
+                setShowAddCustomer(true);
+              }}
+            />
+          )}
+
+          {/* Add Customer Form */}
+          {showAddCustomer && (
+            <AddCustomerForm
+              onClose={() => setShowAddCustomer(false)}
+              onCustomerAdded={(cust) => setSelectedCustomer(cust)}
+            />
+          )}
         </div>
 
         <div className="header-part">
           <div className="header-row">
             <label>Payment Methods:</label>
-            <select><option>Cash Sale</option><option>Credit Card</option><option>Credit Customer</option></select>
+            <select
+              value={paymentMethod}
+              onChange={(e) => setPaymentMethod(e.target.value)} // 👈 update state
+            >
+              <option value="Cash Sale">Cash Sale</option>
+              <option value="Credit Card">Credit Card</option>
+              <option value="Credit Customer">Credit Customer</option>
+            </select>
           </div>
         </div>
 
         <div className="header-part">
-          <div className="header-row"><label>P/Balance:</label><input type="number" defaultValue="0.00" /></div>
-          <div className="header-row"><label>Remarks:</label><input type="text" /></div>
+          <div className="header-row">
+            <label>P/Balance:</label>
+            <input type="number" defaultValue="0.00" />
+          </div>
+          <div className="header-row">
+            <label>Remarks:</label>
+            <input type="text" />
+          </div>
         </div>
 
         <div className="header-part">
-          <div className="header-row"><label>Date:</label><span>{dateTime.toLocaleDateString()}</span></div>
-          <div className="header-row"><label>Time:</label><span>{dateTime.toLocaleTimeString()}</span></div>
-          <div className="header-row"><label>Invoice No:</label><input type="number" value={invoiceNo || ""} readOnly /></div>
+          <div className="header-row">
+            <label>Date:</label>
+            <span>{dateTime.toLocaleDateString()}</span>
+          </div>
+          <div className="header-row">
+            <label>Time:</label>
+            <span>{dateTime.toLocaleTimeString()}</span>
+          </div>
+          <div className="header-row">
+            <label>Invoice No:</label>
+            <input type="number" value={invoiceNo || ""} readOnly />
+          </div>
         </div>
       </div>
 
@@ -404,34 +576,98 @@ function BillingPOS() {
             <table className="products-table">
               <thead>
                 <tr>
-                  <th>Select</th><th>#</th><th>Item Code / Barcode</th><th>Product Name</th>
-                  <th>Sale Price</th><th>Quantity</th><th>Sale Tax %</th>
-                  <th>Discount (Rs)</th><th>Net Total</th>
+                  <th>Select</th>
+                  <th>#</th>
+                  <th>Item Code / Barcode</th>
+                  <th>Product Name</th>
+                  <th>Sale Price</th>
+                  <th>Quantity</th>
+                  <th>Sale Tax %</th>
+                  <th>Discount (Rs)</th>
+                  <th>Net Total</th>
                 </tr>
               </thead>
               <tbody>
                 {rows.map((row, index) => (
                   <tr key={index}>
-                    <td><input type="checkbox" checked={row.selected} onChange={(e) => { const u = [...rows]; u[index].selected = e.target.checked; setRows(u); }} /></td>
+                    <td>
+                      <input
+                        type="checkbox"
+                        checked={row.selected}
+                        onChange={(e) => {
+                          const u = [...rows];
+                          u[index].selected = e.target.checked;
+                          setRows(u);
+                        }}
+                      />
+                    </td>
                     <td>{index + 1}</td>
                     <td data-label="Item Code / Barcode">
-                      <input type="text" value={row.code} onChange={(e) => handleChange(index, "code", e.target.value)} onKeyDown={(e) => handleBarcodeEnter(index, e)} />
+                      <input
+                        type="text"
+                        value={row.code}
+                        onChange={(e) =>
+                          handleChange(index, "code", e.target.value)
+                        }
+                        onKeyDown={(e) => handleBarcodeEnter(index, e)}
+                        ref={(el) => {
+                          if (!rowRefs.current[index])
+                            rowRefs.current[index] = {};
+                          rowRefs.current[index].codeInput = el;
+                        }}
+                      />
                     </td>
                     <td data-label="Product Name">
-                      <input type="text" value={row.name} onChange={(e) => handleChange(index, "name", e.target.value)} />
+                      <input
+                        type="text"
+                        value={row.name}
+                        onChange={(e) =>
+                          handleChange(index, "name", e.target.value)
+                        }
+                      />
                     </td>
                     <td data-label="Sale Price">
-                      <input type="number" value={row.price} onChange={(e) => handleChange(index, "price", e.target.value)} />
+                      <input
+                        type="number"
+                        value={row.price}
+                        onChange={(e) =>
+                          handleChange(index, "price", e.target.value)
+                        }
+                      />
                     </td>
                     <td data-label="Quantity">
-                      <input type="number" value={row.qty} onChange={(e) => handleChange(index, "qty", e.target.value)} />
+                      <input
+                        type="number"
+                        value={row.qty}
+                        onChange={(e) =>
+                          handleChange(index, "qty", e.target.value)
+                        }
+                        onKeyDown={(e) => handleQtyEnter(index, e)}
+                        ref={(el) => {
+                          if (!rowRefs.current[index])
+                            rowRefs.current[index] = {};
+                          rowRefs.current[index].qtyInput = el;
+                        }}
+                      />
                     </td>
                     <td data-label="Sale Tax %">
-                      <input type="number" value={row.tax} onChange={(e) => handleChange(index, "tax", e.target.value)} />
+                      <input
+                        type="number"
+                        value={row.tax}
+                        onChange={(e) =>
+                          handleChange(index, "tax", e.target.value)
+                        }
+                      />
                     </td>
                     <td data-label="Discount (Rs)">
                       {/* show computed discount but allow override */}
-                      <input type="number" value={parseFloat(row.discountRs || 0)} onChange={(e) => handleChange(index, "discountRs", e.target.value)} />
+                      <input
+                        type="number"
+                        value={parseFloat(row.discountRs || 0)}
+                        onChange={(e) =>
+                          handleChange(index, "discountRs", e.target.value)
+                        }
+                      />
                     </td>
                     <td data-label="Net Total">
                       <input type="text" value={row.net || "0.00"} readOnly />
@@ -442,51 +678,117 @@ function BillingPOS() {
             </table>
           </div>
 
-          <button className="add-btn" onClick={addRow}><FaPlus /> Add Row</button>
+          <button className="add-btn" onClick={addRow}>
+            <FaPlus /> Add Row
+          </button>
         </div>
       </div>
 
       {/* Summary */}
       <div className="summary-card">
-        <div class="row ">
-          <div className="summary-row"><span>Items Total (incl. item tax):</span><input type="text" readOnly value={grandSubtotalIncludingItemTax.toFixed(2)} /></div>
-        <div className="summary-row"><span>Total Item Discount:</span><input type="text" readOnly value={totalItemDiscount.toFixed(2)} /></div>
+        <div className="row ">
+          <div className="summary-row">
+            <span>Items Total (incl. item tax):</span>
+            <input
+              type="text"
+              readOnly
+              value={grandSubtotalIncludingItemTax.toFixed(2)}
+            />
+          </div>
+          <div className="summary-row">
+            <span>Total Item Discount:</span>
+            <input type="text" readOnly value={totalItemDiscount.toFixed(2)} />
+          </div>
         </div>
         <div class="row ">
           <div className="summary-row">
-          <div><span>Global Tax % (applied after bill discount): </span>
-            <input type="number" value={taxPercent} onChange={(e) => setTaxPercent(parseFloat(e.target.value) || 0)} />
+            <div>
+              <span>Global Tax % (applied after bill discount): </span>
+              <input
+                type="number"
+                value={taxPercent}
+                onChange={(e) => setTaxPercent(parseFloat(e.target.value) || 0)}
+              />
+            </div>
+          </div>
+          <div className="summary-row">
+            <span>Bill Discount:</span>
+            <input type="text" readOnly value={billDiscountValue.toFixed(2)} />
           </div>
         </div>
-        <div className="summary-row"><span>Bill Discount:</span><input type="text" readOnly value={billDiscountValue.toFixed(2)} /></div>
+        <div className="summary-row total-row">
+          <span>Final Total:</span>
+          <span>{finalTotal.toFixed(2)}</span>
         </div>
-        <div className="summary-row total-row"><span>Final Total:</span><span>{finalTotal.toFixed(2)}</span></div>
 
         {showPrePrint && (
           <div className="preprint-overlay">
             <div className="preprint-modal">
               <h3>Finalize Sale</h3>
-              <div><label>Items Total:</label><span>{grandSubtotalIncludingItemTax.toFixed(2)}</span></div>
-              <div><label>Bill Discount:</label><span>{billDiscountValue.toFixed(2)}</span></div>
-              <div><label>Global Tax:</label><span>{globalTaxAmount.toFixed(2)}</span></div>
-              <div><label>Final Total:</label><span>{finalTotal.toFixed(2)}</span></div>
+              <div>
+                <label>Items Total:</label>
+                <span>{grandSubtotalIncludingItemTax.toFixed(2)}</span>
+              </div>
+              <div>
+                <label>Bill Discount:</label>
+                <span>{billDiscountValue.toFixed(2)}</span>
+              </div>
+              <div>
+                <label>Global Tax:</label>
+                <span>{globalTaxAmount.toFixed(2)}</span>
+              </div>
+              <div>
+                <label>Final Total:</label>
+                <span>{finalTotal.toFixed(2)}</span>
+              </div>
               <div>
                 <label>Paid Amount:</label>
-                <input type="number" value={paidAmount} onChange={(e) => setPaidAmount(parseFloat(e.target.value) || 0)} />
+                <input
+                  type="number"
+                  value={paidAmount}
+                  onChange={(e) =>
+                    setPaidAmount(parseFloat(e.target.value) || 0)
+                  }
+                />
               </div>
-              <div><label>Change:</label><span>{changeAmount.toFixed(2)}</span></div>
+              <div>
+                <label>Change:</label>
+                <span>{changeAmount.toFixed(2)}</span>
+              </div>
               <div className="preprint-actions">
-                <button className="print-btn" onClick={handleSubmit}>Print</button>
-                <button className="cancel-btn" onClick={() => setShowPrePrint(false)}>Cancel</button>
+                <button className="print-btn" onClick={handleSubmit}>
+                  Print
+                </button>
+                <button
+                  className="cancel-btn"
+                  onClick={() => setShowPrePrint(false)}
+                >
+                  Cancel
+                </button>
               </div>
             </div>
           </div>
         )}
 
         <div className="action-buttons">
-          <button className="action-btn print-btn" onClick={() => handlePrePrint()}><FaPrint /> Print</button>
-          <button className="action-btn save-btn" onClick={() => alert("Saved!")}><FaSave /> Save</button>
-          <button className="action-btn exit-btn" onClick={() => alert("Exit clicked")}><FaTimes /> Exit</button>
+          <button
+            className="action-btn print-btn"
+            onClick={() => handlePrePrint()}
+          >
+            <FaPrint /> Print
+          </button>
+          <button
+            className="action-btn save-btn"
+            onClick={() => alert("Saved!")}
+          >
+            <FaSave /> Save
+          </button>
+          <button
+            className="action-btn exit-btn"
+            onClick={() => alert("Exit clicked")}
+          >
+            <FaTimes /> Exit
+          </button>
         </div>
       </div>
     </div>

@@ -84,10 +84,10 @@ const DailySaleSummary = () => {
             <p>Total Invoices: {summary.totalInvoices}</p>
             <p>Total Qty Sold: {summary.totalQty}</p>
             <p>Gross Amount: Rs. {summary.grossAmount}</p>
-            <p>Discount: Rs. {summary.totalDiscount}</p>
-            <p>Tax: Rs. {summary.totalTax}</p>
+            <p>Discount: Rs. {(summary.totalDiscount).toFixed(2)}</p>
+            <p>Tax: Rs. {(summary.totalTax).toFixed(2)}</p>
             <p style={{ fontWeight: "bold" }}>
-              Net Sale: Rs. {summary.netAmount}
+              Net Sale: Rs. {(summary.final_total).toFixed(2)}
             </p>
           </div>
         ) : (

@@ -160,17 +160,17 @@ const getFilteredProducts = (categoryName) => {
           <div className="table-wrapper">
             <table className="products-table">
   <thead>
-    <tr>
-      <th>#</th>
-      <th>Item Code</th>
-      <th>Product Name</th>
-      <th>QTY</th>
-      <th>Cost Price</th>
-      <th>Sale Price</th>
-      <th>Total on Sale</th>      {/* NEW */}
-      <th>Total on Cost</th>      {/* NEW */}
-      </tr>
-  </thead>
+  <tr>
+    <th>#</th>
+    <th>Item Code</th>
+    <th>Product Name</th>
+    <th>QTY</th>
+    <th>Cost Price</th>
+    <th>Sale Price</th>
+    <th>Total on Sale</th>      {/* NEW */}
+    <th>Total on Cost</th>      {/* NEW */}
+  </tr>
+</thead>
   <tbody>
     {filteredProducts.map((product, index) => {
       const totalOnSale = product.qty * product.sale_price;

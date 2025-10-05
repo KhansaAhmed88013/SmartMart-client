@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { UserProvider } from "./Context/UserContext";
 import { ProfileProvider } from "./Context/ProfileContext";
+import { RecoveryProvider } from "./Context/RecoveryContext";
 import ProtectedRoute from "./Components/ProtectedRoute";
 import MainLayout from "./Components/MainLayout/MainLayout";
 import Dashboard from "./Pages/Dashboard/Dashboard";
@@ -43,19 +44,37 @@ import CashierDashboard from "./Pages/CashierDashboard/CashierDashboard";
 import MainLayout_Cashier from "./Components/MainLayout_Cashier/MainLayout_Cashier";
 import CashierReport from "./Pages/CashierReport/CashierReport";
 import ChangePassword from "./Components/ChangePassword/ChangePassword";
-import ForgotPassword from "./Components/Login/ForgotPassword";
-import ResetPassword from "./Components/Login/ResetPassword";
+import CustomerInvoiceRecord from "./Pages/Reports/CustomerReport/CustomerInvoiceRecord";
+import DailySalesReport from "./Pages/Reports/SalesReport/DailySalesReport";
+import OTPinput from "./Components/Login/OTPinput";
+import Recovered from "./Components/Login/Recovered";
+import SuccessMsg from "./Components/Login/SuccessMsg";
+import RecoveryInfo from "./Components/Login/RecoveryInfo";
+import Notifications from "./Components/Notifications/Notifications";
 function App() {
   return (
     <ProfileProvider>
       <UserProvider>
         <Router>
           <Routes>
-            {/* Public Login */}
-            <Route path="login" element={<Login />} />
-            <Route path="ForgotPassword" element={<ForgotPassword />} />
-              <Route path="ResetPassword" element={<ResetPassword />} />
-            
+            <Route
+              path="/recovery/*"
+              element={
+                <RecoveryProvider>
+                  <Routes>
+                    <Route path="login" element={<Login />} />
+                    <Route path="OTPinput" element={<OTPinput />} />
+                    <Route path="Recovered" element={<Recovered />} />
+                    <Route path="Recovery-Info" element={<RecoveryInfo />} />
+                    <Route
+                      path="Success-in-password-change"
+                      element={<SuccessMsg />}
+                    />
+                  </Routes>
+                </RecoveryProvider>
+              }
+            />
+
             {/* ---------- ADMIN LAYOUT ---------- */}
             <Route
               path="/"
@@ -105,7 +124,17 @@ function App() {
               <Route path="settings" element={<Settings />} />
               <Route path="changePassword" element={<ChangePassword />} />
               <Route path="employeeManagement" element={<EmployeMNG />} />
-              </Route>
+              <Route path="notifications" element={<Notifications />} />
+              <Route
+                path="CustomerManagement"
+                element={<CustomerManagement />}
+              />
+              <Route
+                path="/CustomerInvoiceRecord"
+                element={<CustomerInvoiceRecord />}
+              />
+              <Route path="/DailySalesReport" element={<DailySalesReport />} />
+            </Route>
 
             {/* ---------- CASHIER LAYOUT ---------- */}
             <Route
@@ -118,7 +147,7 @@ function App() {
             >
               <Route index element={<CashierDashboard />} />
               <Route path="billing" element={<Billing />} />
-              <Route path="userreport" element={<CashierReport/>}/>
+              <Route path="userreport" element={<CashierReport />} />
               <Route path="changePassword" element={<ChangePassword />} />
             </Route>
 

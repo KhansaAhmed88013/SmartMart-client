@@ -29,7 +29,7 @@ function StockReport() {
     };
     getData();
   }, []);
-
+console.log(stockData)
   // Total Stock Value using closing_stock
   const totalStockValue = stockData.reduce(
     (sum, stock) => sum + Number(stock.closing_stock) * Number(stock.cost_price),
@@ -143,7 +143,7 @@ function StockReport() {
     <tr key={index}>
       <td>{stock.id}</td>
       <td>{stock.name}</td>
-      <td>{stock.Category?.name}</td>
+      <td>{stock.Category}</td>
       <td>{stock.unit}</td>
       <td>{stock.opening_stock}</td>
       <td>{stock.opening_stock_value.toFixed(2)}</td>
