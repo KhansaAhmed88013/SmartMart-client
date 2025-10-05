@@ -1,12 +1,19 @@
 import axios from "axios";
-import {store} from "./redux/store";
+import { store } from "./redux/store";
 
+// ✅ Get dynamic base URL from Redux or localStorage
 const getDynamicBaseURL = () => {
   const state = store.getState();
   const reduxPath = state?.path?.path;
-  return reduxPath;
-};
 
+  
+  if (reduxPath) return reduxPath;
+
+
+  const storedPath = localStorage.getItem("path");
+  if (storedPath) return storedPath;
+  return "";
+};
 const API_BASE = getDynamicBaseURL();
 export const AddProduct = async (data) => {
   try {

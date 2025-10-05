@@ -80,14 +80,22 @@ const Login = () => {
     navigate("/recovery/Recovery-Info");
   };
 
+  
   const handleAddPath = () => {
-    if (path.trim() === "") {
-      alert("Please enter a valid path");
-      return;
-    }
-    dispatch(setPathRedux(path)); // ✅ dispatching Redux action
-    alert(`Path "${path}" has been stored in Redux!`);
-  };
+  if (path.trim() === "") {
+    alert("Please enter a valid path");
+    return;
+  }
+
+  // ✅ Save to Redux
+  dispatch(setPathRedux(path));
+
+  // ✅ Save to localStorage
+  localStorage.setItem("path", path);
+
+  alert(`Path "${path}" has been stored in Redux`);
+};
+
 
   return (
     <div className="login-container">
