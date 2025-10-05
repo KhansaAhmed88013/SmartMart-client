@@ -632,6 +632,9 @@ export const getUsers = async () => {
 
 export const loginUser = async (data) => {
   try {
+    const API_BASE =await getDynamicBaseURL();
+    console.log("API_BASE in loginUser:", API_BASE);
+    
     const res = await axios.post(`${API_BASE}/login`, data, {
       headers: { "Content-Type": "application/json" },
     });
