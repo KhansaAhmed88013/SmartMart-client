@@ -7,10 +7,10 @@ const getDynamicBaseURL = () => {
   return reduxPath;
 };
 
-const API_BASE_URL = getDynamicBaseURL();
+const API_BASE = getDynamicBaseURL();
 export const AddProduct = async (data) => {
   try {
-    const res = await axios.post(`${API_BASE_URL}/addProducts`, data, {
+    const res = await axios.post(`${API_BASE}/addProducts`, data, {
       Headers: {
         "Content-Type": "application/json",
       },
@@ -25,7 +25,7 @@ export const AddProduct = async (data) => {
 
 export const GetProducts = async () => {
   try {
-    const res = await axios.get(`${API_BASE_URL}/getProducts`);
+    const res = await axios.get(`${API_BASE}/getProducts`);
     return res.data;
   } catch (err) {
     const errorMessage =
@@ -36,7 +36,7 @@ export const GetProducts = async () => {
 
 export const DelProduct = async (code) => {
   try {
-    const res = await axios.delete(`${API_BASE_URL}/delProduct/${code}`);
+    const res = await axios.delete(`${API_BASE}/delProduct/${code}`);
     return res.data;
   } catch (err) {
     const errorMessage =
@@ -46,7 +46,7 @@ export const DelProduct = async (code) => {
 };
 export const UpdateProduct = async (data) => {
   try {
-    const result = await axios.put(`${API_BASE_URL}/updateProduct`, data, {
+    const result = await axios.put(`${API_BASE}/updateProduct`, data, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -62,7 +62,7 @@ export const UpdateProduct = async (data) => {
 //Suppier
 export const AddSupplier = async (data) => {
   try {
-    const res = await axios.post(`${API_BASE_URL}/addSupplier`, data, {
+    const res = await axios.post(`${API_BASE}/addSupplier`, data, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -76,7 +76,7 @@ export const AddSupplier = async (data) => {
 };
 export const GetSuppliers = async (data) => {
   try {
-    const res = await axios.get(`${API_BASE_URL}/getSupplier`);
+    const res = await axios.get(`${API_BASE}/getSupplier`);
     return res.data;
   } catch (err) {
     const errorMessage =
@@ -86,7 +86,7 @@ export const GetSuppliers = async (data) => {
 };
 export const GetSupplierReport = async () => {
   try {
-    const res = await axios.get(`${API_BASE_URL}/getSupplierReport`);
+    const res = await axios.get(`${API_BASE}/getSupplierReport`);
     return res.data;
   } catch (err) {
     const errorMessage =
@@ -96,7 +96,7 @@ export const GetSupplierReport = async () => {
 };
 export const EditSupplier = async (data) => {
   try {
-    const res = await axios.put(`${API_BASE_URL}/editSupplier`, data, {
+    const res = await axios.put(`${API_BASE}/editSupplier`, data, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -110,7 +110,7 @@ export const EditSupplier = async (data) => {
 };
 export const DelSupplier = async (id) => {
   try {
-    const res = await axios.delete(`${API_BASE_URL}/delSupplier/${id}`);
+    const res = await axios.delete(`${API_BASE}/delSupplier/${id}`);
     return res.data;
   } catch (err) {
     const errorMessage =
@@ -121,7 +121,7 @@ export const DelSupplier = async (id) => {
 //Category
 export const CreateCategory = async (data) => {
   try {
-    const res = await axios.post(`${API_BASE_URL}/addCategory`, data, {
+    const res = await axios.post(`${API_BASE}/addCategory`, data, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -135,7 +135,7 @@ export const CreateCategory = async (data) => {
 };
 export const GetCategories = async () => {
   try {
-    const res = await axios.get(`${API_BASE_URL}/getCategory`);
+    const res = await axios.get(`${API_BASE}/getCategory`);
     return res.data;
   } catch (err) {
     const errorMessage =
@@ -145,7 +145,7 @@ export const GetCategories = async () => {
 };
 export const EditCategory = async (data) => {
   try {
-    const res = await axios.put(`${API_BASE_URL}/editCategory`, data, {
+    const res = await axios.put(`${API_BASE}/editCategory`, data, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -159,7 +159,7 @@ export const EditCategory = async (data) => {
 };
 export const DelCategory = async (id) => {
   try {
-    const res = await axios.delete(`${API_BASE_URL}/delCategory/${id}`);
+    const res = await axios.delete(`${API_BASE}/delCategory/${id}`);
     return res.data;
   } catch (err) {
     const errorMessage =
@@ -169,7 +169,7 @@ export const DelCategory = async (id) => {
 };
 export const GetCategoriesSuppliers = async () => {
   try {
-    const res = await axios.get(`${API_BASE_URL}/getCategoryNsuppliers`);
+    const res = await axios.get(`${API_BASE}/getCategoryNsuppliers`);
     return res.data;
   } catch (err) {
     const errorMessage =
@@ -180,7 +180,7 @@ export const GetCategoriesSuppliers = async () => {
 
 export const AddDiscount = async (data) => {
   try {
-    const res = await axios.post(`${API_BASE_URL}/addDiscount`, data, {
+    const res = await axios.post(`${API_BASE}/addDiscount`, data, {
       Headers: {
         "Content-Type": "application/json",
       },
@@ -192,7 +192,7 @@ export const AddDiscount = async (data) => {
 };
 export const GetProductNameCode = async () => {
   try {
-    const res = await axios.get(`${API_BASE_URL}/products-basic`);
+    const res = await axios.get(`${API_BASE}/products-basic`);
     return res.data;
   } catch (err) {
     throw err.response?.data || err.message;
@@ -200,7 +200,7 @@ export const GetProductNameCode = async () => {
 };
 export const GetDiscount = async () => {
   try {
-    const res = await axios.get(`${API_BASE_URL}/discounts`);
+    const res = await axios.get(`${API_BASE}/discounts`);
     return res.data;
   } catch (err) {
     throw err.response?.data || err.message;
@@ -208,7 +208,7 @@ export const GetDiscount = async () => {
 };
 export const UpdateDiscount = async (data) => {
   try {
-    const res = await axios.put(`${API_BASE_URL}/editDiscount`, data, {
+    const res = await axios.put(`${API_BASE}/editDiscount`, data, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -222,7 +222,7 @@ export const UpdateDiscount = async (data) => {
 };
 export const DelDiscount = async (id) => {
   try {
-    const res = await axios.delete(`${API_BASE_URL}/delDiscount/${id}`);
+    const res = await axios.delete(`${API_BASE}/delDiscount/${id}`);
     return res.data;
   } catch (err) {
     const errorMessage =
@@ -232,7 +232,7 @@ export const DelDiscount = async (id) => {
 };
 export const AddBillDiscount = async (data) => {
   try {
-    const res = await axios.post(`${API_BASE_URL}/addBillDiscount`, data, {
+    const res = await axios.post(`${API_BASE}/addBillDiscount`, data, {
       Headers: {
         "Content-Type": "application/json",
       },
@@ -244,7 +244,7 @@ export const AddBillDiscount = async (data) => {
 };
 export const getBillDiscount = async () => {
   try {
-    const res = await axios.get(`${API_BASE_URL}/getBillDiscount`);
+    const res = await axios.get(`${API_BASE}/getBillDiscount`);
     return res.data;
   } catch (err) {
     const errorMessage =
@@ -254,7 +254,7 @@ export const getBillDiscount = async () => {
 };
 export const DelBillDiscount = async (id) => {
   try {
-    const res = await axios.delete(`${API_BASE_URL}/delBillDiscount/${id}`);
+    const res = await axios.delete(`${API_BASE}/delBillDiscount/${id}`);
     return res.data;
   } catch (err) {
     const errorMessage =
@@ -264,7 +264,7 @@ export const DelBillDiscount = async (id) => {
 };
 export const UpdateBillDiscount = async (data) => {
   try {
-    const res = await axios.put(`${API_BASE_URL}/UpdateBillDiscount`, data, {
+    const res = await axios.put(`${API_BASE}/UpdateBillDiscount`, data, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -280,7 +280,7 @@ export const UpdateBillDiscount = async (data) => {
 //coategory discount
 export const AddCategoryDiscount = async (data) => {
   try {
-    const res = await axios.post(`${API_BASE_URL}/addCategoryDiscount`, data, {
+    const res = await axios.post(`${API_BASE}/addCategoryDiscount`, data, {
       Headers: {
         "Content-Type": "application/json",
       },
@@ -292,7 +292,7 @@ export const AddCategoryDiscount = async (data) => {
 };
 export const GetCategoryDiscounts = async () => {
   try {
-    const res = await axios.get(`${API_BASE_URL}/getCategoryDiscounts`);
+    const res = await axios.get(`${API_BASE}/getCategoryDiscounts`);
     return res.data;
   } catch (err) {
     const errorMessage =
@@ -302,7 +302,7 @@ export const GetCategoryDiscounts = async () => {
 };
 export const DelCategoryDiscount = async (id) => {
   try {
-    const res = await axios.delete(`${API_BASE_URL}/delCategoryDiscount/${id}`);
+    const res = await axios.delete(`${API_BASE}/delCategoryDiscount/${id}`);
     return res.data;
   } catch (err) {
     const errorMessage =
@@ -313,7 +313,7 @@ export const DelCategoryDiscount = async (id) => {
 export const UpdateCategoryDiscount = async (data) => {
   try {
     const res = await axios.put(
-      `${API_BASE_URL}/updateCategoryDiscount`,
+      `${API_BASE}/updateCategoryDiscount`,
       data,
       {
         headers: {
@@ -330,7 +330,7 @@ export const UpdateCategoryDiscount = async (data) => {
 };
 export const Getnoofdiscount = async () => {
   try {
-    const res = await axios.get(`${API_BASE_URL}/getnoofdiscount`);
+    const res = await axios.get(`${API_BASE}/getnoofdiscount`);
     return res.data;
   } catch (err) {
     const errorMessage =
@@ -343,7 +343,7 @@ export const Getnoofdiscount = async () => {
 export const AddInvoice=async(data)=>{
     try{
         console.log(data)
-        const res=await axios.post(`${API_BASE_URL}/addInvoice`,data,{
+        const res=await axios.post(`${API_BASE}/addInvoice`,data,{
             headers:{
                 'Content-Type':'application/json'
             }
@@ -357,7 +357,7 @@ export const AddInvoice=async(data)=>{
 }
 export const getLastInvoiceNo=async()=>{
     try{
-        const res=await axios.get(`${API_BASE_URL}/getInvoiceNo`)
+        const res=await axios.get(`${API_BASE}/getInvoiceNo`)
         return res.data
     }catch(err){
          const errorMessage = err.response?.data?.message || err.message || "Unknown error";
@@ -367,7 +367,7 @@ export const getLastInvoiceNo=async()=>{
 
 export const getCustomerBillingRecord=async(id)=>{
     try{
-        const res=await axios.get(`${API_BASE_URL}/getCustomerBillingRecord/${id}`)
+        const res=await axios.get(`${API_BASE}/getCustomerBillingRecord/${id}`)
         return res.data
     }catch(err){
          const errorMessage = err.response?.data?.message || err.message || "Unknown error";
@@ -378,7 +378,7 @@ export const getCustomerBillingRecord=async(id)=>{
 //Profile
 export const getProfile=async()=>{
     try{
-        const res=await axios.get(`${API_BASE_URL}/getProfile`)
+        const res=await axios.get(`${API_BASE}/getProfile`)
         return res.data
     }catch(err){
         const errorMessage = err.response?.data?.message || err.message || "Unknown error";
@@ -387,7 +387,7 @@ export const getProfile=async()=>{
 }
 export const getProfileName=async()=>{
     try{
-        const res=await axios.get(`${API_BASE_URL}/getProfileName`)
+        const res=await axios.get(`${API_BASE}/getProfileName`)
         return res.data
     }catch(err){
         const errorMessage = err.response?.data?.message || err.message || "Unknown error";
@@ -397,7 +397,7 @@ export const getProfileName=async()=>{
 export const AddProfile=async(data)=>{
     console.log(data)
     try{
-        const res=await axios.post(`${API_BASE_URL}/addProfile`,data,{
+        const res=await axios.post(`${API_BASE}/addProfile`,data,{
             headers:{
                 'Content-Type':'application/json'
             }
@@ -410,7 +410,7 @@ export const AddProfile=async(data)=>{
 }
 export const GetProductByBarcode = async (barcode) => {
   try {
-    const res = await axios.get(`${API_BASE_URL}/getproductdetail/${barcode}`);
+    const res = await axios.get(`${API_BASE}/getproductdetail/${barcode}`);
     return res.data;
   } catch (err) {
     const errorMessage =
@@ -422,7 +422,7 @@ export const GetProductByBarcode = async (barcode) => {
 
 export const UpdateDiscountStatus=async(data)=>{
     try{
-        const res=await axios.put(`${API_BASE_URL}/editDiscountStatus`,data,{
+        const res=await axios.put(`${API_BASE}/editDiscountStatus`,data,{
             headers:{
                 'Content-Type':'application/json'
             }
@@ -438,7 +438,7 @@ export const UpdateDiscountStatus=async(data)=>{
 // Customer
 export const AddCustomer = async (data) => {
   try {
-    const res = await axios.post(`${API_BASE_URL}/addCustomer`, data, {
+    const res = await axios.post(`${API_BASE}/addCustomer`, data, {
             headers:{
                 'Content-Type':'application/json'
             }
@@ -452,7 +452,7 @@ export const AddCustomer = async (data) => {
 
 export const GetDailySalesReport = async () => {
   try {
-    const res = await axios.get(`${API_BASE_URL}/DailySalesReport`);
+    const res = await axios.get(`${API_BASE}/DailySalesReport`);
     return res.data;
   } catch (err) {
     const errorMessage =
@@ -463,7 +463,7 @@ export const GetDailySalesReport = async () => {
 
 export const GetSalesReportData = async () => {
   try {
-    const res = await axios.get(`${API_BASE_URL}/getSalesReport`);
+    const res = await axios.get(`${API_BASE}/getSalesReport`);
     return res.data;
   } catch (err) {
     const errorMessage =
@@ -473,7 +473,7 @@ export const GetSalesReportData = async () => {
 };
 export const GetCashierSalesReport = async (username, role) => {
   try {
-    const res = await axios.get(`${API_BASE_URL}/getCashierSalesReport`, {
+    const res = await axios.get(`${API_BASE}/getCashierSalesReport`, {
       params: { username, role },
     });
     return res.data;
@@ -485,7 +485,7 @@ export const GetCashierSalesReport = async (username, role) => {
 };
 export const getCashierDashboardReport = async (username, role) => {
   try {
-    const res = await axios.get(`${API_BASE_URL}/getCashierDashboardReport`, {
+    const res = await axios.get(`${API_BASE}/getCashierDashboardReport`, {
       params: { username, role },
     });
     return res.data;
@@ -498,7 +498,7 @@ export const getCashierDashboardReport = async (username, role) => {
 
 export const GetStockReport = async () => {
   try {
-    const res = await axios.get(`${API_BASE_URL}/getStockReport`);
+    const res = await axios.get(`${API_BASE}/getStockReport`);
     return res.data;
   } catch (err) {
     const errorMessage =
@@ -508,7 +508,7 @@ export const GetStockReport = async () => {
 };
 export const getDailyPurchases = async () => {
   try {
-    const res = await axios.get(`${API_BASE_URL}/getDailyPurchaseSummary`);
+    const res = await axios.get(`${API_BASE}/getDailyPurchaseSummary`);
     return res.data;
   } catch (err) {
     const errorMessage =
@@ -520,7 +520,7 @@ export const getDailyPurchases = async () => {
 export const CreatePurchaseOrder = async (data) => {
   console.log(data);
   try {
-    const res = await axios.post(`${API_BASE_URL}/addPurchase`, data, {
+    const res = await axios.post(`${API_BASE}/addPurchase`, data, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -534,7 +534,7 @@ export const CreatePurchaseOrder = async (data) => {
 };
 export const getPurchases = async () => {
   try {
-    const res = await axios.get(`${API_BASE_URL}/getPurchase`);
+    const res = await axios.get(`${API_BASE}/getPurchase`);
     return res.data;
   } catch (err) {
     const errorMessage =
@@ -545,7 +545,7 @@ export const getPurchases = async () => {
 export const updatePurchaseStatus = async (data) => {
   console.log(data);
   try {
-    const res = await axios.put(`${API_BASE_URL}/updatePurchaseStatus`, data, {
+    const res = await axios.put(`${API_BASE}/updatePurchaseStatus`, data, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -559,7 +559,7 @@ export const updatePurchaseStatus = async (data) => {
 };
 export const DelPurchase = async (id) => {
   try {
-    const res = await axios.delete(`${API_BASE_URL}/delPurchase/${id}`);
+    const res = await axios.delete(`${API_BASE}/delPurchase/${id}`);
     return res.data;
   } catch (err) {
     const errorMessage =
@@ -570,7 +570,7 @@ export const DelPurchase = async (id) => {
 export const getSalesSummaryReport = async (data) => {
   try {
     const res = await axios.get(
-      `${API_BASE_URL}/getSalesSummary?from=${data.startDate}&to=${data.endDate}`
+      `${API_BASE}/getSalesSummary?from=${data.startDate}&to=${data.endDate}`
     );
     return res.data;
   } catch (err) {
@@ -582,7 +582,7 @@ export const getSalesSummaryReport = async (data) => {
 export const getOTsalesReport = async (data) => {
   try {
     const res = await axios.get(
-      `${API_BASE_URL}/getOTsalesReport`
+      `${API_BASE}/getOTsalesReport`
     );
     return res.data;
   } catch (err) {
@@ -595,7 +595,7 @@ export const getOTsalesReport = async (data) => {
 export const getInvoiceReport = async (data) => {
   try {
     const res = await axios.get(
-      `${API_BASE_URL}/getInvoiceReports?from=${data.startDate}&to=${data.endDate}`
+      `${API_BASE}/getInvoiceReports?from=${data.startDate}&to=${data.endDate}`
     );
     return res.data;
   } catch (err) {
@@ -607,7 +607,7 @@ export const getInvoiceReport = async (data) => {
 
 export const addUser = async (data) => {
   try {
-    const res = await axios.post(`${API_BASE_URL}/addusers`, data, {
+    const res = await axios.post(`${API_BASE}/addusers`, data, {
       headers: { "Content-Type": "application/json" },
     });
     return res.data;
@@ -621,7 +621,7 @@ export const addUser = async (data) => {
 };
 export const getUsers = async () => {
   try {
-    const res = await axios.get(`${API_BASE_URL}/users`);
+    const res = await axios.get(`${API_BASE}/users`);
     return res.data;
   } catch (err) {
     const errorMessage =
@@ -632,7 +632,7 @@ export const getUsers = async () => {
 
 export const loginUser = async (data) => {
   try {
-    const res = await axios.post(`${API_BASE_URL}/login`, data, {
+    const res = await axios.post(`${API_BASE}/login`, data, {
       headers: { "Content-Type": "application/json" },
     });
     return res.data; // { success: true/false, user, message }
@@ -645,7 +645,7 @@ export const loginUser = async (data) => {
 };
 export const logOut = async (data) => {
   try {
-    const res = await axios.post(`${API_BASE_URL}/logout`, data, {
+    const res = await axios.post(`${API_BASE}/logout`, data, {
       headers: { "Content-Type": "application/json" },
     });
     return res.data;
@@ -657,7 +657,7 @@ export const logOut = async (data) => {
 
 export const GetCutomers = async () => {
   try {
-    const res = await axios.get(`${API_BASE_URL}/getCustomers`);
+    const res = await axios.get(`${API_BASE}/getCustomers`);
     return res.data;
   } catch (err) {
     const errorMessage = err.response?.data?.message || err.message || "Unknown error";
@@ -667,7 +667,7 @@ export const GetCutomers = async () => {
 
 export const GetCutomersReport = async () => {
   try {
-    const res = await axios.get(`${API_BASE_URL}/getCustomerSalesReport`);
+    const res = await axios.get(`${API_BASE}/getCustomerSalesReport`);
     return res.data;
   } catch (err) {
     const errorMessage = err.response?.data?.message || err.message || "Unknown error";
@@ -678,7 +678,7 @@ export const GetCutomersReport = async () => {
 // ✅ delete uses id in URL
 export const DeleteCustomer = async (id) => {
   try {
-    const res = await axios.delete(`${API_BASE_URL}/delCustomer/${id}`);
+    const res = await axios.delete(`${API_BASE}/delCustomer/${id}`);
     return res.data;
   } catch (err) {
     const errorMessage = err.response?.data?.message || err.message || "Unknown error";
@@ -689,7 +689,7 @@ export const DeleteCustomer = async (id) => {
 // ✅ update sends full object in body (must include id)
 export const UpdateCustomer = async (id, data) => {
   try {
-    const res = await axios.put(`${API_BASE_URL}/updateCustomer`, data, {
+    const res = await axios.put(`${API_BASE}/updateCustomer`, data, {
       headers: { "Content-Type": "application/json" },
     });
     return res.data;
@@ -705,7 +705,7 @@ export const UpdateCustomer = async (id, data) => {
 //purchase order
 export const AddUnit = async (data) => {
   try {
-    const res = await axios.post(`${API_BASE_URL}/addUnits`, data, {
+    const res = await axios.post(`${API_BASE}/addUnits`, data, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -719,7 +719,7 @@ export const AddUnit = async (data) => {
 };
 export const GetUnits = async () => {
   try {
-    const res = await axios.get(`${API_BASE_URL}/getUnits`);
+    const res = await axios.get(`${API_BASE}/getUnits`);
     return res.data;
   } catch (err) {
     const errorMessage =
@@ -729,7 +729,7 @@ export const GetUnits = async () => {
 };
 export const DelUnits = async (id) => {
   try {
-    const res = await axios.delete(`${API_BASE_URL}/delUnits/${id}`);
+    const res = await axios.delete(`${API_BASE}/delUnits/${id}`);
     return res.data;
   } catch (err) {
     const errorMessage =
@@ -739,7 +739,7 @@ export const DelUnits = async (id) => {
 };
 export const verifyPassword = async (data) => {
   try {
-    const res = await axios.post(`${API_BASE_URL}/verifyPassword`, data);
+    const res = await axios.post(`${API_BASE}/verifyPassword`, data);
     return res.data; // { valid: true/false }
   } catch (err) {
     const errorMessage =
@@ -750,7 +750,7 @@ export const verifyPassword = async (data) => {
 
 export const changePassword = async (data) => {
   try {
-    const res = await axios.post(`${API_BASE_URL}/changePassword`, data, {
+    const res = await axios.post(`${API_BASE}/changePassword`, data, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -764,7 +764,7 @@ export const changePassword = async (data) => {
 };
 export const deleteUser = async (username) => {
   try {
-    const res = await axios.delete(`${API_BASE_URL}/users/${username}`);
+    const res = await axios.delete(`${API_BASE}/users/${username}`);
     return res.data;
   } catch (err) {
     const errorMessage =
@@ -774,7 +774,7 @@ export const deleteUser = async (username) => {
 };
 export const getRecoveryEmail = async (data) => {
   try {
-    const res = await axios.post(`${API_BASE_URL}/getRecoveryEmail`, data);
+    const res = await axios.post(`${API_BASE}/getRecoveryEmail`, data);
     return res.data;
   } catch (err) {
     const errorMessage =
@@ -784,7 +784,7 @@ export const getRecoveryEmail = async (data) => {
 };
 export const getAdminDashboard = async () => {
   try {
-    const res = await axios.get(`${API_BASE_URL}/getAdminDashboard`);
+    const res = await axios.get(`${API_BASE}/getAdminDashboard`);
     return res.data;
   } catch (err) {
     const errorMessage =
@@ -794,7 +794,7 @@ export const getAdminDashboard = async () => {
 };
 export const notifications = async () => {
   try {
-    const res = await axios.get(`${API_BASE_URL}/notifications`);
+    const res = await axios.get(`${API_BASE}/notifications`);
     return res.data;
   } catch (err) {
     const errorMessage =
@@ -804,7 +804,7 @@ export const notifications = async () => {
 };
 export const clearNotification = async (ids) => {
   try {
-    const res = await axios.post(`${API_BASE_URL}/clearNotifications`, { ids });
+    const res = await axios.post(`${API_BASE}/clearNotifications`, { ids });
     return res.data;
   } catch (err) {
     const errorMessage =
@@ -814,7 +814,7 @@ export const clearNotification = async (ids) => {
 };
 export const addPath = async (data) => {
   try {
-    const res = await axios.post(`${API_BASE_URL}/addPath`, data, {
+    const res = await axios.post(`${API_BASE}/addPath`, data, {
       headers: { "Content-Type": "application/json" },
     });
     return res.data; 
