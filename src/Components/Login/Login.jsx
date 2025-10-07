@@ -4,7 +4,6 @@ import { loginUser } from "../../UserService";
 import { UserContext } from "../../Context/UserContext";
 import { useDispatch } from "react-redux";
 import { setRole } from "../../redux/Role/roleSlice";
-import { setPath as setPathRedux } from "../../redux/Path/pathSlice";
 import { jwtDecode } from "jwt-decode";
 import "./Login.css";
 
@@ -13,7 +12,6 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
-  const [path, setLocalPath] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -80,23 +78,6 @@ const Login = () => {
     navigate("/recovery/Recovery-Info");
   };
 
-  
-  const handleAddPath = () => {
-  if (path.trim() === "") {
-    alert("Please enter a valid path");
-    return;
-  }
-
-  // ✅ Save to Redux
-  dispatch(setPathRedux(path));
-
-  // ✅ Save to localStorage
-  localStorage.setItem("path", path);
-
-  alert(`Path "${path}" has been stored in Redux`);
-};
-
-
   return (
     <div className="login-container">
       <h2>Login</h2>
@@ -149,18 +130,6 @@ const Login = () => {
       >
         Forgot Password?
       </a>
-
-      {/* Path Input Section */}
-      <div className="path-section">
-        <label>Add Path:</label>
-        <input
-          type="text"
-          placeholder="Enter path"
-          value={path}
-          onChange={(e) => setLocalPath(e.target.value)}
-        />
-        <button onClick={handleAddPath}>Add</button>
-      </div>
     </div>
   );
 };
