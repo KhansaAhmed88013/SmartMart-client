@@ -1,6 +1,8 @@
 import axios from "axios";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+console.log(API_BASE_URL);
+console.log("Base URL:", process.env.REACT_APP_API_BASE_URL);
 //const API_BASE_URL = "http://localhost:3000";
 export const AddProduct = async (data) => {
   try {
@@ -663,8 +665,7 @@ export const addUser = async (data) => {
 };
 export const getUsers = async () => {
   try {
-    const  API_BASE_URL =await getDynamicBaseURL();
-    console.log(" API_BASE_URL in loginUser:", `${ API_BASE_URL}/users`);
+  
      const res = await axios.get(`${ API_BASE_URL}/users`);
      console.log("getUsers response:", res.data);
     return res.data;
