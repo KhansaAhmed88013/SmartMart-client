@@ -12,13 +12,15 @@ function EmployeMNG() {
 
   useEffect(() => {
     const fetchUser = async () => {
-      try {
-        const result = await getUsers();
-        setUsers(result);
-      } catch (err) {
-        console.log(err);
-      }
-    };
+  try {
+    const result = await getUsers();
+    console.log("Fetched users:", result);
+    setUsers(Array.isArray(result) ? result : result.users || []); // ✅ fix
+  } catch (err) {
+    console.log(err);
+  }
+};
+
     fetchUser();
   }, []);
 
