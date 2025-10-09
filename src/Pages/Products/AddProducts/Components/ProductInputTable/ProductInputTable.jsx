@@ -67,6 +67,45 @@ useEffect(() => {
   };
   fetchData();
 }, []);
+
+useEffect(() => {
+  let buffer = "";
+  let lastTime = Date.now();
+
+  const handleKeyDown = (e) => {
+    const now = Date.now();
+    if (now - lastTime > 100) buffer = "";
+    lastTime = now;
+
+    if (e.key.length === 1 && /[0-9A-Za-z]/.test(e.key)) buffer += e.key;
+
+    if (e.key === "Enter" && buffer) {
+      e.preventDefault();
+      const scannedCode = buffer.trim();
+      buffer = "";
+      handleScan(scannedCode);
+    }
+  };
+
+  const handleScan = (code) => {
+    console.log("📦 Scanned:", code);
+    setRows((prev) => {
+      const updated = [...prev];
+      let idx = updated.findIndex((r) => !r.code.trim());
+      if (idx === -1) {
+        updated.push({ ...initialRow, code });
+      } else {
+        updated[idx].code = code;
+      }
+      return updated;
+    });
+  };
+
+  window.addEventListener("keydown", handleKeyDown);
+  return () => window.removeEventListener("keydown", handleKeyDown);
+}, []);
+
+
 const unitOptions = [
   ...units.map((u) => ({ value: u.id, label: u.name })),
 ];
@@ -171,6 +210,18 @@ const focusNextRow = (currentIndex) => {
   return (
     <div className="product-input-container">
       <div className="barcode-sticky-wrapper">
+        {/* Hidden input to auto-focus and capture scanner events */}
+<input
+  type="text"
+  style={{
+    position: "absolute",
+    opacity: 0,
+    height: 0,
+    width: 0,
+  }}
+  autoFocus
+  onBlur={(e) => e.target.focus()} // keep focus even after click
+/>
   <button className="add-btn" onClick={() => setOpenBarcode(true)}>
     Create Barcode
   </button>
