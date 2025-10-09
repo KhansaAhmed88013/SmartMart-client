@@ -2,6 +2,7 @@ import React, { useState,useContext ,useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import "./Login.css"; // ✅ reuse same styling
 import { RecoveryContext } from "../../Context/RecoveryContext";
+import { RecoverPassword } from "../../UserService";
 
 function Recovered() {
   const [newPassword, setNewPassword] = useState("");
@@ -17,7 +18,7 @@ function Recovered() {
   }, [otpVerified]);
 
 
- const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
   e.preventDefault();
 
   if (!termsAccepted) {
@@ -31,20 +32,10 @@ function Recovered() {
   }
 
   try {
-    const response = await fetch("http://localhost:3000/recover-Password", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        username: Username,
-        role: Role,
-        newPassword: newPassword
-      }),
-    });
-
-    const data = await response.json();
+    const data = await RecoverPassword(Username, Role, newPassword);
 
     if (data.success) {
-            setPasswordChanged(true); // mark step 3 complete
+      setPasswordChanged(true);
       navigate('/recovery/Success-in-password-change');
     } else {
       alert(data.message || "Failed to reset password.");
@@ -54,6 +45,7 @@ function Recovered() {
     alert("Error resetting password. Try again later.");
   }
 };
+
 
   return (
     <div className="login-container">

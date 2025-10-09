@@ -6,8 +6,6 @@ console.log("Base URL:", process.env.REACT_APP_API_BASE_URL);
 //const API_BASE_URL = "http://localhost:3000";
 export const AddProduct = async (data) => {
   try {
-  
-    
     const res = await axios.post(`${ API_BASE_URL}/addProducts`, data, {
       Headers: {
         "Content-Type": "application/json",
@@ -839,8 +837,6 @@ export const deleteUser = async (username) => {
 };
 export const getRecoveryEmail = async (data) => {
   try {
-   
-    
     const res = await axios.post(`${ API_BASE_URL}/getRecoveryEmail`, data);
     return res.data;
   } catch (err) {
@@ -896,5 +892,40 @@ export const addPath = async (data) => {
       return err.response.data;
     }
     return { success: false, message: err.message || "Unknown error" };
+  }
+};
+// Send recovery OTP to user's email
+export const SendRecoveryEmail = async (email, OTP) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/send_recovery_email`, {
+      recipient_email: email,
+      OTP: OTP,
+    }, {
+      headers: { "Content-Type": "application/json" },
+    });
+
+    return response.data;
+  } catch (err) {
+    const errorMessage =
+      err.response?.data?.message || err.message || "Error sending OTP";
+    throw new Error(errorMessage);
+  }
+};
+// Recover (reset) user password
+export const RecoverPassword = async (username, role, newPassword) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/recover-Password`, {
+      username,
+      role,
+      newPassword,
+    }, {
+      headers: { "Content-Type": "application/json" },
+    });
+
+    return response.data;
+  } catch (err) {
+    const errorMessage =
+      err.response?.data?.message || err.message || "Error resetting password";
+    throw new Error(errorMessage);
   }
 };

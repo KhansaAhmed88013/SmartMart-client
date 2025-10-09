@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Login.css"; // Reuse the same CSS
 import { RecoveryContext } from "../../Context/RecoveryContext";
-import { getRecoveryEmail } from "../../UserService";
+import { getRecoveryEmail ,SendRecoveryEmail} from "../../UserService";
 
 function RecoveryInfo() {
   const [username, setUsername] = useState("");
@@ -36,36 +36,32 @@ function RecoveryInfo() {
     }
   };
 
-  const NavigateToOTP = async (userEmail) => {
-    if (userEmail) {
-      try {
-        const otp = Math.floor(Math.random() * 90000 + 10000);
-        setOTP(otp);
-
-        const response = await fetch("http://localhost:3000/send_recovery_email", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ recipient_email: userEmail, OTP: otp }),
-        });
-
-        const data = await response.json();
-
-        if (data.success) {
-          setusername(username);
-          setrole(role);
-          setEmailVerified(true);
-          navigate("/recovery/OTPinput");
-        } else {
-          setError(data.message || "Failed to send OTP. Try again.");
-        }
-      } catch (err) {
-        console.error(err);
-        setError("Error sending OTP. Try again later.");
-      }
-    } else {
+ const NavigateToOTP = async (userEmail) => {
+    if (!userEmail) {
       setError("You don't have any email");
+      return;
+    }
+
+    try {
+      const otp = Math.floor(Math.random() * 90000 + 10000);
+      setOTP(otp);
+
+      const data = await SendRecoveryEmail(userEmail, otp);
+
+      if (data.success) {
+        setusername(username);
+        setrole(role);
+        setEmailVerified(true);
+        navigate("/recovery/OTPinput");
+      } else {
+        setError(data.message || "Failed to send OTP. Try again.");
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Error sending OTP. Try again later.");
     }
   };
+
 
   return (
     <div className="login-container">

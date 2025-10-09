@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
 import { RecoveryContext } from "../../Context/RecoveryContext";
+import { SendRecoveryEmail } from "../../UserService";
 
 function OTPinput() {
   const [inputotp, setinputOtp] = useState(["", "", "", "", ""]);
@@ -42,32 +43,27 @@ function OTPinput() {
    alert("The code you have entered is not correct. Try again or re-send the link")
    return;
   }
-  const ResendOTP=async()=>{
-    if(disable)return
-    try {
-      const RandomOTP = Math.floor(Math.random() * 90000 + 10000);
-      setOTP(RandomOTP);
-      
-      const response = await fetch("/send_recovery_email", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ recipient_email:email, OTP:RandomOTP }),
-      });
+ const ResendOTP = async () => {
+  if (disable) return;
 
-      const data = await response.json();
+  try {
+    const RandomOTP = Math.floor(Math.random() * 90000 + 10000);
+    setOTP(RandomOTP);
 
-      if (data.success) {
-       setDisable(true)
-       alert(`A new OTP has successfully sent to your email ${email}`)
-       setTimer(60)
-      } else {
-        setError(data.message || "Failed to send OTP. Try again.");
-      }
-    } catch (err) {
-      console.error(err);
-      setError("Error sending OTP. Try again later.");
+    const data = await SendRecoveryEmail(email, RandomOTP);
+
+    if (data.success) {
+      setDisable(true);
+      alert(`A new OTP has successfully been sent to your email ${email}`);
+      setTimer(60);
+    } else {
+      setError(data.message || "Failed to send OTP. Try again.");
     }
+  } catch (err) {
+    console.error(err);
+    setError("Error sending OTP. Try again later.");
   }
+};
 
   // Handle OTP input
   const handleChange = (element, index) => {
