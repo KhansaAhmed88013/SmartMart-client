@@ -25,12 +25,32 @@ function ProductInputTable() {
   const [categories, setCategories] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
   const [supplier, setSupplier] = useState(null);
+  const [barcodeError, setBarcodeError] = useState(null);
+
 
   const [openBarcode, setOpenBarcode] = useState(false);
   const [barcodeValue, setBarcodeValue] = useState("");
 
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [showSupplierModal, setShowSupplierModal] = useState(false);
+  const hiddenInputRef = useRef(null);
+
+useEffect(() => {
+  // Focus on mount
+  if (hiddenInputRef.current) {
+    hiddenInputRef.current.focus();
+  }
+
+  // Keep focus every 2s (scanner safe guard)
+  const interval = setInterval(() => {
+    if (hiddenInputRef.current && document.activeElement !== hiddenInputRef.current) {
+      hiddenInputRef.current.focus();
+    }
+  }, 2000);
+
+  return () => clearInterval(interval);
+}, []);
+
 
   const [supplierFormData, setSupplierFormData] = useState({
     supplier_name: "",
@@ -67,14 +87,41 @@ useEffect(() => {
   };
   fetchData();
 }, []);
+const processScannedCode = (code) => {
+  console.log("📦 Scanned:", code);
+
+  if (!code || code.length < 3) {
+    setBarcodeError(`❌ Invalid barcode: ${code || "EMPTY"}`);
+    showMessage(`Invalid barcode scanned: ${code || "EMPTY"}`, "error");
+    return;
+  }
+
+  setRows((prev) => {
+    const updated = [...prev];
+    let idx = updated.findIndex((r) => !r.code.trim());
+    if (idx === -1) {
+      updated.push({ ...initialRow, code });
+    } else {
+      updated[idx].code = code;
+    }
+    return updated;
+  });
+
+  setBarcodeError(null);
+  showMessage(`✅ Barcode scanned successfully: ${code}`, "success");
+};
+
 
 useEffect(() => {
   let buffer = "";
   let lastTime = Date.now();
 
   const handleKeyDown = (e) => {
+    // 🛑 Pause scanning if any modal is open
+    if (openBarcode || showCategoryModal || showSupplierModal) return;
+
     const now = Date.now();
-    if (now - lastTime > 100) buffer = "";
+    if (now - lastTime > 100) buffer = ""; // reset if typing delayed
     lastTime = now;
 
     if (e.key.length === 1 && /[0-9A-Za-z]/.test(e.key)) buffer += e.key;
@@ -83,27 +130,13 @@ useEffect(() => {
       e.preventDefault();
       const scannedCode = buffer.trim();
       buffer = "";
-      handleScan(scannedCode);
+      processScannedCode(scannedCode);
     }
-  };
-
-  const handleScan = (code) => {
-    console.log("📦 Scanned:", code);
-    setRows((prev) => {
-      const updated = [...prev];
-      let idx = updated.findIndex((r) => !r.code.trim());
-      if (idx === -1) {
-        updated.push({ ...initialRow, code });
-      } else {
-        updated[idx].code = code;
-      }
-      return updated;
-    });
   };
 
   window.addEventListener("keydown", handleKeyDown);
   return () => window.removeEventListener("keydown", handleKeyDown);
-}, []);
+}, [openBarcode, showCategoryModal, showSupplierModal]);
 
 
 const unitOptions = [
@@ -209,9 +242,10 @@ const focusNextRow = (currentIndex) => {
 
   return (
     <div className="product-input-container">
+      
       <div className="barcode-sticky-wrapper">
-        {/* Hidden input to auto-focus and capture scanner events */}
-<input
+       <input
+  ref={hiddenInputRef}
   type="text"
   style={{
     position: "absolute",
@@ -219,9 +253,9 @@ const focusNextRow = (currentIndex) => {
     height: 0,
     width: 0,
   }}
-  autoFocus
-  onBlur={(e) => e.target.focus()} // keep focus even after click
+  onBlur={(e) => e.target.focus()} // immediate refocus on blur
 />
+
   <button className="add-btn" onClick={() => setOpenBarcode(true)}>
     Create Barcode
   </button>
@@ -276,6 +310,7 @@ const focusNextRow = (currentIndex) => {
           handleSubmit={handleBarcodeSubmit}
         />
       )}
+      
 
       <h2 className="table-title">Add Products</h2>
       <div className="table-wrapper">
