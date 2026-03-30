@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./ProductInputTable.css";
 import { FaPlus } from "react-icons/fa";
 import Select from "react-select";
@@ -32,23 +32,6 @@ function ProductInputTable() {
 
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [showSupplierModal, setShowSupplierModal] = useState(false);
-  const hiddenInputRef = useRef(null);
-
-useEffect(() => {
-  // Focus on mount
-  if (hiddenInputRef.current) {
-    hiddenInputRef.current.focus();
-  }
-
-  // Keep focus every 2s (scanner safe guard)
-  const interval = setInterval(() => {
-    if (hiddenInputRef.current && document.activeElement !== hiddenInputRef.current) {
-      hiddenInputRef.current.focus();
-    }
-  }, 2000);
-
-  return () => clearInterval(interval);
-}, []);
 
 
   const [supplierFormData, setSupplierFormData] = useState({
@@ -129,6 +112,15 @@ useEffect(() => {
   const handleKeyDown = (e) => {
     // ≡ƒ¢æ Pause scanning if any modal is open
     if (openBarcode || showCategoryModal || showSupplierModal) return;
+
+    // Do not treat manual typing in form controls as barcode scans.
+    const targetTag = e.target?.tagName;
+    const isTypingField =
+      e.target?.isContentEditable ||
+      targetTag === "INPUT" ||
+      targetTag === "TEXTAREA" ||
+      targetTag === "SELECT";
+    if (isTypingField || e.ctrlKey || e.metaKey || e.altKey) return;
 
     const now = Date.now();
     if (now - lastTime > 100) buffer = ""; // reset if typing delayed
@@ -254,18 +246,6 @@ const focusNextRow = (currentIndex) => {
     <div className="product-input-container">
       
       <div className="barcode-sticky-wrapper">
-       <input
-  ref={hiddenInputRef}
-  type="text"
-  style={{
-    position: "absolute",
-    opacity: 0,
-    height: 0,
-    width: 0,
-  }}
-  onBlur={(e) => e.target.focus()} // immediate refocus on blur
-/>
-
   <button className="add-btn" onClick={() => setOpenBarcode(true)}>
     Create Barcode
   </button>
