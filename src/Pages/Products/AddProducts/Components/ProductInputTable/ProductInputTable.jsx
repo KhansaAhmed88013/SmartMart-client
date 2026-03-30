@@ -88,7 +88,6 @@ useEffect(() => {
   fetchData();
 }, []);
 const processScannedCode = (code) => {
-  console.log("📦 Scanned:", code);
 
   if (!code || code.length < 3) {
     setBarcodeError(`❌ Invalid barcode: ${code || "EMPTY"}`);

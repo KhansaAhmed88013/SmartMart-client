@@ -14,10 +14,8 @@ function EmployeMNG() {
     const fetchUser = async () => {
   try {
     const result = await getUsers();
-    console.log("Fetched users:", result);
     setUsers(Array.isArray(result) ? result : result.users || []); // ✅ fix
   } catch (err) {
-    console.log(err);
   }
 };
 
@@ -36,7 +34,6 @@ function EmployeMNG() {
         setMessage(`User "${username}" deleted successfully.`);
         setTimeout(() => setMessage(""), 3000); // hide message after 3s
       } catch (err) {
-        console.log(err);
         alert("Failed to delete user");
       }
     }

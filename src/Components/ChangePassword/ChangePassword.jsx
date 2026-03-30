@@ -60,7 +60,6 @@ function ChangePassword() {
       setNewPassword("");
       setConfirmPassword("");
     } catch (err) {
-      console.log(err);
       setMessage(
         err.response?.data?.message || err.message || "Error changing password"
       );

@@ -29,7 +29,6 @@ function StockReport() {
     };
     getData();
   }, []);
-console.log(stockData)
   // Total Stock Value using closing_stock
   const totalStockValue = stockData.reduce(
     (sum, stock) => sum + Number(stock.closing_stock) * Number(stock.cost_price),

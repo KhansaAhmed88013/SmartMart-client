@@ -15,7 +15,6 @@ function ShopProfileForm() {
         "ProfileContext is undefined! Make sure ShopProfileForm is wrapped inside <ProfileProvider>"
       );
     } else {
-      console.log("ProfileContext loaded:", context);
     }
   }, [context]);
 

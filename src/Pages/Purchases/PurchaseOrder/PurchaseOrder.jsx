@@ -237,7 +237,6 @@ function PurchaseOrderPage() {
   try {
     const response = await CreatePurchaseOrder(orderPayload);
     alert("Purchase order submitted successfully!");
-    console.log("Order submitted:", response.data);
 
     // reset form
     setOrderItems([]);

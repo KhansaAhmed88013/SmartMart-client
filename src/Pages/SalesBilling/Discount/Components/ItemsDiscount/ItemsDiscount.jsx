@@ -64,7 +64,6 @@ function ItemsDiscount() {
           });
         }
       } catch (err) {
-        console.log("No existing data or error:", err);
       } finally {
         setLoading(false);
       }

@@ -9,7 +9,6 @@ const BarcodeDetection = () => {
   useSymbologyScanner(
     (barcode) => {
       setScannedCode(barcode);
-      console.log("Scanned:", barcode);
     },
     {
       video: videoRef.current, // Pass the video element

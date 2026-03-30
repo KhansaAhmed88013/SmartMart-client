@@ -20,7 +20,6 @@ function Categories() {
       const result = await GetProducts();
       setProducts(result);
     } catch (err) {
-      console.log(err.message);
     } finally {
       setLoading(false);
     }

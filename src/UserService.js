@@ -1,8 +1,6 @@
 import axios from "axios";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-console.log(API_BASE_URL);
-console.log("Base URL:", process.env.REACT_APP_API_BASE_URL);
 //const API_BASE_URL = "http://localhost:3000";
 export const AddProduct = async (data) => {
   try {
@@ -368,13 +366,11 @@ export const Getnoofdiscount = async () => {
 //Billing
 export const AddInvoice=async(data)=>{
     try{
-        console.log(data)
         const res=await axios.post(`${ API_BASE_URL}/addInvoice`,data,{
             headers:{
                 'Content-Type':'application/json'
             }
         })
-        console.log(res)
         return res.data
     }catch(err){
          const errorMessage = err.response?.data?.message || err.message || "Unknown error";
@@ -421,7 +417,6 @@ export const getProfileName=async()=>{
     }
 }
 export const AddProfile=async(data)=>{
-    console.log(data)
     try{
         const res=await axios.post(`${ API_BASE_URL}/addProfile`,data,{
             headers:{
@@ -553,7 +548,6 @@ export const getDailyPurchases = async () => {
 };
 //purchase order
 export const CreatePurchaseOrder = async (data) => {
-  console.log(data);
   try {
    
     
@@ -581,7 +575,6 @@ export const getPurchases = async () => {
   }
 };
 export const updatePurchaseStatus = async (data) => {
-  console.log(data);
   try {
   
      const res =await axios.put(`${ API_BASE_URL}/updatePurchaseStatus`, data, {
@@ -665,7 +658,6 @@ export const getUsers = async () => {
   try {
   
      const res = await axios.get(`${ API_BASE_URL}/users`);
-     console.log("getUsers response:", res.data);
     return res.data;
   } catch (err) {
     const errorMessage =

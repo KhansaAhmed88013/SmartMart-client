@@ -75,7 +75,6 @@ function CategoryDiscount() {
       status: form.status,
     };
 
-    console.log("📤 Sending Add payload:", payload);
 const response = await AddCategoryDiscount(payload);
 
 // find category name locally
@@ -118,7 +117,6 @@ const handleUpdate = async () => {
       status: editForm.status,
     };
 
-    console.log("📤 Sending Update payload:", payload);
 
     const result = await UpdateCategoryDiscount(payload);
 

@@ -50,7 +50,6 @@ useEffect(() => {
   const gettingPurchase = async () => {
     try {
       const result = await getPurchases();
-      console.log(result);
       const mappedInvoices = result.map((inv) => {
         const total = parseFloat(inv.total_amount) || 0;
         const paid = inv.paid_amount ? parseFloat(inv.paid_amount) : 0;

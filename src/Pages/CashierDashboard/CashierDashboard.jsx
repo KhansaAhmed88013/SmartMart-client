@@ -20,7 +20,6 @@ function CashierDashboard() {
           const result = await getCashierDashboardReport(username,role);
           setTodayBills(result);
         } catch (err) {
-          console.log(err);
          }
       };
       fetchData();

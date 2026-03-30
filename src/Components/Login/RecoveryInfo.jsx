@@ -19,7 +19,6 @@ function RecoveryInfo() {
 
     try {
       const result = await getRecoveryEmail({ username, role });
-      console.log(result);
       if (!result.email) {
         setError("User not found or no email associated.");
         setLoading(false);

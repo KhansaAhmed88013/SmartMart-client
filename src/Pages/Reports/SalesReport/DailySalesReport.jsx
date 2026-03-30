@@ -34,7 +34,6 @@ function DailySalesReport() {
         const result = await GetDailySalesReport();
         setData(result);
       } catch (err) {
-        console.log(err);
       }
     };
     fetchData();

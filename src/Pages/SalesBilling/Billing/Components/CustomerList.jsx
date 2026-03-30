@@ -12,7 +12,6 @@ function CustomerList({ onClose, onSelect, onAddNew }) {
         const customers = await GetCutomers();
         setCustomers(customers);
       } catch (err) {
-        console.log(err);
       }
     };
     fetchCustomers();

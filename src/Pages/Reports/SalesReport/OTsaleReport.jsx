@@ -25,7 +25,6 @@ const OTSaleReport = () => {
         setSales(result);
         setFilteredSales(result); // show all initially
       } catch (err) {
-        console.log(err);
       }
     };
     fetchData();
