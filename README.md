@@ -16,6 +16,8 @@ Frontend application for SmartMart built with React (Create React App).
 - npm 9+
 - SmartMart server running locally or deployed
 
+<img width="1300" height="900" alt="smartmart thumbnail" src="https://github.com/user-attachments/assets/fe502121-34b8-47aa-a9c3-60e08a9241d2" />
+
 ## Environment Configuration
 
 The app reads API base URL from `REACT_APP_API_BASE_URL`.
@@ -77,7 +79,6 @@ If port 3000 is busy, CRA will prompt for another port.
 ```bash
 npm run build
 ```
-<img width="1536" height="1024" alt="smartmart thumbnail" src="https://github.com/user-attachments/assets/fe502121-34b8-47aa-a9c3-60e08a9241d2" />
 
 
 This creates optimized static files in `build/`.
