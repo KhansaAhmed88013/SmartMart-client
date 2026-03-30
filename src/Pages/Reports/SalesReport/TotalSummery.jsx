@@ -22,17 +22,16 @@ const DailySaleSummary = () => {
     documentTitle: "Sales_Summary", // optional: set title of printed doc
   });
 
-  // Fetch summary from backend
-  const fetchSummary = async () => {
-    try {
-      const data = await getSalesSummaryReport({ startDate, endDate });
-      setSummary(data.summary);
-    } catch (err) {
-      console.error("Error fetching summary:", err);
-    }
-  };
-
   useEffect(() => {
+    const fetchSummary = async () => {
+      try {
+        const data = await getSalesSummaryReport({ startDate, endDate });
+        setSummary(data.summary);
+      } catch (err) {
+        console.error("Error fetching summary:", err);
+      }
+    };
+
     fetchSummary();
   }, [startDate, endDate]);
 

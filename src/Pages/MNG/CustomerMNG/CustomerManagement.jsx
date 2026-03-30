@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 import {
   AddCustomer,
@@ -20,7 +19,6 @@ function CustomerManagement() {
     balance: 0.0,
   });
 
-  const navigate = useNavigate();
   // ✅ Fetch customers safely
   const getCustomers = async () => {
     try {

@@ -9,13 +9,12 @@ function OTPinput() {
   const { email, OTP ,setOTP,emailVerified,setOtpVerified}=useContext(RecoveryContext)
   const [timer,setTimer]=useState(60)
   const [disable,setDisable]=useState(true)
-  const [error,setError]=useState(null)
   const navigate=useNavigate()
   useEffect(() => {
     if (!emailVerified) {
       navigate("/recovery/Recovery-Info");
     }
-  }, [emailVerified]);
+  }, [emailVerified, navigate]);
 
  useEffect(() => {
   if (!disable) return; // don't start timer if not disabled
@@ -57,11 +56,11 @@ function OTPinput() {
       alert(`A new OTP has successfully been sent to your email ${email}`);
       setTimer(60);
     } else {
-      setError(data.message || "Failed to send OTP. Try again.");
+      alert(data.message || "Failed to send OTP. Try again.");
     }
   } catch (err) {
     console.error(err);
-    setError("Error sending OTP. Try again later.");
+    alert("Error sending OTP. Try again later.");
   }
 };
 

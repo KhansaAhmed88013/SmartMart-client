@@ -121,7 +121,7 @@ const Login = () => {
       </form>
 
       <a
-        href="#"
+        href="/recovery/Recovery-Info"
         onClick={(e) => {
           e.preventDefault();
           setError("");

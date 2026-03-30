@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
   FaEdit,
-  FaDownload,
-  FaUpload,
-  FaListAlt,
   FaTrash,
   FaBox,
 } from "react-icons/fa";

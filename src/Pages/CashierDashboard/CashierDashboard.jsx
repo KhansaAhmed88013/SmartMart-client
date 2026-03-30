@@ -1,6 +1,6 @@
 import "./CashierDashboard.css";
 import { useNavigate } from "react-router-dom";
-import { FaCashRegister, FaFileInvoice, FaCogs, FaCalendarDay } from "react-icons/fa";
+import { FaCashRegister, FaFileInvoice, FaCalendarDay } from "react-icons/fa";
 import { useEffect, useState, useContext } from "react";
 import { UserContext } from "../../Context/UserContext";
 import { getCashierDashboardReport } from "../../UserService";
@@ -14,6 +14,7 @@ function CashierDashboard() {
   
   useEffect(() => {
       const fetchData = async () => {
+        if (!currentUser) return;
         try {
           const username=currentUser.username
           const role=currentUser.role
@@ -23,7 +24,7 @@ function CashierDashboard() {
          }
       };
       fetchData();
-    }, []);
+    }, [currentUser]);
   const sections = [
     { title: `Today's Bills : ${todayBills.count}`, icon: <FaCalendarDay />, desc: `${todayBills.count} bills created today`, route: "/cashier/userreport", color: "card-purple" },
     { title: "Billing", icon: <FaCashRegister />, desc: "Create new bills / POS", route: "/cashier/billing", color: "card-blue" },

@@ -41,7 +41,7 @@ import Settings from "./Pages/Settings/Settings";
 import EmployeMNG from "./Pages/MNG/EmployeMNG/EmployeMNG";
 import Login from "./Components/Login/Login";
 import CashierDashboard from "./Pages/CashierDashboard/CashierDashboard";
-import MainLayout_Cashier from "./Components/MainLayout_Cashier/MainLayout_Cashier";
+import MainLayoutCashier from "./Components/MainLayout_Cashier/MainLayout_Cashier";
 import CashierReport from "./Pages/CashierReport/CashierReport";
 import ChangePassword from "./Components/ChangePassword/ChangePassword";
 import CustomerInvoiceRecord from "./Pages/Reports/CustomerReport/CustomerInvoiceRecord";
@@ -141,7 +141,7 @@ function App() {
               path="/cashier"
               element={
                 <ProtectedRoute allowedRoles={["Cashier"]}>
-                  <MainLayout_Cashier />
+                  <MainLayoutCashier />
                 </ProtectedRoute>
               }
             >

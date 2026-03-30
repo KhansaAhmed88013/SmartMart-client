@@ -109,7 +109,6 @@ function DailySalesReport() {
 
         {/* Tables for each date */}
         {filteredSales.map((rows, idx) => {
-          const date = rows[0]?.invoiceDate;
           return (
             <div key={idx} style={{ marginBottom: "30px" }}>
               <table

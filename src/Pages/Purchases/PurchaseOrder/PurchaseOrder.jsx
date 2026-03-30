@@ -235,7 +235,7 @@ function PurchaseOrderPage() {
   };
 
   try {
-    const response = await CreatePurchaseOrder(orderPayload);
+    await CreatePurchaseOrder(orderPayload);
     alert("Purchase order submitted successfully!");
 
     // reset form

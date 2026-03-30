@@ -18,14 +18,13 @@ function ProductInputTable() {
   expiry: new Date().toISOString().split("T")[0],
   category: "",
   supplier: "",
-  unit: "",   // ✅ add this
+  unit: "",   // Γ£à add this
 };
 
   const [rows, setRows] = useState([initialRow]);
   const [categories, setCategories] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
   const [supplier, setSupplier] = useState(null);
-  const [barcodeError, setBarcodeError] = useState(null);
 
 
   const [openBarcode, setOpenBarcode] = useState(false);
@@ -87,36 +86,48 @@ useEffect(() => {
   };
   fetchData();
 }, []);
-const processScannedCode = (code) => {
-
-  if (!code || code.length < 3) {
-    setBarcodeError(`❌ Invalid barcode: ${code || "EMPTY"}`);
-    showMessage(`Invalid barcode scanned: ${code || "EMPTY"}`, "error");
-    return;
-  }
-
-  setRows((prev) => {
-    const updated = [...prev];
-    let idx = updated.findIndex((r) => !r.code.trim());
-    if (idx === -1) {
-      updated.push({ ...initialRow, code });
-    } else {
-      updated[idx].code = code;
-    }
-    return updated;
-  });
-
-  setBarcodeError(null);
-  showMessage(`✅ Barcode scanned successfully: ${code}`, "success");
-};
-
-
 useEffect(() => {
   let buffer = "";
   let lastTime = Date.now();
 
+  const notify = (msg, type) => {
+    setMessage(msg);
+    setMsgType(type);
+    setTimeout(() => setMessage(null), 3000);
+  };
+
+  const processScannedCode = (code) => {
+    if (!code || code.length < 3) {
+      notify(`Invalid barcode scanned: ${code || "EMPTY"}`, "error");
+      return;
+    }
+
+    setRows((prev) => {
+      const updated = [...prev];
+      let idx = updated.findIndex((r) => !r.code.trim());
+      if (idx === -1) {
+        updated.push({
+          code,
+          name: "",
+          cost_price: "",
+          qty: "",
+          sale_price: "",
+          expiry: new Date().toISOString().split("T")[0],
+          category: "",
+          supplier: "",
+          unit: "",
+        });
+      } else {
+        updated[idx].code = code;
+      }
+      return updated;
+    });
+
+    notify(`Barcode scanned successfully: ${code}`, "success");
+  };
+
   const handleKeyDown = (e) => {
-    // 🛑 Pause scanning if any modal is open
+    // ≡ƒ¢æ Pause scanning if any modal is open
     if (openBarcode || showCategoryModal || showSupplierModal) return;
 
     const now = Date.now();

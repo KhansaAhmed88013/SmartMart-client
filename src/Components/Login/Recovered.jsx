@@ -15,7 +15,7 @@ function Recovered() {
     if (!otpVerified) {
       navigate("/recovery/OTPinput"); // redirect if OTP step not done
     }
-  }, [otpVerified]);
+  }, [otpVerified, navigate]);
 
 
 const handleSubmit = async (e) => {

@@ -1,5 +1,5 @@
 import styles from "./Navbar_Cashier.module.css";
-import { FaBars, FaSearch, FaBell, FaTimes } from "react-icons/fa";
+import { FaBars, FaTimes } from "react-icons/fa";
 import { useState, useEffect, useContext } from "react";
 import { logOut, getProfileName } from "../../UserService";
 import { UserContext } from "../../Context/UserContext";
@@ -70,7 +70,14 @@ const handleLogout = async () => {
           <a href="/cashier/userreport">Record</a>
           <a href="/cashier/changePassword">Settings</a>
           {currentUser && (
-            <a onClick={handleLogout} style={{ cursor: "pointer" }}>
+            <a
+              href="/recovery/login"
+              onClick={(e) => {
+                e.preventDefault();
+                handleLogout();
+              }}
+              style={{ cursor: "pointer" }}
+            >
               Logout
             </a>
           )}
@@ -125,7 +132,14 @@ const handleLogout = async () => {
           <a href="/cashier/userreport">Record</a>
           <a href="/cashier/changePassword">Settings</a>
           {currentUser && (
-          <a onClick={handleLogout} style={{ cursor: "pointer" }}>
+          <a
+            href="/recovery/login"
+            onClick={(e) => {
+              e.preventDefault();
+              handleLogout();
+            }}
+            style={{ cursor: "pointer" }}
+          >
             Logout
           </a>
         )}

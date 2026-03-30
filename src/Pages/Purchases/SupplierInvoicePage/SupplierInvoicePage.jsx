@@ -47,39 +47,39 @@ useEffect(() => {
     }
   };
 
-  const gettingPurchase = async () => {
-    try {
-      const result = await getPurchases();
-      const mappedInvoices = result.map((inv) => {
-        const total = parseFloat(inv.total_amount) || 0;
-        const paid = inv.paid_amount ? parseFloat(inv.paid_amount) : 0;
-        return {
-          invoiceNumber: inv.id,
-          supplier: inv.supplier,
-          purchaseDate: new Date(inv.purchase_date),
-          date: new Date(inv.purchase_date).toLocaleDateString(),
-          dueDate: inv.due_date
-            ? new Date(inv.due_date).toLocaleDateString()
-            : "N/A",
-          status: inv.payment_status,
-          total,
-          paidAmount: paid,
-          pendingAmount: total - paid, // ✅ always a number
-          items: inv.PurchaseItems.map((item) => ({
-            product: item.Product.name,
-            qty: parseFloat(item.quantity),
-            price: parseFloat(item.cost_price),
-          })),
-        };
-      });
-
-      setInvoices(mappedInvoices);
-    } catch (err) {
-      showMessage("Failed to fetch purchases!", "error");
-    }
-  };
-
   useEffect(() => {
+    const gettingPurchase = async () => {
+      try {
+        const result = await getPurchases();
+        const mappedInvoices = result.map((inv) => {
+          const total = parseFloat(inv.total_amount) || 0;
+          const paid = inv.paid_amount ? parseFloat(inv.paid_amount) : 0;
+          return {
+            invoiceNumber: inv.id,
+            supplier: inv.supplier,
+            purchaseDate: new Date(inv.purchase_date),
+            date: new Date(inv.purchase_date).toLocaleDateString(),
+            dueDate: inv.due_date
+              ? new Date(inv.due_date).toLocaleDateString()
+              : "N/A",
+            status: inv.payment_status,
+            total,
+            paidAmount: paid,
+            pendingAmount: total - paid,
+            items: inv.PurchaseItems.map((item) => ({
+              product: item.Product.name,
+              qty: parseFloat(item.quantity),
+              price: parseFloat(item.cost_price),
+            })),
+          };
+        });
+
+        setInvoices(mappedInvoices);
+      } catch (err) {
+        showMessage("Failed to fetch purchases!", "error");
+      }
+    };
+
     gettingPurchase();
   }, []);
 

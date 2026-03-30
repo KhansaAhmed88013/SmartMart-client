@@ -1,6 +1,4 @@
 import { Navigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { selectRole } from "../redux/Role/roleSlice";
 import { jwtDecode } from "jwt-decode";
 
 const ProtectedRoute = ({ children, allowedRoles }) => {

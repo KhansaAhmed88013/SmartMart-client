@@ -1,5 +1,5 @@
 import { useState, useRef,useEffect } from "react";
-import { FaEdit, FaTrash, FaList, FaPlus, FaPrint } from "react-icons/fa";
+import { FaEdit, FaTrash, FaPlus, FaPrint } from "react-icons/fa";
 import { useReactToPrint } from "react-to-print";
 import AddBillDiscountOverlay from "./AddBillDiscountOverlay";
 import EditBillDiscountOverlay from "./EditBillDiscountOverlay";
@@ -8,16 +8,16 @@ import "./TotalBillDiscount.css";
 
 function TotalBillDiscount() {
   const [discounts, setDiscounts] = useState([]);
-const fetchBillDiscounts=async()=>{
+  useEffect(()=>{
+  const fetchBillDiscounts=async()=>{
     try{
-        const result=await getBillDiscount()
-        setDiscounts(result)
+      const result=await getBillDiscount()
+      setDiscounts(result)
     }catch(err){
-        console.error("Error adding discount:", 'error');
+      console.error("Error adding discount:", 'error');
     showMessage(err, 'error');
     }
-}
-  useEffect(()=>{
+  }
     fetchBillDiscounts()
   },[])
 

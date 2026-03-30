@@ -740,7 +740,6 @@ export const UpdateCustomer = async (id, data) => {
     });
     return res.data;
   } catch (err) {
-    const errorMessage = err.response?.data?.message || err.message || "Unknown error";
     if (err.response && err.response.data) {
       return err.response.data;
     }

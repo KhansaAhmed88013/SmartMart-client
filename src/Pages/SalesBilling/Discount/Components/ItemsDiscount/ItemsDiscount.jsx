@@ -156,7 +156,7 @@ function ItemsDiscount() {
 }
 
     try {
-      const updatedDiscount = await UpdateDiscount(editDiscount);
+      await UpdateDiscount(editDiscount);
       handleModalClose();
       fetchDiscounts();
 

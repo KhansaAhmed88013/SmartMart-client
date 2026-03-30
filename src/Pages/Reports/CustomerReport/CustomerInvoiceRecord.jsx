@@ -14,22 +14,22 @@ const CustomerInvoiceRecord = () => {
   const [selectedCustomer, setSelectedCustomer] = useState("all"); // default all
   const { ProfileData } = useContext(ProfileContext);
 
-  const fetchInvoices = async () => {
-    try {
-      setLoading(true);
-      const data = await getInvoiceReport({ startDate, endDate });
-      const customersData = await GetCutomers();
-      setCustomers(customersData);
-      setInvoices(data);
-    } catch (err) {
-      console.error("Error fetching invoices:", err);
-      setInvoices([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchInvoices = async () => {
+      try {
+        setLoading(true);
+        const data = await getInvoiceReport({ startDate, endDate });
+        const customersData = await GetCutomers();
+        setCustomers(customersData);
+        setInvoices(data);
+      } catch (err) {
+        console.error("Error fetching invoices:", err);
+        setInvoices([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchInvoices();
   }, [startDate, endDate]);
 

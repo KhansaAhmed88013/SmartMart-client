@@ -12,20 +12,20 @@ const InvoiceReport = () => {
   const [loading, setLoading] = useState(false);
   const { ProfileData } = useContext(ProfileContext);
 
-  const fetchInvoices = async () => {
-    try {
-      setLoading(true);
-      const data = await getInvoiceReport({ startDate, endDate });
-      setInvoices(data);
-    } catch (err) {
-      console.error("Error fetching invoices:", err);
-      setInvoices([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchInvoices = async () => {
+      try {
+        setLoading(true);
+        const data = await getInvoiceReport({ startDate, endDate });
+        setInvoices(data);
+      } catch (err) {
+        console.error("Error fetching invoices:", err);
+        setInvoices([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchInvoices();
   }, [startDate, endDate]);
   // Calculate subtotal of an invoice

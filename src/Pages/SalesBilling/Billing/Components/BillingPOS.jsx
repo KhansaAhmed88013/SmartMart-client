@@ -7,7 +7,6 @@ import {
   AddInvoice,
   getLastInvoiceNo,
   GetProductByBarcode,
-  GetCutomers,
 } from "../../../../UserService";
 import CustomerList from "./CustomerList";
 import AddCustomerForm from "./AddCustomerForm";

@@ -26,27 +26,27 @@ function CategoryDiscount() {
   const componentRef = useRef();
   const today = new Date().toISOString().split("T")[0];
 
-  // ✅ Fetch discounts on load
-  const fetchCategoryDiscounts = async () => {
-    try {
-      const result = await GetCategoryDiscounts();
-      setDiscounts(result);
-    } catch (err) {
-      console.error("Error fetching discounts:", err);
-      showMessage("Failed to load discounts", "error");
-    }
-  };
-  const fetchCategories = async () => {
-    try {
-      const result = await GetCategories();
-      setCategories(result);
-    } catch (err) {
-      console.error("Error fetching categories:", err);
-      showMessage("Failed to load categories", "error");
-    }
-  };
-
   useEffect(() => {
+    const fetchCategoryDiscounts = async () => {
+      try {
+        const result = await GetCategoryDiscounts();
+        setDiscounts(result);
+      } catch (err) {
+        console.error("Error fetching discounts:", err);
+        showMessage("Failed to load discounts", "error");
+      }
+    };
+
+    const fetchCategories = async () => {
+      try {
+        const result = await GetCategories();
+        setCategories(result);
+      } catch (err) {
+        console.error("Error fetching categories:", err);
+        showMessage("Failed to load categories", "error");
+      }
+    };
+
     fetchCategoryDiscounts();
     fetchCategories();
   }, []);

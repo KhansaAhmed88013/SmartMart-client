@@ -1,13 +1,12 @@
-import { useState } from "react";
 import { Outlet } from "react-router-dom";
-import Navbar_Cashier from "./Navbar_Cashier";
+import NavbarCashier from "./Navbar_Cashier";
 import "./MainLayout_Cashier.css";
 
 function MainLayout_Cashier() {
   return (
     <div className="layout">
       <header>
-        <Navbar_Cashier />
+        <NavbarCashier />
       </header>
 
       <main className="content">

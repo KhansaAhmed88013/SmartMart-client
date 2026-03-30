@@ -94,7 +94,14 @@ function MyNavbar({ sideBarOpen, openSideBar, closeSidebar }) {
                 <a href="/settings" onClick={handleLinkClick}>
                   Settings
                 </a>
-                <a onClick={handleLogout} style={{ cursor: "pointer" }}>
+                <a
+                  href="/recovery/login"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleLogout();
+                  }}
+                  style={{ cursor: "pointer" }}
+                >
                   Log Out
                 </a>
               </div>

@@ -56,6 +56,11 @@ const filteredSuppliers = suppliers.filter((supplier) => {
         </div>
       
       {/* Date Filters */}
+      {msg && (
+        <p style={{ color: "red", textAlign: "center", marginBottom: "10px" }}>
+          {msg}
+        </p>
+      )}
       <div
         style={{
           display: "flex",
