@@ -359,3 +359,34 @@
   font-size: 14px;
   color: #555;
 }
+
+.demo-credentials {
+  margin-bottom: 18px;
+  padding: 12px 14px;
+  border: 1px dashed #4b6cb7;
+  border-radius: 10px;
+  background: #f5f8ff;
+  color: #25344f;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.demo-credentials:hover,
+.demo-credentials:focus {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(24, 40, 72, 0.12);
+  outline: none;
+}
+
+.demo-credentials strong {
+  font-size: 14px;
+  color: #182848;
+}
+
+.demo-credentials span {
+  font-size: 13px;
+  color: #2f3a52;
+}

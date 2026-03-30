@@ -17,6 +17,15 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const demoUsername = process.env.REACT_APP_DEMO_USERNAME || "MartAdmin";
+  const demoPassword = process.env.REACT_APP_DEMO_PASSWORD || "admin12345";
+
+  const fillDemoCredentials = () => {
+    setUsername(demoUsername);
+    setPassword(demoPassword);
+    setError("");
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -82,6 +91,24 @@ const Login = () => {
     <div className="login-container">
       <h2>Login</h2>
       <form onSubmit={handleLogin}>
+        <div
+          className="demo-credentials"
+          role="button"
+          tabIndex={0}
+          onClick={fillDemoCredentials}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              fillDemoCredentials();
+            }
+          }}
+          title="Click to auto-fill"
+        >
+          <strong>Demo Login (Click to Auto-fill)</strong>
+          <span>Username: {demoUsername}</span>
+          <span>Password: {demoPassword}</span>
+        </div>
+
         <div className="form-group">
           <label>Username:</label>
           <input

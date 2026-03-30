@@ -19,6 +19,10 @@ Frontend application for SmartMart built with React (Create React App).
 ## Environment Configuration
 
 The app reads API base URL from `REACT_APP_API_BASE_URL`.
+The login page demo card can also use:
+
+- `REACT_APP_DEMO_USERNAME`
+- `REACT_APP_DEMO_PASSWORD`
 
 Current files:
 
@@ -30,6 +34,8 @@ Example values:
 ```env
 # .env
 REACT_APP_API_BASE_URL=https://smartmart-server-g79g.onrender.com
+REACT_APP_DEMO_USERNAME=MartAdmin
+REACT_APP_DEMO_PASSWORD=admin12345
 
 # .env.development.local
 REACT_APP_API_BASE_URL=http://localhost:5000
